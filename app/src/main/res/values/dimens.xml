@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="button_width">328dp</dimen>
-    <dimen name="button_height">220dp</dimen>
-    <dimen name="button_margin">15dp</dimen>
-    <dimen name="button_padding">25dp</dimen>
+    <dimen name="button_margin">20dp</dimen>
+    <dimen name="text_padding">20dp</dimen>
+    <dimen name="text_size">22sp</dimen>
+    <dimen name="radius">16dp</dimen>
 </resources>
