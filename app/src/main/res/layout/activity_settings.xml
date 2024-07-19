@@ -45,11 +45,13 @@
             android:layout_height="match_parent"
             android:text="@string/dark_theme"
             android:textColor="@color/black"
-            android:padding="@dimen/text_padding"/>
+            android:padding="@dimen/text_padding"
+            android:layout_weight="1"/>
 
         <Switch
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            and/>
 
     </LinearLayout>
 
@@ -62,6 +64,13 @@
             android:layout_height="match_parent"
             android:text="@string/share_app"
             android:textColor="@color/black"
+            android:padding="@dimen/text_padding"
+            android:layout_weight="1"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/share"
             android:padding="@dimen/text_padding"/>
 
 
