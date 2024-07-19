@@ -1,28 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
 
     android:orientation="vertical">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingStart="@dimen/text_padding"
-        android:paddingEnd="@dimen/text_padding"
-        android:paddingTop="@dimen/text_padding"
-        android:textSize="@dimen/text_size"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:paddingBottom="@dimen/text_padding"
-        android:text="@string/button_settings"
+        android:layout_height="wrap_content">
 
-        android:drawableStart="@drawable/arrow_back"
-        android:drawablePadding="25dp"
-        android:layout_marginBottom="@dimen/button_margin"
-        />
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/arrow_back"
+            android:layout_gravity="center"
+            android:background="@color/white"
+            android:padding="@dimen/text_padding"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/text_padding"
+            android:paddingEnd="@dimen/text_padding"
+            android:paddingTop="@dimen/text_padding"
+            android:textSize="@dimen/text_size"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:paddingBottom="@dimen/text_padding"
+            android:text="@string/button_settings"
+            />
+
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -41,7 +53,19 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/share_app"
+            android:textColor="@color/black"
+            android:padding="@dimen/text_padding"/>
+
+
+    </LinearLayout>
 
 
 </LinearLayout>
