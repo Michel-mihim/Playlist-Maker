@@ -4,4 +4,5 @@
     <dimen name="text_padding">20dp</dimen>
     <dimen name="text_size">22sp</dimen>
     <dimen name="radius">16dp</dimen>
+    <dimen name="dp_0">0dp</dimen>
 </resources>
