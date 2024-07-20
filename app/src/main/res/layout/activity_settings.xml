@@ -51,7 +51,7 @@
         <Switch
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            and/>
+            android:padding="15dp"/>
 
     </LinearLayout>
 
@@ -73,6 +73,45 @@
             android:src="@drawable/share"
             android:padding="@dimen/text_padding"/>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/support"
+            android:textColor="@color/black"
+            android:padding="@dimen/text_padding"
+            android:layout_weight="1"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/support"
+            android:padding="@dimen/text_padding"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/license"
+            android:textColor="@color/black"
+            android:padding="@dimen/text_padding"
+            android:layout_weight="1"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/license"
+            android:padding="@dimen/text_padding"/>
 
     </LinearLayout>
 

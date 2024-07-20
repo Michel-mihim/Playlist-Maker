@@ -5,4 +5,6 @@
     <string name="button_settings">Настройки</string>
     <string name="dark_theme">Тёмная тема</string>
     <string name="share_app">Поделиться приложением</string>
+    <string name="support">Написать в поддержку</string>
+    <string name="license">Пользовательское соглашение</string>
 </resources>
