@@ -21,12 +21,12 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        // button_search_reaction-------------------------------------------------------------------
+        // button_search_reaction через анонимный класс---------------------------------------------
         val button_search = findViewById<Button>(R.id.button_search)
-
+        val displayIntent = Intent(this, SearchActivity::class.java)
         val button_searchClickListener : View.OnClickListener = object : View.OnClickListener {
             override fun onClick(view: View) {
-                Toast.makeText(this@MainActivity, "Открываем поиск!", Toast.LENGTH_SHORT).show()
+                startActivity(displayIntent)
             }
         }
 
@@ -37,7 +37,8 @@ class MainActivity : AppCompatActivity() {
         val button_lib = findViewById<Button>(R.id.button_lib)
 
         button_lib.setOnClickListener {
-            Toast.makeText(this@MainActivity, "Открываем медиатеку!", Toast.LENGTH_SHORT).show()
+            val displayIntent = Intent(this, LibActivity::class.java)
+            startActivity(displayIntent)
         }
         //------------------------------------------------------------------------------------------
 
