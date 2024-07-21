@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -44,7 +45,8 @@ class MainActivity : AppCompatActivity() {
         val button_settings = findViewById<Button>(R.id.button_settings)
 
         button_settings.setOnClickListener {
-            Toast.makeText(this@MainActivity, "Открываем настройки!", Toast.LENGTH_SHORT).show()
+            val displayIntent = Intent(this, SettingsActivity::class.java)
+            startActivity(displayIntent)
         }
         //------------------------------------------------------------------------------------------
     }
