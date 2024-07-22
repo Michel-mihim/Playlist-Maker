@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LibActivity"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/button_back_from_lib"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/arrow_back"
+            android:foreground="?attr/selectableItemBackground"
+            android:layout_gravity="center"
+            android:background="@color/white"
+            android:padding="@dimen/text_padding"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/text_padding"
+            android:paddingEnd="@dimen/text_padding"
+            android:paddingTop="@dimen/text_padding"
+            android:textSize="@dimen/text_size"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:paddingBottom="@dimen/text_padding"
+            android:text="@string/button_lib"
+            />
+
+    </LinearLayout>
+
+
+</LinearLayout>
