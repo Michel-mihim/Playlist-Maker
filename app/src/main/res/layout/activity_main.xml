@@ -25,70 +25,30 @@
 
     <Button
         android:id="@+id/button_search"
-        android:foreground="?attr/selectableItemBackground"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_0"
-        android:layout_marginLeft="@dimen/button_margin"
-        android:layout_marginRight="@dimen/button_margin"
         android:layout_marginTop="@dimen/button_margin"
-        android:layout_weight="1"
-        android:backgroundTint="@color/white"
-        android:textAlignment="center"
         android:text="@string/button_search"
-        android:textColor="@color/black"
-        android:textAllCaps="false"
-        android:textSize="@dimen/text_size"
+        style="@style/MainActivityButtonStyle"
 
-        app:cornerRadius="@dimen/radius"
         app:icon="@drawable/search"
-        app:iconGravity="textStart"
-        app:iconTint="@color/black"
         />
 
     <Button
         android:id="@+id/button_lib"
-        android:foreground="?attr/selectableItemBackground"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_0"
-        android:layout_marginLeft="@dimen/button_margin"
-        android:layout_marginRight="@dimen/button_margin"
         android:layout_marginTop="@dimen/button_margin"
         android:layout_marginBottom="@dimen/button_margin"
-        android:layout_weight="1"
-        android:backgroundTint="@color/white"
-        android:textAlignment="center"
         android:text="@string/button_lib"
-        android:textColor="@color/black"
-        android:textAllCaps="false"
-        android:textSize="@dimen/text_size"
+        style="@style/MainActivityButtonStyle"
 
-        app:cornerRadius="@dimen/radius"
         app:icon="@drawable/lib"
-        app:iconGravity="textStart"
-        app:iconTint="@color/black"
         />
 
     <Button
         android:id="@+id/button_settings"
-        android:foreground="?attr/selectableItemBackground"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_0"
-        android:layout_marginLeft="@dimen/button_margin"
-        android:layout_marginRight="@dimen/button_margin"
-
         android:layout_marginBottom="@dimen/button_margin"
-        android:layout_weight="1"
-        android:backgroundTint="@color/white"
-        android:textAlignment="center"
         android:text="@string/button_settings"
-        android:textColor="@color/black"
-        android:textAllCaps="false"
-        android:textSize="@dimen/text_size"
+        style="@style/MainActivityButtonStyle"
 
-        app:cornerRadius="@dimen/radius"
         app:icon="@drawable/settings"
-        app:iconGravity="textStart"
-        app:iconTint="@color/black"
         />
 
 </LinearLayout>

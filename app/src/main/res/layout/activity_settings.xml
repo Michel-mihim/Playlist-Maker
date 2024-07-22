@@ -9,8 +9,7 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        style="@style/SettingsActivityMenuListStyle">
 
         <ImageButton
             android:id="@+id/button_back_from_settings"
@@ -37,83 +36,55 @@
 
     </LinearLayout>
 
-
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        style="@style/SettingsActivityMenuListStyle">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/dark_theme"
-            android:textColor="@color/black"
-            android:padding="@dimen/text_padding"
-            android:layout_weight="1"/>
+            style="@style/SettingsActivityMenuItemTextStyle"
+            android:text="@string/dark_theme"/>
 
         <Switch
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            style="@style/SettingsActivityMenuItemIconStyle"
             android:padding="15dp"/>
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        style="@style/SettingsActivityMenuListStyle">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/share_app"
-            android:textColor="@color/black"
-            android:padding="@dimen/text_padding"
-            android:layout_weight="1"/>
+            style="@style/SettingsActivityMenuItemTextStyle"
+            android:text="@string/share_app"/>
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/share"
-            android:padding="@dimen/text_padding"/>
+            style="@style/SettingsActivityMenuItemIconStyle"
+            android:src="@drawable/share"/>
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        style="@style/SettingsActivityMenuListStyle">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/support"
-            android:textColor="@color/black"
-            android:padding="@dimen/text_padding"
-            android:layout_weight="1"/>
+            style="@style/SettingsActivityMenuItemTextStyle"
+            android:text="@string/support"/>
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/support"
-            android:padding="@dimen/text_padding"/>
+            style="@style/SettingsActivityMenuItemIconStyle"
+            android:src="@drawable/support"/>
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        style="@style/SettingsActivityMenuListStyle">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/license"
-            android:textColor="@color/black"
-            android:padding="@dimen/text_padding"
-            android:layout_weight="1"/>
+            style="@style/SettingsActivityMenuItemTextStyle"
+            android:text="@string/license"/>
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/license"
-            android:padding="@dimen/text_padding"/>
+            style="@style/SettingsActivityMenuItemIconStyle"
+            android:src="@drawable/license"/>
 
     </LinearLayout>
 
