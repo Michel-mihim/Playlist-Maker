@@ -19,13 +19,5 @@ class SearchActivity : AppCompatActivity() {
             insets
         }
 
-        // button_back_from_search_reaction---------------------------------------------------------
-        val button_back_from_search = findViewById<ImageButton>(R.id.button_back_from_search)
-
-        button_back_from_search.setOnClickListener {
-            val displayIntent = Intent(this, MainActivity::class.java)
-            startActivity(displayIntent)
-        }
-        //------------------------------------------------------------------------------------------
     }
 }

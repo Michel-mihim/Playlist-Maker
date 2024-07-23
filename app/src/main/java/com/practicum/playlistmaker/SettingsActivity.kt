@@ -14,14 +14,6 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        // button_back_from_settings_reaction-------------------------------------------------------
-        val button_back_from_settings = findViewById<ImageButton>(R.id.button_back_from_settings)
-
-        button_back_from_settings.setOnClickListener {
-            val displayIntent = Intent(this, MainActivity::class.java)
-            startActivity(displayIntent)
-        }
-        //------------------------------------------------------------------------------------------
     }
 
 }

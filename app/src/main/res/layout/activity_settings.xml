@@ -2,24 +2,15 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/menuColor"
 
     android:orientation="vertical">
 
     <LinearLayout
         style="@style/SettingsActivityMenuListStyle">
-
-        <ImageButton
-            android:id="@+id/button_back_from_settings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/arrow_back"
-            android:foreground="?attr/selectableItemBackground"
-            android:layout_gravity="center"
-            android:background="@color/white"
-            android:padding="@dimen/text_padding"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -30,7 +21,7 @@
             android:textSize="@dimen/text_size"
             android:textStyle="bold"
             android:fontFamily="@font/ys_display_medium"
-            android:textColor="@color/black"
+            android:textColor="@color/menuItemsTextColor"
             android:paddingBottom="@dimen/text_padding"
             android:text="@string/button_settings"
             />
