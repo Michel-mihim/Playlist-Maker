@@ -44,7 +44,9 @@
     <Button
         style="@style/SettingsActivityMenuItemTextStyle"
         android:text="@string/share_app"
-        android:drawableEnd="@drawable/share"/>
+        android:drawableEnd="@drawable/share"
+
+        />
 
     <!--style="?attr/borderlessButtonStyle"-->
 
