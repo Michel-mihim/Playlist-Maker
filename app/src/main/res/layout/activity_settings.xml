@@ -32,7 +32,7 @@
         style="@style/SettingsActivityMenuListStyle">
 
         <TextView
-            style="@style/SettingsActivityMenuItemTextStyle"
+            style="@style/SettingsActivityMenuItemThemeTextStyle"
             android:text="@string/dark_theme"/>
 
         <Switch
@@ -41,44 +41,22 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        style="@style/SettingsActivityMenuListStyle">
+    <Button
+        style="@style/SettingsActivityMenuItemTextStyle"
+        android:text="@string/share_app"
+        android:drawableEnd="@drawable/share"/>
 
-        <TextView
-            style="@style/SettingsActivityMenuItemTextStyle"
-            android:text="@string/share_app"/>
+    <!--style="?attr/borderlessButtonStyle"-->
 
-        <ImageView
-            style="@style/SettingsActivityMenuItemIconStyle"
-            android:src="@drawable/share"/>
+    <Button
+        style="@style/SettingsActivityMenuItemTextStyle"
+        android:text="@string/support"
+        android:drawableEnd="@drawable/support"/>
 
-    </LinearLayout>
-
-    <LinearLayout
-        style="@style/SettingsActivityMenuListStyle">
-
-        <TextView
-            style="@style/SettingsActivityMenuItemTextStyle"
-            android:text="@string/support"/>
-
-        <ImageView
-            style="@style/SettingsActivityMenuItemIconStyle"
-            android:src="@drawable/support"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        style="@style/SettingsActivityMenuListStyle">
-
-        <TextView
-            style="@style/SettingsActivityMenuItemTextStyle"
-            android:text="@string/license"/>
-
-        <ImageView
-            style="@style/SettingsActivityMenuItemIconStyle"
-            android:src="@drawable/license"/>
-
-    </LinearLayout>
+    <Button
+        style="@style/SettingsActivityMenuItemTextStyle"
+        android:text="@string/license"
+        android:drawableEnd="@drawable/license"/>
 
 
 </LinearLayout>
