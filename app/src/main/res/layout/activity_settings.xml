@@ -42,6 +42,7 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/button_share"
         style="@style/SettingsActivityMenuItemTextStyle"
         android:text="@string/share_app"
         android:drawableEnd="@drawable/share"
