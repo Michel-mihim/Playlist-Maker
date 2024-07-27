@@ -43,8 +43,10 @@ class SettingsActivity : AppCompatActivity() {
         val button_license = findViewById<Button>(R.id.button_license)
         button_license.setOnClickListener{
             val licenseIntent = Intent(Intent.ACTION_VIEW)
-            licenseIntent.data = Uri.parse("https://yandex.ru/legal/practicum_offer/")
-            startActivity(licenseIntent)
+            val url = R.string.license_link
+            Toast.makeText(this, url, Toast.LENGTH_LONG).show()
+            //licenseIntent.data = Uri.parse(url)
+            //startActivity(licenseIntent)
         }
     }
 
