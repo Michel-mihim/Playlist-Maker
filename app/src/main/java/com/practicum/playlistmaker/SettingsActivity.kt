@@ -44,6 +44,13 @@ class SettingsActivity : AppCompatActivity() {
             licenseIntent.data = Uri.parse(getString(R.string.license_url))
             startActivity(licenseIntent)
         }
+
+        //back_button
+        val settings_back_button = findViewById<ImageButton>(R.id.settings_back_button)
+        settings_back_button.setOnClickListener{
+            val settings_back_intent = Intent(this, MainActivity::class.java)
+            startActivity(settings_back_intent)
+        }
     }
 
 }

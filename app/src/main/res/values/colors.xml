@@ -7,4 +7,6 @@
     <color name="menuItemsTextColor">#1A1B22</color>
     <color name="backgroundTextColor">#FFFFFFFF</color>
     <color name="iconColor">#AEAFB4</color>
+    <color name="editColor">#E6E8EB</color>
+    <color name="editTextColor">#818C99</color>
 </resources>

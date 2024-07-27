@@ -12,6 +12,14 @@
     <LinearLayout
         style="@style/SettingsActivityMenuListStyle">
 
+        <ImageButton
+            android:id="@+id/settings_back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/arrow_back"
+            android:tint="@color/menuItemsTextColor"
+            android:backgroundTint="@color/menuColor"/>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -41,6 +49,8 @@
 
     </LinearLayout>
 
+    <!--применены кнопки вместо TextView потому что у них
+    при нажатии есть нужный визуальный эффект-->
     <Button
         android:id="@+id/button_share"
         style="@style/SettingsActivityMenuItemTextStyle"
