@@ -52,6 +52,7 @@
     <!--style="?attr/borderlessButtonStyle"-->
 
     <Button
+        android:id="@+id/button_support"
         style="@style/SettingsActivityMenuItemTextStyle"
         android:text="@string/support"
         android:drawableEnd="@drawable/support"/>

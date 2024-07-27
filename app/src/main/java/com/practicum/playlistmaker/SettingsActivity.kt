@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageButton
@@ -25,6 +26,17 @@ class SettingsActivity : AppCompatActivity() {
             //shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Полезная ссылка:")
             //shareIntent.putExtra(Intent.EXTRA_TEXT, "https://practicum.yandex.ru/profile/android-developer/")
             startActivity(shareIntent)
+        }
+
+        //support
+        val button_support = findViewById<Button>(R.id.button_support)
+        button_support.setOnClickListener{
+            val supportIntent = Intent(Intent.ACTION_SENDTO)
+            supportIntent.data = Uri.parse("mailto:")
+            supportIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("ya-mihim@yandex.ru"))
+            supportIntent.putExtra(Intent.EXTRA_SUBJECT, "Сообщение разработчикам и разработчицам приложения Playlist Maker")
+            supportIntent.putExtra(Intent.EXTRA_TEXT, "Спасибо разработчикам и разработчицам за крутое приложение!")
+            startActivity(supportIntent)
         }
     }
 
