@@ -38,6 +38,14 @@ class SettingsActivity : AppCompatActivity() {
             supportIntent.putExtra(Intent.EXTRA_TEXT, "Спасибо разработчикам и разработчицам за крутое приложение!")
             startActivity(supportIntent)
         }
+
+        //license
+        val button_license = findViewById<Button>(R.id.button_license)
+        button_license.setOnClickListener{
+            val licenseIntent = Intent(Intent.ACTION_VIEW)
+            licenseIntent.data = Uri.parse("https://yandex.ru/legal/practicum_offer/")
+            startActivity(licenseIntent)
+        }
     }
 
 }
