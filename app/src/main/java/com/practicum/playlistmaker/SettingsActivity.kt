@@ -21,10 +21,8 @@ class SettingsActivity : AppCompatActivity() {
         button_share.setOnClickListener{
             val shareIntent = Intent(Intent.ACTION_SEND)
             shareIntent.setType("text/plain")
-            shareIntent.putExtra(Intent.EXTRA_SUBJECT, R.string.share_message_subject)
-            shareIntent.putExtra(Intent.EXTRA_TEXT, R.string.share_message)
-            //shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Полезная ссылка:")
-            //shareIntent.putExtra(Intent.EXTRA_TEXT, "https://practicum.yandex.ru/profile/android-developer/")
+            shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_message_subject))
+            shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_message))
             startActivity(shareIntent)
         }
 
@@ -33,9 +31,9 @@ class SettingsActivity : AppCompatActivity() {
         button_support.setOnClickListener{
             val supportIntent = Intent(Intent.ACTION_SENDTO)
             supportIntent.data = Uri.parse("mailto:")
-            supportIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("ya-mihim@yandex.ru"))
-            supportIntent.putExtra(Intent.EXTRA_SUBJECT, "Сообщение разработчикам и разработчицам приложения Playlist Maker")
-            supportIntent.putExtra(Intent.EXTRA_TEXT, "Спасибо разработчикам и разработчицам за крутое приложение!")
+            supportIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.student_email)))
+            supportIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.letter_text_subject))
+            supportIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.letter_text))
             startActivity(supportIntent)
         }
 
@@ -43,10 +41,8 @@ class SettingsActivity : AppCompatActivity() {
         val button_license = findViewById<Button>(R.id.button_license)
         button_license.setOnClickListener{
             val licenseIntent = Intent(Intent.ACTION_VIEW)
-            val url = R.string.license_link
-            Toast.makeText(this, url, Toast.LENGTH_LONG).show()
-            //licenseIntent.data = Uri.parse(url)
-            //startActivity(licenseIntent)
+            licenseIntent.data = Uri.parse(getString(R.string.license_url))
+            startActivity(licenseIntent)
         }
     }
 
