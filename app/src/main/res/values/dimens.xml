@@ -6,4 +6,6 @@
     <dimen name="tiny_text_size">16sp</dimen>
     <dimen name="radius">16dp</dimen>
     <dimen name="dp_0">0dp</dimen>
+    <dimen name="edit_search_heigth">36dp</dimen>
+    <dimen name="radius_tiny">8dp</dimen>
 </resources>
