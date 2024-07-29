@@ -25,31 +25,25 @@
         android:text="@string/app_name"/>
 
     <Button
+        style="@style/MainActivityButtonStyle"
         android:id="@+id/button_search"
         android:layout_marginTop="@dimen/button_margin"
         android:text="@string/button_search"
-        style="@style/MainActivityButtonStyle"
-
-        app:icon="@drawable/search"
-        />
+        app:icon="@drawable/search"/>
 
     <Button
+        style="@style/MainActivityButtonStyle"
         android:id="@+id/button_lib"
         android:layout_marginTop="@dimen/button_margin"
         android:layout_marginBottom="@dimen/button_margin"
         android:text="@string/button_lib"
-        style="@style/MainActivityButtonStyle"
-
-        app:icon="@drawable/lib"
-        />
+        app:icon="@drawable/lib"/>
 
     <Button
+        style="@style/MainActivityButtonStyle"
         android:id="@+id/button_settings"
         android:layout_marginBottom="@dimen/button_margin"
         android:text="@string/button_settings"
-        style="@style/MainActivityButtonStyle"
-
-        app:icon="@drawable/settings"
-        />
+        app:icon="@drawable/settings"/>
 
 </LinearLayout>
