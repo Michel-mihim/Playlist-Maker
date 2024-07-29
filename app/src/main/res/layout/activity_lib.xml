@@ -6,6 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/menuColor"
     tools:context=".LibActivity"
     android:orientation="vertical">
 
@@ -13,18 +14,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <ImageButton
+            style="@style/ArrowBackButtonStyle"
+            android:id="@+id/lib_back_button"/>
+
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="@dimen/text_padding"
-            android:paddingEnd="@dimen/text_padding"
-            android:paddingTop="@dimen/text_padding"
-            android:textSize="@dimen/text_size"
-            android:textStyle="bold"
-            android:textColor="@color/menuItemsTextColor"
-            android:paddingBottom="@dimen/text_padding"
-            android:text="@string/button_lib"
-            />
+            style="@style/MenuHeadTextStyle"
+            android:text="@string/button_lib"/>
 
     </LinearLayout>
 

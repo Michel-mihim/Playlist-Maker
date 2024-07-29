@@ -1,11 +1,13 @@
 package com.practicum.playlistmaker
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
@@ -38,8 +40,13 @@ class SearchActivity : AppCompatActivity() {
 
         search_clear_button.visibility = View.GONE
 
+        //keyboard
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
         search_clear_button.setOnClickListener {
             search_editText.setText(getString(R.string.empty_string))
+            imm.hideSoftInputFromWindow(currentFocus!!.windowToken,0)
+            search_editText.clearFocus()
         }
 
         val textWatcher = object : TextWatcher {
@@ -50,6 +57,7 @@ class SearchActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 search_clear_button.visibility = searchClearButtonVisibility(s)
                 //Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show()
+
             }
 
             override fun afterTextChanged(s: Editable?) {
