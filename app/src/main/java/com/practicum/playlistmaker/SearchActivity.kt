@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -15,6 +16,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+
 
 class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +42,14 @@ class SearchActivity : AppCompatActivity() {
 
         search_clear_button.visibility = View.GONE
 
+        if (savedInstanceState != null) {
+            search_def = savedInstanceState.getString(SEARCH_STRING, SEARCH_DEF)
+            Toast.makeText(getApplicationContext(), "взято значение "+search_def, Toast.LENGTH_SHORT).show()
+        } else {Toast.makeText(getApplicationContext(), "нечего брать", Toast.LENGTH_SHORT).show()}
+
+        Toast.makeText(getApplicationContext(), "проверка, должно вставить "+search_def, Toast.LENGTH_SHORT).show()
+        search_editText.setText(search_def)
+
         //keyboard
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
@@ -56,12 +66,12 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 search_clear_button.visibility = searchClearButtonVisibility(s)
-                //Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show()
 
             }
 
             override fun afterTextChanged(s: Editable?) {
-                //
+                search_def = s.toString()
+                Toast.makeText(getApplicationContext(), "в строке сейчас "+search_def, Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -74,5 +84,34 @@ class SearchActivity : AppCompatActivity() {
         } else {
             View.VISIBLE
         }
+
     }
+
+    //переменная строки поиска
+    private var search_def : String = SEARCH_DEF
+
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(SEARCH_STRING, search_def)
+
+        Toast.makeText(getApplicationContext(), "процедура сохранения прошла, сохранено "+search_def, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        search_def = savedInstanceState.getString(SEARCH_STRING, SEARCH_DEF)
+
+        Toast.makeText(getApplicationContext(), "процедура извлечения данных прошла, взято "+search_def, Toast.LENGTH_SHORT).show()
+
+        search_def = "govno"
+
+        Toast.makeText(getApplicationContext(), "но потом изменено на "+search_def, Toast.LENGTH_SHORT).show()
+    }
+
+    companion object {
+        const val SEARCH_STRING = "SEARCH_STRING"
+        const val SEARCH_DEF = ""
+    }
+
 }
