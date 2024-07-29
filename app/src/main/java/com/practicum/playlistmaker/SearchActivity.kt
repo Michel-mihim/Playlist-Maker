@@ -28,30 +28,21 @@ class SearchActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        //back_button
+        //переменные================================================================================
         val search_back_button = findViewById<ImageButton>(R.id.search_back_button)
+        val search_clear_button = findViewById<ImageButton>(R.id.search_clear_button)
+        val search_editText = findViewById<EditText>(R.id.search_editText)
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
+        //основной листинг==========================================================================
+        search_clear_button.visibility = View.GONE
+        search_editText.setText(search_def)
+
+        //слушатели нажатий=========================================================================
         search_back_button.setOnClickListener{
             val search_back_intent = Intent(this, MainActivity::class.java)
             startActivity(search_back_intent)
         }
-
-        //editText
-        val search_editText = findViewById<EditText>(R.id.search_editText)
-        val search_clear_button = findViewById<ImageButton>(R.id.search_clear_button)
-
-        search_clear_button.visibility = View.GONE
-
-        if (savedInstanceState != null) {
-            search_def = savedInstanceState.getString(SEARCH_STRING, SEARCH_DEF)
-            Toast.makeText(getApplicationContext(), "взято значение "+search_def, Toast.LENGTH_SHORT).show()
-        } else {Toast.makeText(getApplicationContext(), "нечего брать", Toast.LENGTH_SHORT).show()}
-
-        Toast.makeText(getApplicationContext(), "проверка, должно вставить "+search_def, Toast.LENGTH_SHORT).show()
-        search_editText.setText(search_def)
-
-        //keyboard
-        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
         search_clear_button.setOnClickListener {
             search_editText.setText(getString(R.string.empty_string))
@@ -59,6 +50,7 @@ class SearchActivity : AppCompatActivity() {
             search_editText.clearFocus()
         }
 
+        //переопределение функций слушателя текста==================================================
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 //
@@ -66,52 +58,43 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 search_clear_button.visibility = searchClearButtonVisibility(s)
-
             }
 
             override fun afterTextChanged(s: Editable?) {
                 search_def = s.toString()
-                Toast.makeText(getApplicationContext(), "в строке сейчас "+search_def, Toast.LENGTH_SHORT).show()
             }
         }
-
         search_editText.addTextChangedListener(textWatcher)
+
     }
 
+    //вспомогательные функции=======================================================================
     private fun searchClearButtonVisibility(s: CharSequence?): Int {
         return if (s.isNullOrEmpty()) {
             View.GONE
         } else {
             View.VISIBLE
         }
-
     }
 
-    //переменная строки поиска
+    //константы=====================================================================================
+    companion object {
+        const val SEARCH_STRING = "SEARCH_STRING"
+        const val SEARCH_DEF = ""
+    }
+
+    //переменная строки поиска======================================================================
     private var search_def : String = SEARCH_DEF
 
-
+    //переопределение функций памяти состояния======================================================
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(SEARCH_STRING, search_def)
-
-        Toast.makeText(getApplicationContext(), "процедура сохранения прошла, сохранено "+search_def, Toast.LENGTH_SHORT).show()
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         search_def = savedInstanceState.getString(SEARCH_STRING, SEARCH_DEF)
-
-        Toast.makeText(getApplicationContext(), "процедура извлечения данных прошла, взято "+search_def, Toast.LENGTH_SHORT).show()
-
-        search_def = "govno"
-
-        Toast.makeText(getApplicationContext(), "но потом изменено на "+search_def, Toast.LENGTH_SHORT).show()
-    }
-
-    companion object {
-        const val SEARCH_STRING = "SEARCH_STRING"
-        const val SEARCH_DEF = ""
     }
 
 }
