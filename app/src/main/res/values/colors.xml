@@ -8,6 +8,8 @@
     <color name="backgroundTextColor">#FFFFFFFF</color>
     <color name="iconColor">#AEAFB4</color>
     <color name="editIconColor">#AEAFB4</color>
-    <color name="editTextColor">#AEAFB4</color>
+    <color name="clearButtonColor">#AEAFB4</color>
+    <color name="editTextColor">#1A1B22</color>
+    <color name="editHintColor">#AEAFB4</color>
     <color name="editColor">#E6E8EB</color>
 </resources>
