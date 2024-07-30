@@ -23,14 +23,11 @@ class MainActivity : AppCompatActivity() {
 
         // button_search_reaction через анонимный класс---------------------------------------------
         val button_search = findViewById<Button>(R.id.button_search)
-        val displayIntent = Intent(this, SearchActivity::class.java)
-        val button_searchClickListener : View.OnClickListener = object : View.OnClickListener {
-            override fun onClick(view: View) {
-                startActivity(displayIntent)
-            }
+        button_search.setOnClickListener{
+            val searchIntent = Intent(this, SearchActivity::class.java)
+            startActivity(searchIntent)
         }
 
-        button_search.setOnClickListener(button_searchClickListener)
         //------------------------------------------------------------------------------------------
 
         // button_lib_reaction----------------------------------------------------------------------

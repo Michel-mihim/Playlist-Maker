@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="backgroundColor">#1A1B22</color>
+    <color name="buttonTextColor">#1A1B22</color>
+    <color name="buttonColor">#FFFFFFFF</color>
+    <color name="menuColor">#1A1B22</color>
+    <color name="menuItemsTextColor">#FFFFFFFF</color>
+    <color name="backgroundTextColor">#FFFFFFFF</color>
+    <color name="iconColor">#FFFFFFFF</color>
+    <color name="editIconColor">#1A1B22</color>
+    <color name="clearButtonColor">#1A1B22</color>
+    <color name="editTextColor">#1A1B22</color>
+    <color name="editHintColor">#1A1B22</color>
+    <color name="editColor">#FFFFFF</color>
+</resources>

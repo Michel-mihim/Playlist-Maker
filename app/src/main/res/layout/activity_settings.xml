@@ -2,120 +2,62 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/menuColor"
 
     android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        style="@style/SettingsActivityMenuListStyle">
 
         <ImageButton
-            android:id="@+id/button_back_from_settings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/arrow_back"
-            android:foreground="?attr/selectableItemBackground"
-            android:layout_gravity="center"
-            android:background="@color/white"
-            android:padding="@dimen/text_padding"/>
+            style="@style/ArrowBackButtonStyle"
+            android:id="@+id/settings_back_button"/>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="@dimen/text_padding"
-            android:paddingEnd="@dimen/text_padding"
-            android:paddingTop="@dimen/text_padding"
-            android:textSize="@dimen/text_size"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:paddingBottom="@dimen/text_padding"
-            android:text="@string/button_settings"
-            />
+            style="@style/MenuHeadTextStyle"
+            android:text="@string/button_settings"/>
 
     </LinearLayout>
 
-
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        style="@style/SettingsActivityMenuListStyle">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/dark_theme"
-            android:textColor="@color/black"
-            android:padding="@dimen/text_padding"
-            android:layout_weight="1"/>
+            style="@style/SettingsActivityMenuItemThemeTextStyle"
+            android:text="@string/dark_theme"/>
 
         <Switch
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            style="@style/SettingsActivityMenuItemIconStyle"
             android:padding="15dp"/>
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <!--применены кнопки вместо TextView потому что у них
+    при нажатии есть нужный визуальный эффект-->
+    <Button
+        android:id="@+id/button_share"
+        style="@style/SettingsActivityMenuItemTextStyle"
+        android:text="@string/share_app"
+        android:drawableEnd="@drawable/share"
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/share_app"
-            android:textColor="@color/black"
-            android:padding="@dimen/text_padding"
-            android:layout_weight="1"/>
+        />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/share"
-            android:padding="@dimen/text_padding"/>
+    <!--style="?attr/borderlessButtonStyle"-->
 
-    </LinearLayout>
+    <Button
+        android:id="@+id/button_support"
+        style="@style/SettingsActivityMenuItemTextStyle"
+        android:text="@string/support"
+        android:drawableEnd="@drawable/support"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/support"
-            android:textColor="@color/black"
-            android:padding="@dimen/text_padding"
-            android:layout_weight="1"/>
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/support"
-            android:padding="@dimen/text_padding"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/license"
-            android:textColor="@color/black"
-            android:padding="@dimen/text_padding"
-            android:layout_weight="1"/>
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/license"
-            android:padding="@dimen/text_padding"/>
-
-    </LinearLayout>
+    <Button
+        android:id="@+id/button_license"
+        style="@style/SettingsActivityMenuItemTextStyle"
+        android:text="@string/license"
+        android:drawableEnd="@drawable/license"/>
 
 
 </LinearLayout>

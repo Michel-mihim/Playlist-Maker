@@ -19,13 +19,11 @@ class LibActivity : AppCompatActivity() {
             insets
         }
 
-        // button_back_from_lib_reaction------------------------------------------------------------
-        val button_back_from_lib = findViewById<ImageButton>(R.id.button_back_from_lib)
-
-        button_back_from_lib.setOnClickListener {
-            val displayIntent = Intent(this, MainActivity::class.java)
-            startActivity(displayIntent)
+        val lib_back_button = findViewById<ImageButton>(R.id.lib_back_button)
+        lib_back_button.setOnClickListener{
+            val libBackIntent = Intent(this, MainActivity::class.java)
+            startActivity(libBackIntent)
         }
-        //------------------------------------------------------------------------------------------
+
     }
 }
