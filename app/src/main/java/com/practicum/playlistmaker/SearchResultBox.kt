@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.appcompat.view.menu.MenuView.ItemView
 import androidx.recyclerview.widget.RecyclerView
 
-data class SearchResultBox(val track_name: String, val artist_name: String)
+data class SearchResultBox(val trackName: String, val artistName: String, val trackTime: String)
 
 class SearchResultBoxAdapter(
     private val searchResultBoxes: List<SearchResultBox>
@@ -27,15 +27,18 @@ class SearchResultBoxAdapter(
     class SearchResultViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val trackNameView: TextView
         private val artistNameView: TextView
+        private val trackTimeView: TextView
 
         init {
             trackNameView = itemView.findViewById(R.id.track_name)
             artistNameView = itemView.findViewById(R.id.artist_name)
+            trackTimeView = itemView.findViewById(R.id.track_time)
         }
 
         fun bind(searchResultBox: SearchResultBox) {
-            trackNameView.text = searchResultBox.track_name
-            artistNameView.text = searchResultBox.artist_name
+            trackNameView.text = searchResultBox.trackName
+            artistNameView.text = searchResultBox.artistName
+            trackTimeView.text = searchResultBox.trackTime
         }
 
     }

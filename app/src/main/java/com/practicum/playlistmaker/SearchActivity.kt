@@ -48,6 +48,14 @@ class SearchActivity : AppCompatActivity() {
             "Guns N' Roses"
         )
 
+        val track_times_list = listOf(
+            "5:01",
+            "4:35",
+            "4:10",
+            "5:33",
+            "5:03"
+        )
+
         //переменные VIEW===========================================================================
         val search_back_button = findViewById<ImageButton>(R.id.search_back_button)
         val search_clear_button = findViewById<ImageButton>(R.id.search_clear_button)
@@ -61,7 +69,7 @@ class SearchActivity : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.searchResultsRecycler)
         recyclerView.adapter = SearchResultBoxAdapter(
             searchResultBoxes = List(50) {
-                SearchResultBox(track_names_list[it % 5], artist_names_list[it % 5])
+                SearchResultBox(track_names_list[it % 5], artist_names_list[it % 5], track_times_list[it % 5])
             }
         )
 
