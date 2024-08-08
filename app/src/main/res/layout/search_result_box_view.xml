@@ -8,9 +8,12 @@
     android:background="@color/menuColor">
 
     <ImageView
-        android:layout_width="80dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:src="@drawable/"/>
+        android:paddingLeft="@dimen/text_padding"
+        android:paddingVertical="@dimen/edit_text_padding"
+        android:scaleType="fitStart"
+        android:src="@drawable/the_beatles" />
 
     <LinearLayout
         android:layout_width="250dp"
@@ -20,10 +23,12 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center|left"
+            android:gravity="bottom|left"
             android:paddingLeft="@dimen/edit_text_padding"
             android:layout_weight="1"
-            android:text="название песни"/>
+            android:text="название песни"
+            android:fontFamily="@font/ys_display_regular"
+            android:textSize="@dimen/tiny_text_size"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,25 +38,28 @@
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center|left"
+                android:layout_height="13dp"
+                android:gravity="top|left"
                 android:paddingLeft="@dimen/edit_text_padding"
-                android:text="исполнитель"/>
+                android:text="исполнитель"
+                android:fontFamily="@font/ys_display_regular"
+                android:textSize="@dimen/super_tiny_text_size"/>
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center|left"
+                android:layout_height="13dp"
+
                 android:paddingLeft="@dimen/edit_text_padding"
-                android:src="@drawable/dot"
-                />
+                android:src="@drawable/dot"/>
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center|left"
+                android:layout_height="13dp"
+                android:gravity="top|left"
                 android:paddingLeft="@dimen/edit_text_padding"
-                android:text="длительность"/>
+                android:text="длительность"
+                android:fontFamily="@font/ys_display_regular"
+                android:textSize="@dimen/super_tiny_text_size"/>
 
         </LinearLayout>
 
@@ -63,6 +71,8 @@
 
         android:background="@color/menuColor"
         android:src="@drawable/arrow_next"
-        app:tint="@color/arrowNextColor"/>
+        app:tint="@color/arrowNextColor"
+
+        android:gravity=""/>
 
 </LinearLayout>
