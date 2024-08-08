@@ -12,4 +12,5 @@
     <color name="editTextColor">#1A1B22</color>
     <color name="editHintColor">#AEAFB4</color>
     <color name="editColor">#E6E8EB</color>
+    <color name="arrowNextColor">#AEAFB4</color>
 </resources>
