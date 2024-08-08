@@ -40,6 +40,14 @@ class SearchActivity : AppCompatActivity() {
             "Sweet Child O'Mine"
         )
 
+        val artist_names_list = listOf(
+            "Nirvana",
+            "Michael Jackson",
+            "Bee Gees",
+            "Led Zeppelin",
+            "Guns N' Roses"
+        )
+
         //переменные VIEW===========================================================================
         val search_back_button = findViewById<ImageButton>(R.id.search_back_button)
         val search_clear_button = findViewById<ImageButton>(R.id.search_clear_button)
@@ -53,7 +61,7 @@ class SearchActivity : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.searchResultsRecycler)
         recyclerView.adapter = SearchResultBoxAdapter(
             searchResultBoxes = List(50) {
-                SearchResultBox(track_names_list[it % 5])
+                SearchResultBox(track_names_list[it % 5], artist_names_list[it % 5])
             }
         )
 
