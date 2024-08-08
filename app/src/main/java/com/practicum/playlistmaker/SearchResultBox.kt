@@ -50,9 +50,9 @@ class SearchResultBoxAdapter(
             trackNameView.text = searchResultBox.trackName
             artistNameView.text = searchResultBox.artistName
             trackTimeView.text = searchResultBox.trackTime
-            Glide
-                .with(itemView.context)
+            Glide.with(itemView.context)
                 .load(searchResultBox.artworkUrl100)
+                .placeholder(R.drawable.empty_music_image)
                 .into(trackImageView)
         }
 

@@ -14,7 +14,7 @@
         android:paddingLeft="@dimen/text_padding"
         android:paddingVertical="@dimen/edit_text_padding"
         android:scaleType="fitStart"
-        android:src="@drawable/the_beatles" />
+        android:src="@drawable/empty_music_image"/>
 
     <LinearLayout
         android:layout_width="250dp"
