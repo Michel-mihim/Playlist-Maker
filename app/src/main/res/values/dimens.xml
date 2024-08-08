@@ -10,4 +10,5 @@
     <dimen name="edit_search_heigth">36dp</dimen>
     <dimen name="radius_tiny">8dp</dimen>
     <dimen name="edit_text_padding">8dp</dimen>
+    <dimen name="track_image_corner">2dp</dimen>
 </resources>

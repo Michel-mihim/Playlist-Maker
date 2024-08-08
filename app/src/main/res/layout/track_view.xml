@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:paddingLeft="@dimen/text_padding"
         android:paddingVertical="@dimen/edit_text_padding"
-        android:scaleType="fitStart"
+        android:scaleType="fitCenter"
         android:src="@drawable/empty_music_image"/>
 
     <LinearLayout

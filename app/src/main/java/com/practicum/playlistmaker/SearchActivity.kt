@@ -1,17 +1,14 @@
 package com.practicum.playlistmaker
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageButton
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -77,9 +74,9 @@ class SearchActivity : AppCompatActivity() {
         search_clear_button.visibility = View.GONE
         search_editText.setText(search_def)
 
-        recyclerView.adapter = SearchResultBoxAdapter(
-            searchResultBoxes = List(50) {
-                SearchResultBox(track_names_list[it % 5], artist_names_list[it % 5], track_times_list[it % 5], track_images_list[it % 5])
+        recyclerView.adapter = TrackAdapter(
+            tracks = List(50) {
+                Track(track_names_list[it % 5], artist_names_list[it % 5], track_times_list[it % 5], track_images_list[it % 5])
             }
         )
 
