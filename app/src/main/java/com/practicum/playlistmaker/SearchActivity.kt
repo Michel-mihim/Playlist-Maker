@@ -16,6 +16,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 
 class SearchActivity : AppCompatActivity() {
@@ -28,7 +30,17 @@ class SearchActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        //переменные================================================================================
+
+        //переменные и списки
+        val track_names_list = listOf(
+            "Smells Like Teen Spirit",
+            "Billie Jean",
+            "Stayin' Alive",
+            "Whole Lotta Love",
+            "Sweet Child O'Mine"
+        )
+
+        //переменные VIEW===========================================================================
         val search_back_button = findViewById<ImageButton>(R.id.search_back_button)
         val search_clear_button = findViewById<ImageButton>(R.id.search_clear_button)
         val search_editText = findViewById<EditText>(R.id.search_editText)
@@ -37,6 +49,15 @@ class SearchActivity : AppCompatActivity() {
         //основной листинг==========================================================================
         search_clear_button.visibility = View.GONE
         search_editText.setText(search_def)
+
+        val recyclerView = findViewById<RecyclerView>(R.id.searchResultsRecycler)
+        recyclerView.adapter = SearchResultBoxAdapter(
+            searchResultBoxes = List(50) {
+                SearchResultBox(track_names_list[it % 5])
+            }
+        )
+
+        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
         //слушатели нажатий=========================================================================
         search_back_button.setOnClickListener{
