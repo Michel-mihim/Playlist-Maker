@@ -52,13 +52,13 @@ class TrackAdapter(
             artistNameView.text = track.artistName
             trackTimeView.text = track.trackTime
 
-            //val cornerDp = (R.dimen.track_image_corner)
-            //val cornerPx = dpToPx(R.dimen.track_image_corner, itemView.context)
+            val cornerDp = itemView.context.resources.getDimension(R.dimen.track_image_corner)
+            val cornerPx = dpToPx(cornerDp, itemView.context)
             Glide.with(itemView.context)
                 .load(track.artworkUrl100)
-                .placeholder(R.drawable.empty_music_image)
+                .placeholder(R.drawable.placeholder)
                 .centerInside()
-                .transform(RoundedCorners(R.dimen.track_image_corner))
+                .transform(RoundedCorners(cornerPx))
                 .into(trackImageView)
         }
 
