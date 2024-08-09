@@ -12,5 +12,13 @@
     <color name="editTextColor">#1A1B22</color>
     <color name="editHintColor">#1A1B22</color>
     <color name="editColor">#FFFFFF</color>
+
+    <!--
+    TRACK RECYCLER
+    -->
     <color name="arrowNextColor">#FFFFFF</color>
+    <color name="track_name_color">#FFFFFF</color>
+    <color name="artist_name_color">#FFFFFF</color>
+    <color name="track_time_color">#FFFFFF</color>
+    <color name="dot_color">#FFFFFF</color>
 </resources>
