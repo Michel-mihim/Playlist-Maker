@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="61dp"
+    android:layout_height="@dimen/recycler_height"
     android:orientation="horizontal"
     android:background="@color/menuColor">
 
@@ -17,7 +17,7 @@
         android:src="@drawable/empty_music_image" />
 
     <LinearLayout
-        android:layout_width="270dp"
+        android:layout_width="@dimen/music_info_frame_width"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
@@ -44,7 +44,7 @@
             <TextView
                 android:id="@+id/artist_name"
                 android:layout_width="wrap_content"
-                android:layout_height="13dp"
+                android:layout_height="@dimen/artist_name_height"
                 android:gravity="top|left"
                 android:paddingLeft="@dimen/edit_text_padding"
                 android:text="@string/artist_name"
@@ -56,7 +56,7 @@
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="13dp"
+                android:layout_height="@dimen/artist_name_height"
                 android:paddingLeft="@dimen/edit_text_padding"
                 android:src="@drawable/dot"
                 app:tint="@color/dot_color"/>
@@ -64,7 +64,7 @@
             <TextView
                 android:id="@+id/track_time"
                 android:layout_width="match_parent"
-                android:layout_height="13dp"
+                android:layout_height="@dimen/artist_name_height"
                 android:gravity="top|left"
                 android:paddingLeft="@dimen/edit_text_padding"
                 android:text="@string/track_time"
@@ -93,7 +93,4 @@
             app:tint="@color/arrowNextColor" />
 
     </LinearLayout>
-
-
-
 </LinearLayout>

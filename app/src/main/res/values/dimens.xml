@@ -18,6 +18,8 @@
     <!--
     TRACK RECYCLER
     -->
+    <dimen name="recycler_height">61dp</dimen>
+    <dimen name="music_info_frame_width">270dp</dimen>
     <dimen name="track_image_corner">2dp</dimen>
     <dimen name="recycler_margin_top">16dp</dimen>
     <dimen name="image_padding_left">13dp</dimen>
@@ -25,4 +27,5 @@
     <dimen name="music_info_text_padding_left_right">8dp</dimen>
     <dimen name="inter_button_margin_top">18dp</dimen>
     <dimen name="inter_button_margin_right">12dp</dimen>
+    <dimen name="artist_name_height">13dp</dimen>
 </resources>
