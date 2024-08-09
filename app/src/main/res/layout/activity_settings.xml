@@ -57,7 +57,7 @@
         android:id="@+id/button_license"
         style="@style/SettingsActivityMenuItemTextStyle"
         android:text="@string/license"
-        android:drawableEnd="@drawable/license"/>
+        android:drawableEnd="@drawable/arrow_next"/>
 
 
 </LinearLayout>
