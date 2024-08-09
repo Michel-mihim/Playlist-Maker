@@ -17,21 +17,22 @@
         android:src="@drawable/empty_music_image" />
 
     <LinearLayout
-        android:layout_width="250dp"
+        android:layout_width="270dp"
         android:layout_height="match_parent"
-
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/track_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/ys_display_regular"
             android:gravity="bottom|left"
             android:paddingHorizontal="@dimen/music_info_text_padding_left_right"
-            android:layout_weight="1"
             android:text="@string/track_name"
-            android:fontFamily="@font/ys_display_regular"
-            android:textSize="@dimen/tiny_text_size"/>
+            android:textSize="@dimen/tiny_text_size"
+            android:ellipsize="end"
+            android:maxLines="1"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -47,7 +48,9 @@
                 android:paddingLeft="@dimen/edit_text_padding"
                 android:text="@string/artist_name"
                 android:fontFamily="@font/ys_display_regular"
-                android:textSize="@dimen/super_tiny_text_size"/>
+                android:textSize="@dimen/super_tiny_text_size"
+                android:ellipsize="end"
+                android:maxLines="1"/>
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -64,20 +67,32 @@
                 android:paddingLeft="@dimen/edit_text_padding"
                 android:text="@string/track_time"
                 android:fontFamily="@font/ys_display_regular"
-                android:textSize="@dimen/super_tiny_text_size"/>
+                android:textSize="@dimen/super_tiny_text_size"
+                android:ellipsize="end"
+                android:maxLines="1"/>
 
         </LinearLayout>
 
     </LinearLayout>
 
-    <ImageButton
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layoutDirection="rtl">
 
-        android:background="@color/menuColor"
-        android:src="@drawable/arrow_next"
-        app:tint="@color/arrowNextColor"
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/inter_button_margin_right"
+            android:layout_marginTop="@dimen/inter_button_margin_top"
+            android:background="@color/menuColor"
 
-        android:gravity=""/>
+            android:src="@drawable/arrow_next"
+
+            app:tint="@color/arrowNextColor" />
+
+    </LinearLayout>
+
+
 
 </LinearLayout>
