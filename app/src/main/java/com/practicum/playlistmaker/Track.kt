@@ -52,15 +52,17 @@ class TrackAdapter(
             artistNameView.text = track.artistName
             trackTimeView.text = track.trackTime
 
-            val cornerDp = (R.dimen.track_image_corner)
-            val cornerPx = dpToPx(R.dimen.track_image_corner, itemView.context)
+            //val cornerDp = (R.dimen.track_image_corner)
+            //val cornerPx = dpToPx(R.dimen.track_image_corner, itemView.context)
             Glide.with(itemView.context)
                 .load(track.artworkUrl100)
                 .placeholder(R.drawable.empty_music_image)
-                .transform(RoundedCorners(cornerPx))
+                .centerInside()
+                .transform(RoundedCorners(R.dimen.track_image_corner))
                 .into(trackImageView)
         }
 
+        //не понял как использовать эту функцию, он требует на вход FLOAT, а в dimens INT
         fun dpToPx(dp: Float, context: Context): Int {
             return TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP,

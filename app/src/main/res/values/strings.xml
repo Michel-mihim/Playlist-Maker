@@ -14,4 +14,11 @@
     <string name="letter_text">Спасибо разработчикам и разработчицам за крутое приложение!</string>
     <string name="license_url">https://yandex.ru/legal/practicum_offer/</string>
     <string name="empty_string"></string>
+
+    <!--
+    TRACK RECYCLER
+    -->
+    <string name="track_name">Название песни</string>
+    <string name="artist_name">Исполнитель</string>
+    <string name="track_time">Длительность</string>
 </resources>

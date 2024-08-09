@@ -63,6 +63,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/searchResultsRecycler"/>
+        android:id="@+id/searchResultsRecycler"
+        android:layout_marginTop="@dimen/recycler_margin_top"/>
 
 </LinearLayout>
