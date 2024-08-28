@@ -44,7 +44,9 @@
             android:textColor="@color/editTextColor"
             android:textSize="@dimen/tiny_text_size"
             android:maxLines="1"
-            android:inputType="text"/>
+            android:inputType="text"
+            android:imeOptions="actionDone"
+            android:singleLine="true"/>
 
         <ImageButton
             android:id="@+id/search_clear_button"

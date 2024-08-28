@@ -6,18 +6,23 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
+
 
 
 class SearchActivity : AppCompatActivity() {
@@ -27,7 +32,15 @@ class SearchActivity : AppCompatActivity() {
         .baseUrl(iTunesBaseUrl)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
-    private val iTunesService = retrofit.create<>()
+    private val iTunesService = retrofit.create(iTunesApi::class.java)
+
+    private val tracks = ArrayList<Track>()
+    private val adapter = TrackAdapter(tracks)
+
+    private lateinit var search_back_button: ImageButton
+    private lateinit var search_clear_button: ImageButton
+    private lateinit var search_editText: EditText
+    private lateinit var searchRecyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,58 +55,27 @@ class SearchActivity : AppCompatActivity() {
         //переменные и списки
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
-        val track_names_list = listOf(
-            "Smells Like Teen Spirit",
-            "Billie Jean",
-            "Stayin' Alive",
-            "Whole Lotta Love",
-            "Sweet Child O'Mine"
-        )
-
-        val artist_names_list = listOf(
-            "Nirvana",
-            "Michael Jackson",
-            "Bee Gees",
-            "Led Zeppelin",
-            "Guns N' Roses"
-        )
-
-        val track_times_list = listOf(
-            "5:01",
-            "4:35",
-            "4:10",
-            "5:33",
-            "5:03"
-        )
-
-        val track_images_list = listOf(
-            "https://is5-ssl.mzstatic.com/image/thumb/Music115/v4/7b/58/c2/7b58c21a-2b51-2bb2-e59a-9bb9b96ad8c3/00602567924166.rgb.jpg/100x100bb.jpg",
-            "https://is5-ssl.mzstatic.com/image/thumb/Music125/v4/3d/9d/38/3d9d3811-71f0-3a0e-1ada-3004e56ff852/827969428726.jpg/100x100bb.jpg",
-            "https://is4-ssl.mzstatic.com/image/thumb/Music115/v4/1f/80/1f/1f801fc1-8c0f-ea3e-d3e5-387c6619619e/16UMGIM86640.rgb.jpg/100x100bb.jpg",
-            "https://is2-ssl.mzstatic.com/image/thumb/Music62/v4/7e/17/e3/7e17e33f-2efa-2a36-e916-7f808576cf6b/mzm.fyigqcbs.jpg/100x100bb.jpg",
-            "https://is5-ssl.mzstatic.com/image/thumb/Music125/v4/a0/4d/c4/a04dc484-03cc-02aa-fa82-5334fcb4bc16/18UMGIM24878.rgb.jpg/100x100bb.jpg"
-        )
-
         //переменные VIEW===========================================================================
-        val search_back_button = findViewById<ImageButton>(R.id.search_back_button)
-        val search_clear_button = findViewById<ImageButton>(R.id.search_clear_button)
-        val search_editText = findViewById<EditText>(R.id.search_editText)
-
-        val recyclerView = findViewById<RecyclerView>(R.id.searchResultsRecycler)
+        search_back_button = findViewById(R.id.search_back_button)
+        search_clear_button = findViewById(R.id.search_clear_button)
+        search_editText = findViewById(R.id.search_editText)
+        searchRecyclerView = findViewById(R.id.searchResultsRecycler)
 
         //основной листинг==========================================================================
         search_clear_button.visibility = View.GONE
         search_editText.setText(search_def)
 
-        recyclerView.adapter = TrackAdapter(
-            tracks = List(50) {
-                Track(track_names_list[it % 5], artist_names_list[it % 5], track_times_list[it % 5], track_images_list[it % 5])
-            }
-        )
-
-        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-
         //слушатели нажатий=========================================================================
+        search_editText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                if (search_editText.text.isNotEmpty()) {
+                    search()
+                }
+                true
+            }
+            false
+        }
+
         search_back_button.setOnClickListener{
             val search_back_intent = Intent(this, MainActivity::class.java)
             startActivity(search_back_intent)
@@ -124,6 +106,38 @@ class SearchActivity : AppCompatActivity() {
     }
 
     //вспомогательные функции=======================================================================
+    private fun search() {
+        iTunesService.search(search_editText.text.toString()).enqueue(object : Callback<SearchResponse> {
+            override fun onResponse(
+                call: Call<SearchResponse>,
+                response: Response<SearchResponse>
+            ) {
+                when (response.code()) {
+                    200 -> {
+                        if (response.body()?.results!!.isNotEmpty() == true) {
+                            //заполняем адаптер
+                            tracks.clear()
+                            tracks.addAll(response.body()?.results!!)
+
+                            searchRecyclerView.adapter = TrackAdapter(tracks)
+                            searchRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
+
+                            Toast.makeText(this@SearchActivity, "Поиск успешно произведен!", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(this@SearchActivity, "Ничего не найдено", Toast.LENGTH_SHORT).show()
+                        }
+                    } else -> {
+                    Toast.makeText(this@SearchActivity, "Код ошибки: ${response.code()}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
+                Toast.makeText(this@SearchActivity, "Что-то пошло не так..", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
     private fun searchClearButtonVisibility(s: CharSequence?): Int {
         return if (s.isNullOrEmpty()) {
             View.GONE
