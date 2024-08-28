@@ -25,7 +25,7 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(track: Track) {
         trackNameView.text = track.trackName
         artistNameView.text = track.artistName
-        trackTimeView.text = track.trackTime
+        trackTimeView.text = track.trackTimeMillis.toString()
 
         val cornerDp = itemView.context.resources.getDimension(R.dimen.track_image_corner)
         val cornerPx = dpToPx(cornerDp, itemView.context)

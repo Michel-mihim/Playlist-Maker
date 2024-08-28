@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -108,6 +109,7 @@ class SearchActivity : AppCompatActivity() {
     //вспомогательные функции=======================================================================
     private fun search() {
         iTunesService.search(search_editText.text.toString()).enqueue(object : Callback<SearchResponse> {
+            @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(
                 call: Call<SearchResponse>,
                 response: Response<SearchResponse>
@@ -121,6 +123,7 @@ class SearchActivity : AppCompatActivity() {
 
                             searchRecyclerView.adapter = TrackAdapter(tracks)
                             searchRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
+                            adapter.notifyDataSetChanged()
 
                             Toast.makeText(this@SearchActivity, "Поиск успешно произведен!", Toast.LENGTH_SHORT).show()
                         } else {
