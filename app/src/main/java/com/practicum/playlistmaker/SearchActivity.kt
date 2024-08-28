@@ -15,9 +15,20 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
 
 
 class SearchActivity : AppCompatActivity() {
+
+    private val iTunesBaseUrl = "https://itunes.apple.com"
+    private  val retrofit = Retrofit.Builder()
+        .baseUrl(iTunesBaseUrl)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+    private val iTunesService = retrofit.create<>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

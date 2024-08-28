@@ -43,6 +43,8 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.material.v161)
     implementation(libs.glide)
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
     annotationProcessor (libs.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
