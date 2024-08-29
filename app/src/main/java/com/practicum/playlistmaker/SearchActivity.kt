@@ -11,6 +11,8 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -43,6 +45,9 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var search_editText: EditText
     private lateinit var searchRecyclerView: RecyclerView
 
+    private lateinit var trackNotFoundPlaceholderImage: ImageView
+    private lateinit var trackNotFoundPlaceholderText: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -61,6 +66,9 @@ class SearchActivity : AppCompatActivity() {
         search_clear_button = findViewById(R.id.search_clear_button)
         search_editText = findViewById(R.id.search_editText)
         searchRecyclerView = findViewById(R.id.searchResultsRecycler)
+
+        trackNotFoundPlaceholderImage = findViewById(R.id.placeholder_pic_not_found)
+        trackNotFoundPlaceholderText = findViewById(R.id.placeholder_text_not_found)
 
         //основной листинг==========================================================================
         search_clear_button.visibility = View.GONE
@@ -124,21 +132,45 @@ class SearchActivity : AppCompatActivity() {
                             searchRecyclerView.adapter = TrackAdapter(tracks)
                             searchRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
                             adapter.notifyDataSetChanged()
-
-                            Toast.makeText(this@SearchActivity, "Поиск успешно произведен!", Toast.LENGTH_SHORT).show()
+                            showStatus(2, null)
                         } else {
-                            Toast.makeText(this@SearchActivity, "Ничего не найдено", Toast.LENGTH_SHORT).show()
+                            showStatus(0, null)
                         }
                     } else -> {
-                    Toast.makeText(this@SearchActivity, "Код ошибки: ${response.code()}", Toast.LENGTH_SHORT).show()
+                        showStatus(1, response.code())
                     }
                 }
             }
 
             override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
-                Toast.makeText(this@SearchActivity, "Что-то пошло не так..", Toast.LENGTH_SHORT).show()
+                showStatus(3, null)
             }
         })
+    }
+
+    private fun showStatus(indicator: Int, error_code: Int?) {
+        when (indicator) {
+            0 -> {
+                trackNotFoundPlaceholderText.visibility = View.VISIBLE
+                trackNotFoundPlaceholderImage.visibility = View.VISIBLE
+                tracks.clear()
+                adapter.notifyDataSetChanged()
+                Toast.makeText(this@SearchActivity, "Ничего не найдено", Toast.LENGTH_SHORT).show()
+            }
+            1 -> {
+                Toast.makeText(this@SearchActivity, "Код ошибки: ${error_code}", Toast.LENGTH_SHORT).show()
+            }
+            2 -> {
+                trackNotFoundPlaceholderText.visibility = View.GONE
+                trackNotFoundPlaceholderImage.visibility = View.GONE
+                Toast.makeText(this@SearchActivity, "Поиск успешно произведен!", Toast.LENGTH_SHORT).show()
+            }
+            3 -> {
+                Toast.makeText(this@SearchActivity, "Что-то пошло не так..", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+
     }
 
     private fun searchClearButtonVisibility(s: CharSequence?): Int {
