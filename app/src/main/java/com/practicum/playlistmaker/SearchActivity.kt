@@ -9,6 +9,7 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -29,24 +30,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 class SearchActivity : AppCompatActivity() {
-
-    private val iTunesBaseUrl = "https://itunes.apple.com"
-    private  val retrofit = Retrofit.Builder()
-        .baseUrl(iTunesBaseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-    private val iTunesService = retrofit.create(iTunesApi::class.java)
-
-    private val tracks = ArrayList<Track>()
-    private val adapter = TrackAdapter(tracks)
-
-    private lateinit var search_back_button: ImageButton
-    private lateinit var search_clear_button: ImageButton
-    private lateinit var search_editText: EditText
-    private lateinit var searchRecyclerView: RecyclerView
-
-    private lateinit var trackNotFoundPlaceholderImage: ImageView
-    private lateinit var trackNotFoundPlaceholderText: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,6 +52,7 @@ class SearchActivity : AppCompatActivity() {
 
         trackNotFoundPlaceholderImage = findViewById(R.id.placeholder_pic_not_found)
         trackNotFoundPlaceholderText = findViewById(R.id.placeholder_text_not_found)
+        searchRenewButton = findViewById(R.id.search_renew_button)
 
         //основной листинг==========================================================================
         search_clear_button.visibility = View.GONE
@@ -95,6 +79,12 @@ class SearchActivity : AppCompatActivity() {
             search_editText.setText(getString(R.string.empty_string))
             imm.hideSoftInputFromWindow(currentFocus!!.windowToken,0)
             search_editText.clearFocus()
+        }
+
+        searchRenewButton.setOnClickListener {
+            if (search_editText.text.isNotEmpty()) {
+                search()
+            }
         }
 
         //переопределение функций слушателя текста==================================================
@@ -128,9 +118,9 @@ class SearchActivity : AppCompatActivity() {
                     200 -> {
                         if (response.body()?.results!!.isNotEmpty() == true) {
                             tracks.addAll(response.body()?.results!!)
-                            showStatus(SearchStatus.TRACKS_FOUND,"Поиск успешно произведен!")
+                            showStatus(SearchStatus.TRACKS_FOUND, SEARCH_SUCCESS)
                         } else {
-                            showStatus(SearchStatus.TRACKS_NOT_FOUND,"Ничего не найдено")
+                            showStatus(SearchStatus.TRACKS_NOT_FOUND, TRACKS_NOT_FOUND_2)
                         }
                     } else -> {
                         showStatus(SearchStatus.ERROR_OCCURED,"Код ошибки: ${response.code()}")
@@ -143,7 +133,7 @@ class SearchActivity : AppCompatActivity() {
             @SuppressLint("NotifyDataSetChanged")
             override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
                 tracks.clear()
-                showStatus(SearchStatus.SOMETHING_WRONG,"Что-то пошло не так..")
+                showStatus(SearchStatus.SOMETHING_WRONG, SOMETHING_WRONG)
                 searchRecyclerView.adapter = TrackAdapter(tracks)
                 adapter.notifyDataSetChanged()
             }
@@ -154,19 +144,23 @@ class SearchActivity : AppCompatActivity() {
     private fun showStatus(indicator: SearchStatus, text: String) {
         when (indicator) {
             SearchStatus.TRACKS_NOT_FOUND -> {
-                showPlaceholder("Ничего не нашлось", R.drawable.not_found)
+                showPlaceholder(TRACKS_NOT_FOUND, R.drawable.not_found)
+                searchRenewButton.visibility = renewButtonVisibility(SearchStatus.TRACKS_NOT_FOUND)
                 Toast.makeText(this@SearchActivity, text, Toast.LENGTH_SHORT).show()
             }
             SearchStatus.SOMETHING_WRONG -> {
-                showPlaceholder("Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету", R.drawable.net_trouble)
+                showPlaceholder(NETWORK_PROBLEM, R.drawable.net_trouble)
+                searchRenewButton.visibility = renewButtonVisibility(SearchStatus.SOMETHING_WRONG)
                 Toast.makeText(this@SearchActivity, text, Toast.LENGTH_SHORT).show()
             }
             SearchStatus.TRACKS_FOUND -> {
                 hidePlaceholder()
+                searchRenewButton.visibility = renewButtonVisibility(SearchStatus.TRACKS_FOUND)
                 Toast.makeText(this@SearchActivity, text, Toast.LENGTH_SHORT).show()
             }
             SearchStatus.ERROR_OCCURED -> {
-                showPlaceholder("Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету", R.drawable.net_trouble)
+                showPlaceholder(NETWORK_PROBLEM, R.drawable.net_trouble)
+                searchRenewButton.visibility = renewButtonVisibility(SearchStatus.ERROR_OCCURED)
                 Toast.makeText(this@SearchActivity, text, Toast.LENGTH_SHORT).show()
             }
         }
@@ -184,6 +178,14 @@ class SearchActivity : AppCompatActivity() {
         trackNotFoundPlaceholderImage.visibility = View.GONE
     }
 
+    private fun renewButtonVisibility(indicator: SearchStatus): Int {
+        return when (indicator) {
+            SearchStatus.TRACKS_FOUND -> View.GONE
+            SearchStatus.TRACKS_NOT_FOUND -> View.GONE
+            else -> View.VISIBLE
+        }
+    }
+
     private fun searchClearButtonVisibility(s: CharSequence?): Int {
         return if (s.isNullOrEmpty()) {
             View.GONE
@@ -196,7 +198,33 @@ class SearchActivity : AppCompatActivity() {
     companion object {
         const val SEARCH_STRING = "SEARCH_STRING"
         const val SEARCH_DEF = ""
+        const val TRACKS_NOT_FOUND = "Ничего не нашлось"
+        const val TRACKS_NOT_FOUND_2 = "Ничего не найдено"
+        const val NETWORK_PROBLEM = "Проблемы со связью\n" +
+                "\n" +
+                "Загрузка не удалась. Проверьте подключение к интернету"
+        const val SOMETHING_WRONG = "Что-то пошло не так.."
+        const val SEARCH_SUCCESS = "Поиск успешно произведен!"
     }
+
+    private val iTunesBaseUrl = "https://itunes.apple.com"
+    private  val retrofit = Retrofit.Builder()
+        .baseUrl(iTunesBaseUrl)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+    private val iTunesService = retrofit.create(iTunesApi::class.java)
+
+    private val tracks = ArrayList<Track>()
+    private val adapter = TrackAdapter(tracks)
+
+    private lateinit var search_back_button: ImageButton
+    private lateinit var search_clear_button: ImageButton
+    private lateinit var search_editText: EditText
+    private lateinit var searchRecyclerView: RecyclerView
+
+    private lateinit var trackNotFoundPlaceholderImage: ImageView
+    private lateinit var trackNotFoundPlaceholderText: TextView
+    private lateinit var searchRenewButton: Button
 
     //переменная строки поиска======================================================================
     private var search_def : String = SEARCH_DEF
