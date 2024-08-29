@@ -73,6 +73,7 @@ class SearchActivity : AppCompatActivity() {
         //основной листинг==========================================================================
         search_clear_button.visibility = View.GONE
         search_editText.setText(search_def)
+        searchRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
 
         //слушатели нажатий=========================================================================
         search_editText.setOnEditorActionListener { _, actionId, _ ->
@@ -122,55 +123,65 @@ class SearchActivity : AppCompatActivity() {
                 call: Call<SearchResponse>,
                 response: Response<SearchResponse>
             ) {
+                tracks.clear()
                 when (response.code()) {
                     200 -> {
                         if (response.body()?.results!!.isNotEmpty() == true) {
-                            //заполняем адаптер
-                            tracks.clear()
                             tracks.addAll(response.body()?.results!!)
-
-                            searchRecyclerView.adapter = TrackAdapter(tracks)
-                            searchRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
-                            adapter.notifyDataSetChanged()
-                            showStatus(2, null)
+                            showStatus(SearchStatus.TRACKS_FOUND,"Поиск успешно произведен!")
                         } else {
-                            showStatus(0, null)
+                            showStatus(SearchStatus.TRACKS_NOT_FOUND,"Ничего не найдено")
                         }
                     } else -> {
-                        showStatus(1, response.code())
+                        showStatus(SearchStatus.ERROR_OCCURED,"Код ошибки: ${response.code()}")
                     }
                 }
+                searchRecyclerView.adapter = TrackAdapter(tracks)
+                adapter.notifyDataSetChanged()
             }
 
+            @SuppressLint("NotifyDataSetChanged")
             override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
-                showStatus(3, null)
+                tracks.clear()
+                showStatus(SearchStatus.SOMETHING_WRONG,"Что-то пошло не так..")
+                searchRecyclerView.adapter = TrackAdapter(tracks)
+                adapter.notifyDataSetChanged()
             }
         })
     }
 
-    private fun showStatus(indicator: Int, error_code: Int?) {
+    @SuppressLint("NotifyDataSetChanged")
+    private fun showStatus(indicator: SearchStatus, text: String) {
         when (indicator) {
-            0 -> {
-                trackNotFoundPlaceholderText.visibility = View.VISIBLE
-                trackNotFoundPlaceholderImage.visibility = View.VISIBLE
-                tracks.clear()
-                adapter.notifyDataSetChanged()
-                Toast.makeText(this@SearchActivity, "Ничего не найдено", Toast.LENGTH_SHORT).show()
+            SearchStatus.TRACKS_NOT_FOUND -> {
+                showPlaceholder("Ничего не нашлось", R.drawable.not_found)
+                Toast.makeText(this@SearchActivity, text, Toast.LENGTH_SHORT).show()
             }
-            1 -> {
-                Toast.makeText(this@SearchActivity, "Код ошибки: ${error_code}", Toast.LENGTH_SHORT).show()
+            SearchStatus.SOMETHING_WRONG -> {
+                showPlaceholder("Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету", R.drawable.net_trouble)
+                Toast.makeText(this@SearchActivity, text, Toast.LENGTH_SHORT).show()
             }
-            2 -> {
-                trackNotFoundPlaceholderText.visibility = View.GONE
-                trackNotFoundPlaceholderImage.visibility = View.GONE
-                Toast.makeText(this@SearchActivity, "Поиск успешно произведен!", Toast.LENGTH_SHORT).show()
+            SearchStatus.TRACKS_FOUND -> {
+                hidePlaceholder()
+                Toast.makeText(this@SearchActivity, text, Toast.LENGTH_SHORT).show()
             }
-            3 -> {
-                Toast.makeText(this@SearchActivity, "Что-то пошло не так..", Toast.LENGTH_SHORT).show()
+            SearchStatus.ERROR_OCCURED -> {
+                showPlaceholder("Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету", R.drawable.net_trouble)
+                Toast.makeText(this@SearchActivity, text, Toast.LENGTH_SHORT).show()
             }
         }
+    }
 
+    private fun showPlaceholder(text: String, image: Int) {
+        trackNotFoundPlaceholderText.text = text
+        trackNotFoundPlaceholderImage.setImageResource(image)
+        trackNotFoundPlaceholderText.visibility = View.VISIBLE
+        trackNotFoundPlaceholderImage.visibility = View.VISIBLE
+    }
 
+    private fun hidePlaceholder() {
+        trackNotFoundPlaceholderText.visibility = View.GONE
+        trackNotFoundPlaceholderImage.visibility = View.GONE
     }
 
     private fun searchClearButtonVisibility(s: CharSequence?): Int {

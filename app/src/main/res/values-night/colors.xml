@@ -21,4 +21,9 @@
     <color name="artist_name_color">#FFFFFF</color>
     <color name="track_time_color">#FFFFFF</color>
     <color name="dot_color">#FFFFFF</color>
+
+    <!--
+    SEARCH ACTIVITY
+    -->
+    <color name="not_found_text_color">#FFFFFF</color>
 </resources>

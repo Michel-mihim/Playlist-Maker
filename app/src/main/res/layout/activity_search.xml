@@ -89,7 +89,9 @@
             android:textStyle="bold"
             android:textSize="@dimen/not_found_text_size"
             android:layout_marginTop="@dimen/not_found_margin_top"
+            android:layout_marginHorizontal="@dimen/not_found_margin_horizontal"
             android:fontFamily="@font/ys_display_medium"
+            android:textColor="@color/not_found_text_color"
             android:visibility="invisible"/>
 
     </FrameLayout>

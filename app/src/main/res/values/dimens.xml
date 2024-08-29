@@ -17,6 +17,7 @@
     <dimen name="not_found_text_size">19dp</dimen>
     <dimen name="not_found_margin_top">238dp</dimen>
     <dimen name="not_found_pic_margin_top">102dp</dimen>
+    <dimen name="not_found_margin_horizontal">24dp</dimen>
     <!--
     TRACK RECYCLER
     -->
