@@ -156,7 +156,7 @@ class SearchActivity : AppCompatActivity() {
             SearchStatus.TRACKS_FOUND -> {
                 hidePlaceholder()
                 searchRenewButton.visibility = renewButtonVisibility(SearchStatus.TRACKS_FOUND)
-                Toast.makeText(this@SearchActivity, text, Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this@SearchActivity, text, Toast.LENGTH_SHORT).show()
             }
             SearchStatus.ERROR_OCCURED -> {
                 showPlaceholder(NETWORK_PROBLEM, R.drawable.net_trouble)
