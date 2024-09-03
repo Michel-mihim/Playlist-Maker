@@ -21,4 +21,11 @@
     <string name="track_name">Название песнииииииииииииииииииииииииииииииииии</string>
     <string name="artist_name">Исполнитель</string>
     <string name="track_time">Длительность</string>
+    <string name="track_not_found">Ничего не нашлось</string>
+
+    <!--
+    SEARCH ACTIVITY
+    -->
+    <string name="renew">Обновить</string>
+
 </resources>

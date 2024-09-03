@@ -14,7 +14,14 @@
     <dimen name="edit_search_heigth">36dp</dimen>
     <dimen name="radius_tiny">8dp</dimen>
     <dimen name="edit_text_padding">8dp</dimen>
-
+    <dimen name="not_found_text_size">19sp</dimen>
+    <dimen name="not_found_margin_top">238dp</dimen>
+    <dimen name="not_found_pic_margin_top">102dp</dimen>
+    <dimen name="not_found_margin_horizontal">24dp</dimen>
+    <dimen name="not_found_renew_button_text_size">14sp</dimen>
+    <dimen name="not_found_renew_button_margin_top">350dp</dimen>
+    <dimen name="track_layout_marginLeft">66dp</dimen>
+    <dimen name="track_layout_marginRight">44dp</dimen>
     <!--
     TRACK RECYCLER
     -->
