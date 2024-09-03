@@ -25,13 +25,12 @@
     <LinearLayout
         style="@style/SettingsActivityMenuListStyle">
 
-        <TextView
+        <com.google.android.material.switchmaterial.SwitchMaterial
             style="@style/SettingsActivityMenuItemThemeTextStyle"
-            android:text="@string/dark_theme"/>
-
-        <Switch
-            style="@style/SettingsActivityMenuItemIconStyle"
-            android:padding="15dp"/>
+            android:layout_width="match_parent"
+            android:padding="15dp"
+            android:text="@string/dark_theme"
+            android:textSize="@dimen/tiny_text_size"/>
 
     </LinearLayout>
 
