@@ -26,6 +26,7 @@
         style="@style/SettingsActivityMenuListStyle">
 
         <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/themeSwitcher"
             style="@style/SettingsActivityMenuItemThemeTextStyle"
             android:layout_width="match_parent"
             android:padding="15dp"
