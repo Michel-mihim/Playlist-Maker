@@ -24,10 +24,15 @@ class SettingsActivity : AppCompatActivity() {
         val button_license = findViewById<Button>(R.id.button_license)
         val settings_back_button = findViewById<ImageButton>(R.id.settings_back_button)
 
+        //основной листинг
+        if ((applicationContext as App).darkTheme) {
+            themeSwitcher.isChecked = true
+        }
+
 
         //слушатели нажатий=========================================================================
-        themeSwitcher.setOnCheckedChangeListener {switcher, checked ->
-
+        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+            (applicationContext as App).switchTheme(checked)
         }
 
         button_share.setOnClickListener{

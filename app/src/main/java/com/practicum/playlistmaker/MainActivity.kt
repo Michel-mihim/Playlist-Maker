@@ -1,7 +1,9 @@
 package com.practicum.playlistmaker
 
+import android.app.Application
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
@@ -47,5 +49,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(displayIntent)
         }
         //------------------------------------------------------------------------------------------
+
+        Log.d("MainActivity", "Я выполнилось")
     }
 }
