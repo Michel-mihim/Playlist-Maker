@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.res.Configuration
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
+import kotlin.math.log
 
 
 const val THEME_KEY = "night_theme"
@@ -13,26 +14,18 @@ class App: Application() {
 
     var darkTheme = false
 
-
     override fun onCreate() {
         super.onCreate()
 
-        val nightModeFlags = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-        val darkThemeSys = nightModeFlags == Configuration.UI_MODE_NIGHT_YES
-
-        }
-
         val sharedPrefs = getSharedPreferences(PREFERENCES, MODE_PRIVATE)
-        darkTheme = (sharedPrefs.getString(THEME_KEY, current_theme_app) == "dark")
+        darkTheme = (sharedPrefs.getString(THEME_KEY, isSysThemeDark().toString())).toBoolean()
 
-        current_theme_pref = when {
-            darkTheme -> "dark" else -> "light"
-        }
-        sharedPrefs.edit()
-            .putString(THEME_KEY, current_theme_pref)
-            .apply()
+        Log.d("SysDarkPrefsDark", isSysThemeDark().toString()+" "+darkTheme.toString())
 
-        Log.d("App", "Я выполнилось")
+        //sharedPrefs.edit()
+        //    .putString(THEME_KEY, isSysThemeDark().toString())
+        //    .apply()
+
     }
 
     fun switchTheme(darkThemeEnabled: Boolean) {
@@ -44,5 +37,10 @@ class App: Application() {
                 AppCompatDelegate.MODE_NIGHT_NO
             }
         )
+    }
+
+    fun isSysThemeDark(): Boolean {
+        val nightModeFlags = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        return nightModeFlags == Configuration.UI_MODE_NIGHT_YES
     }
 }

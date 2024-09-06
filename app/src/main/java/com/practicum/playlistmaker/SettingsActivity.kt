@@ -3,6 +3,7 @@ package com.practicum.playlistmaker
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
@@ -31,9 +32,12 @@ class SettingsActivity : AppCompatActivity() {
 
 
         //слушатели нажатий=========================================================================
-        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
-            (applicationContext as App).switchTheme(checked)
+        themeSwitcher.setOnCheckedChangeListener{ switch, isDark ->
+            (applicationContext as App).switchTheme(isDark)
+
+            Log.d("Switcher", isDark.toString())
         }
+
 
         button_share.setOnClickListener{
             val shareIntent = Intent(Intent.ACTION_SEND)
