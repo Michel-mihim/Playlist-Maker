@@ -73,6 +73,7 @@ class SearchActivity : AppCompatActivity() {
         search_back_button.setOnClickListener{
             val search_back_intent = Intent(this, MainActivity::class.java)
             startActivity(search_back_intent)
+            finish()
         }
 
         search_clear_button.setOnClickListener {

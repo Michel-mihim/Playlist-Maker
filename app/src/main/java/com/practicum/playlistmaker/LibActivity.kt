@@ -23,6 +23,7 @@ class LibActivity : AppCompatActivity() {
         lib_back_button.setOnClickListener{
             val libBackIntent = Intent(this, MainActivity::class.java)
             startActivity(libBackIntent)
+            finish()
         }
 
     }
