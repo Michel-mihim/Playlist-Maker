@@ -40,13 +40,13 @@ class App: Application() {
 
     fun readThemePrefsDark(): Boolean {
         val sharedPrefs = getSharedPreferences(PREFERENCES, MODE_PRIVATE)
-        return (sharedPrefs.getString(THEME_KEY, isSysThemeDark().toString())).toBoolean()
+        return (sharedPrefs.getBoolean(THEME_KEY, isSysThemeDark()))
     }
 
     fun writeThemePrefsDark(darkThemeEnabled: Boolean) {
         val sharedPrefs = getSharedPreferences(PREFERENCES, MODE_PRIVATE)
         sharedPrefs.edit()
-            .putString(THEME_KEY, darkThemeEnabled.toString())
+            .putBoolean(THEME_KEY, darkThemeEnabled)
             .apply()
     }
 }
