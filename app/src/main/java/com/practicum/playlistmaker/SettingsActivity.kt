@@ -34,7 +34,8 @@ class SettingsActivity : AppCompatActivity() {
 
         //слушатели нажатий=========================================================================
         themeSwitcher.setOnCheckedChangeListener{ switcher, checked ->
-            (applicationContext as App).switchTheme(checked)
+            (applicationContext as App).switchTheme((applicationContext as App)
+                .getSharedPreferences(PREFERENCES, MODE_PRIVATE), checked)
         }
 
         button_share.setOnClickListener{
