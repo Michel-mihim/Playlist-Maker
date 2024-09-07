@@ -14,6 +14,8 @@ import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
@@ -30,14 +32,10 @@ class SettingsActivity : AppCompatActivity() {
             themeSwitcher.isChecked = true
         }
 
-
         //слушатели нажатий=========================================================================
-        themeSwitcher.setOnCheckedChangeListener{ switch, isDark ->
-            (applicationContext as App).switchTheme(isDark)
-
-            Log.d("Switcher", isDark.toString())
+        themeSwitcher.setOnCheckedChangeListener{ switcher, checked ->
+            (applicationContext as App).switchTheme(checked)
         }
-
 
         button_share.setOnClickListener{
             val shareIntent = Intent(Intent.ACTION_SEND)
@@ -62,8 +60,6 @@ class SettingsActivity : AppCompatActivity() {
             licenseIntent.data = Uri.parse(getString(R.string.license_url))
             startActivity(licenseIntent)
         }
-
-
 
         settings_back_button.setOnClickListener{
             val settingsBackIntent = Intent(this, MainActivity::class.java)

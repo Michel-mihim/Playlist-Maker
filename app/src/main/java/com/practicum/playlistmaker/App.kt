@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.res.Configuration
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
-import kotlin.math.log
 
 
 const val THEME_KEY = "night_theme"
@@ -17,14 +16,8 @@ class App: Application() {
     override fun onCreate() {
         super.onCreate()
 
-        val sharedPrefs = getSharedPreferences(PREFERENCES, MODE_PRIVATE)
-        darkTheme = (sharedPrefs.getString(THEME_KEY, isSysThemeDark().toString())).toBoolean()
-
-        Log.d("SysDarkPrefsDark", isSysThemeDark().toString()+" "+darkTheme.toString())
-
-        //sharedPrefs.edit()
-        //    .putString(THEME_KEY, isSysThemeDark().toString())
-        //    .apply()
+        darkTheme = readThemePrefsDark()
+        switchTheme(darkTheme)
 
     }
 
@@ -37,10 +30,23 @@ class App: Application() {
                 AppCompatDelegate.MODE_NIGHT_NO
             }
         )
+        writeThemePrefsDark(darkThemeEnabled)
     }
 
     fun isSysThemeDark(): Boolean {
         val nightModeFlags = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         return nightModeFlags == Configuration.UI_MODE_NIGHT_YES
+    }
+
+    fun readThemePrefsDark(): Boolean {
+        val sharedPrefs = getSharedPreferences(PREFERENCES, MODE_PRIVATE)
+        return (sharedPrefs.getString(THEME_KEY, isSysThemeDark().toString())).toBoolean()
+    }
+
+    fun writeThemePrefsDark(darkThemeEnabled: Boolean) {
+        val sharedPrefs = getSharedPreferences(PREFERENCES, MODE_PRIVATE)
+        sharedPrefs.edit()
+            .putString(THEME_KEY, darkThemeEnabled.toString())
+            .apply()
     }
 }
