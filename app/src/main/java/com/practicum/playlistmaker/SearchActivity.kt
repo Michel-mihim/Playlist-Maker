@@ -45,6 +45,7 @@ class SearchActivity : AppCompatActivity() {
         //переменные и списки
         val sharedPrefs = getSharedPreferences(PREFERENCES, MODE_PRIVATE)
         val searchHistory = SearchHistory(sharedPrefs)
+        adapter = TrackAdapter(tracks, searchHistory)
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
         //переменные VIEW===========================================================================
@@ -133,7 +134,7 @@ class SearchActivity : AppCompatActivity() {
                     }
                 }
 
-                searchRecyclerView.adapter = TrackAdapter(tracks, searchHistory)
+                searchRecyclerView.adapter = adapter
                 adapter.notifyDataSetChanged()
             }
 
@@ -141,7 +142,7 @@ class SearchActivity : AppCompatActivity() {
             override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
                 tracks.clear()
                 showStatus(SearchStatus.SOMETHING_WRONG, SOMETHING_WRONG)
-                searchRecyclerView.adapter = TrackAdapter(tracks, searchHistory)
+                searchRecyclerView.adapter = adapter
                 adapter.notifyDataSetChanged()
             }
         })
@@ -222,7 +223,8 @@ class SearchActivity : AppCompatActivity() {
     private val iTunesService = retrofit.create(iTunesApi::class.java)
 
     private val tracks = ArrayList<Track>()
-    private val adapter = TrackAdapter(tracks, searchHistory)
+
+    private lateinit var adapter: TrackAdapter
 
     private lateinit var search_back_button: ImageButton
     private lateinit var search_clear_button: ImageButton
