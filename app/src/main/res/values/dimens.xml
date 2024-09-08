@@ -22,6 +22,11 @@
     <dimen name="not_found_renew_button_margin_top">350dp</dimen>
     <dimen name="track_layout_marginLeft">66dp</dimen>
     <dimen name="track_layout_marginRight">44dp</dimen>
+    <dimen name="search_edit_margin_horizontal">16dp</dimen>
+    <dimen name="search_edit_margin_vertical">8dp</dimen>
+    <dimen name="history_padding_top">18dp</dimen>
+    <dimen name="history_padding_bottom">12dp</dimen>
+    <dimen name="history_clear_button_margin_top">291dp</dimen>
     <!--
     TRACK RECYCLER
     -->

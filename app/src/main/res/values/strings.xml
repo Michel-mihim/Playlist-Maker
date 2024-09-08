@@ -27,5 +27,7 @@
     SEARCH ACTIVITY
     -->
     <string name="renew">Обновить</string>
+    <string name="history">Вы искали</string>
+    <string name="clear_history">Очистить историю</string>
 
 </resources>
