@@ -28,7 +28,7 @@
     <dimen name="history_padding_bottom">12dp</dimen>
     <dimen name="history_clear_button_margin_top">291dp</dimen>
     <!--
-    TRACK RECYCLER
+    TRACK RECYCLERs
     -->
     <dimen name="recycler_height">61dp</dimen>
     <dimen name="music_info_frame_width">270dp</dimen>
@@ -40,4 +40,7 @@
     <dimen name="inter_button_margin_top">18dp</dimen>
     <dimen name="inter_button_margin_right">12dp</dimen>
     <dimen name="artist_name_height">13dp</dimen>
+
+    <dimen name="history_recycler_margin_top">84dp</dimen>
+    <dimen name="history_recycler_margin_bottom">425dp</dimen>
 </resources>

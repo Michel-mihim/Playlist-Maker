@@ -121,6 +121,12 @@
             android:textSize="@dimen/not_found_text_size"
             android:fontFamily="@font/ys_display_medium"
             android:textColor="@color/menuItemsTextColor"/>
+        
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/history_recycler_margin_top"
+            android:layout_marginBottom="@dimen/history_recycler_margin_bottom"/>
 
         <Button
             android:layout_width="wrap_content"
