@@ -3,6 +3,7 @@ package com.practicum.playlistmaker
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -42,6 +43,8 @@ class SearchActivity : AppCompatActivity() {
         }
 
         //переменные и списки
+        val sharedPrefs = getSharedPreferences(PREFERENCES, MODE_PRIVATE)
+        val searchHistory = SearchHistory(sharedPrefs)
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
         //переменные VIEW===========================================================================
@@ -59,11 +62,12 @@ class SearchActivity : AppCompatActivity() {
         search_editText.setText(search_def)
         searchRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
 
+
         //слушатели нажатий=========================================================================
         search_editText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 if (search_editText.text.isNotEmpty()) {
-                    search()
+                    search(searchHistory)
                 }
                 true
             }
@@ -84,7 +88,7 @@ class SearchActivity : AppCompatActivity() {
 
         searchRenewButton.setOnClickListener {
             if (search_editText.text.isNotEmpty()) {
-                search()
+                search(searchHistory)
             }
         }
 
@@ -107,7 +111,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     //вспомогательные функции=======================================================================
-    private fun search() {
+    private fun search(searchHistory: SearchHistory) {
         iTunesService.search(search_editText.text.toString()).enqueue(object : Callback<SearchResponse> {
             @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(
@@ -115,6 +119,7 @@ class SearchActivity : AppCompatActivity() {
                 response: Response<SearchResponse>
             ) {
                 tracks.clear()
+
                 when (response.code()) {
                     200 -> {
                         if (response.body()?.results!!.isNotEmpty() == true) {
@@ -127,7 +132,8 @@ class SearchActivity : AppCompatActivity() {
                         showStatus(SearchStatus.ERROR_OCCURED,"Код ошибки: ${response.code()}")
                     }
                 }
-                searchRecyclerView.adapter = TrackAdapter(tracks)
+
+                searchRecyclerView.adapter = TrackAdapter(tracks, searchHistory)
                 adapter.notifyDataSetChanged()
             }
 
@@ -135,7 +141,7 @@ class SearchActivity : AppCompatActivity() {
             override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
                 tracks.clear()
                 showStatus(SearchStatus.SOMETHING_WRONG, SOMETHING_WRONG)
-                searchRecyclerView.adapter = TrackAdapter(tracks)
+                searchRecyclerView.adapter = TrackAdapter(tracks, searchHistory)
                 adapter.notifyDataSetChanged()
             }
         })
@@ -216,7 +222,7 @@ class SearchActivity : AppCompatActivity() {
     private val iTunesService = retrofit.create(iTunesApi::class.java)
 
     private val tracks = ArrayList<Track>()
-    private val adapter = TrackAdapter(tracks)
+    private val adapter = TrackAdapter(tracks, searchHistory)
 
     private lateinit var search_back_button: ImageButton
     private lateinit var search_clear_button: ImageButton
