@@ -123,6 +123,7 @@
             android:textColor="@color/menuItemsTextColor"/>
         
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/historyRecycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/history_recycler_margin_top"
