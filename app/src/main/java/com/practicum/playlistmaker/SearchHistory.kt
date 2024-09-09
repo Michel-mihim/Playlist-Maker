@@ -6,16 +6,16 @@ import com.google.gson.Gson
 const val SEARCH_HISTORY_KEY = "history"
 
 class SearchHistory(val sharedPrefs: SharedPreferences) {
-    fun writeHistory(track: Track) {
-        val json = Gson().toJson(track)
+    fun writeHistory(tracks: Array<Track>) {
+        val json = Gson().toJson(tracks)
         this.sharedPrefs.edit()
             .putString(SEARCH_HISTORY_KEY, json)
             .apply()
     }
 
-    fun readHistory():Track? {
-        val json = this.sharedPrefs.getString(SEARCH_HISTORY_KEY, null) ?: return null
-        return Gson().fromJson(json, Track::class.java)
+    fun readHistory(): Array<Track> {
+        val json = this.sharedPrefs.getString(SEARCH_HISTORY_KEY, null) ?: return emptyArray()
+        return Gson().fromJson(json, Array<Track>::class.java)
     }
 
     fun clearHistory() {

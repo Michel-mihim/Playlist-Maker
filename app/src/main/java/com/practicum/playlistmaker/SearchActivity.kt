@@ -132,7 +132,7 @@ class SearchActivity : AppCompatActivity() {
     @SuppressLint("NotifyDataSetChanged")
     private fun showHistory(searchHistory: SearchHistory) {
         val track = searchHistory.readHistory()
-        tracks.add(track!!)
+        tracks.add(track)
         historyRecyclerView.adapter = adapter
         adapter.notifyDataSetChanged()
     }
