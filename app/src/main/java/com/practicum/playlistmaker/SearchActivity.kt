@@ -58,6 +58,7 @@ class SearchActivity : AppCompatActivity() {
         trackNotFoundPlaceholderImage = findViewById(R.id.placeholder_pic_not_found)
         trackNotFoundPlaceholderText = findViewById(R.id.placeholder_text_not_found)
         searchRenewButton = findViewById(R.id.search_renew_button)
+        history_clear_button = findViewById(R.id.history_clear_button)
 
         //основной листинг==========================================================================
         search_clear_button.visibility = View.GONE
@@ -76,6 +77,10 @@ class SearchActivity : AppCompatActivity() {
                 true
             }
             false
+        }
+
+        history_clear_button.setOnClickListener{
+            clearHistory(searchHistory)
         }
 
         search_back_button.setOnClickListener{
@@ -115,6 +120,15 @@ class SearchActivity : AppCompatActivity() {
     }
 
     //вспомогательные функции=======================================================================
+    @SuppressLint("NotifyDataSetChanged")
+    private fun clearHistory(searchHistory: SearchHistory) {
+        searchHistory.clearHistory()
+        //historyRecyclerView.adapter = adapter
+        //adapter.notifyDataSetChanged()
+
+        Toast.makeText(this@SearchActivity, "История поиска была удалена", Toast.LENGTH_SHORT).show()
+    }
+
     @SuppressLint("NotifyDataSetChanged")
     private fun showHistory(searchHistory: SearchHistory) {
         val track = searchHistory.readHistory()
@@ -246,6 +260,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var trackNotFoundPlaceholderImage: ImageView
     private lateinit var trackNotFoundPlaceholderText: TextView
     private lateinit var searchRenewButton: Button
+    private lateinit var history_clear_button: Button
 
     //переменная строки поиска======================================================================
     private var search_def : String = SEARCH_DEF
