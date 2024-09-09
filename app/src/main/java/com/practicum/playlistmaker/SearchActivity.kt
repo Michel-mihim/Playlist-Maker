@@ -53,6 +53,7 @@ class SearchActivity : AppCompatActivity() {
         search_clear_button = findViewById(R.id.search_clear_button)
         search_editText = findViewById(R.id.search_editText)
         searchRecyclerView = findViewById(R.id.searchResultsRecycler)
+        historyRecyclerView = findViewById(R.id.historyRecycler)
 
         trackNotFoundPlaceholderImage = findViewById(R.id.placeholder_pic_not_found)
         trackNotFoundPlaceholderText = findViewById(R.id.placeholder_text_not_found)
@@ -62,13 +63,15 @@ class SearchActivity : AppCompatActivity() {
         search_clear_button.visibility = View.GONE
         search_editText.setText(search_def)
         searchRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
+        historyRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
+
 
 
         //слушатели нажатий=========================================================================
         search_editText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 if (search_editText.text.isNotEmpty()) {
-                    search(searchHistory)
+                    search()
                 }
                 true
             }
@@ -89,7 +92,7 @@ class SearchActivity : AppCompatActivity() {
 
         searchRenewButton.setOnClickListener {
             if (search_editText.text.isNotEmpty()) {
-                search(searchHistory)
+                search()
             }
         }
 
@@ -112,7 +115,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     //вспомогательные функции=======================================================================
-    private fun search(searchHistory: SearchHistory) {
+    private fun search() {
         iTunesService.search(search_editText.text.toString()).enqueue(object : Callback<SearchResponse> {
             @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(
@@ -230,6 +233,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var search_clear_button: ImageButton
     private lateinit var search_editText: EditText
     private lateinit var searchRecyclerView: RecyclerView
+    private lateinit var historyRecyclerView: RecyclerView
 
     private lateinit var trackNotFoundPlaceholderImage: ImageView
     private lateinit var trackNotFoundPlaceholderText: TextView
