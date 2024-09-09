@@ -6,7 +6,7 @@ import com.google.gson.Gson
 const val SEARCH_HISTORY_KEY = "history"
 
 class SearchHistory(val sharedPrefs: SharedPreferences) {
-    fun writeHistory(tracks: Array<Track>) {
+    fun writeHistory(tracks: ArrayList<Track>) {
         val json = Gson().toJson(tracks)
         this.sharedPrefs.edit()
             .putString(SEARCH_HISTORY_KEY, json)

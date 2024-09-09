@@ -71,7 +71,7 @@ class SearchActivity : AppCompatActivity() {
 
         //слушатели нажатий=========================================================================
         adapter.onItemClickListener = { track ->
-            Log.d("WTF", track.toString())
+            writeHistory(searchHistory, track)
         }
 
         search_editText.setOnEditorActionListener { _, actionId, _ ->
@@ -125,12 +125,20 @@ class SearchActivity : AppCompatActivity() {
     }
 
     //вспомогательные функции=======================================================================
+    private fun writeHistory(searchHistory: SearchHistory, trackAdded: Track) {
+        val lastTracks = searchHistory.readHistory()
+        newTracks.clear()
+        newTracks.add(trackAdded)
+        newTracks.addAll(lastTracks)
+        Log.d("WTF", newTracks.toString())
+        searchHistory.writeHistory(newTracks)
+    }
+
     @SuppressLint("NotifyDataSetChanged")
     private fun clearHistory(searchHistory: SearchHistory) {
         searchHistory.clearHistory()
-        showHistory(searchHistory)
 
-        Toast.makeText(this@SearchActivity, "История поиска была удалена", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this@SearchActivity, HISTORY_CLEARED, Toast.LENGTH_SHORT).show()
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -245,6 +253,7 @@ class SearchActivity : AppCompatActivity() {
                 "Загрузка не удалась. Проверьте подключение к интернету"
         const val SOMETHING_WRONG = "Что-то пошло не так.."
         const val SEARCH_SUCCESS = "Поиск успешно произведен!"
+        const val HISTORY_CLEARED ="История поиска была удалена"
     }
 
     private val iTunesBaseUrl = "https://itunes.apple.com"
@@ -255,8 +264,8 @@ class SearchActivity : AppCompatActivity() {
     private val iTunesService = retrofit.create(iTunesApi::class.java)
 
     private val tracks = ArrayList<Track>()
+    private var newTracks = ArrayList<Track>()
 
-    //private lateinit var lastTracks: Array<Track>?
     private lateinit var adapter: TrackAdapter
 
     private lateinit var search_back_button: ImageButton
