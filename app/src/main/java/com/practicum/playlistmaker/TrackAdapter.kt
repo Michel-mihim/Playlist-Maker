@@ -23,7 +23,7 @@ class TrackAdapter(
         //слушатель нажатия на трек в результатах поиска
         holder.itemView.setOnClickListener {
             Log.d("WTF", tracks[position].toString())
-
+            //запись трека в файл
             searchHistory.writeHistory(tracks[position])
         }
     }

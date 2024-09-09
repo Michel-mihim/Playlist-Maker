@@ -65,7 +65,7 @@ class SearchActivity : AppCompatActivity() {
         searchRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
         historyRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
 
-
+        showHistory(searchHistory)
 
         //слушатели нажатий=========================================================================
         search_editText.setOnEditorActionListener { _, actionId, _ ->
@@ -115,6 +115,14 @@ class SearchActivity : AppCompatActivity() {
     }
 
     //вспомогательные функции=======================================================================
+    @SuppressLint("NotifyDataSetChanged")
+    private fun showHistory(searchHistory: SearchHistory) {
+        val track = searchHistory.readHistory()
+        tracks.add(track!!)
+        historyRecyclerView.adapter = adapter
+        adapter.notifyDataSetChanged()
+    }
+
     private fun search() {
         iTunesService.search(search_editText.text.toString()).enqueue(object : Callback<SearchResponse> {
             @SuppressLint("NotifyDataSetChanged")
