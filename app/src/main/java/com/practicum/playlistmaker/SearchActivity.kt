@@ -7,6 +7,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -45,7 +46,7 @@ class SearchActivity : AppCompatActivity() {
         //переменные и списки
         val sharedPrefs = getSharedPreferences(PREFERENCES, MODE_PRIVATE)
         val searchHistory = SearchHistory(sharedPrefs)
-        adapter = TrackAdapter(tracks, searchHistory)
+        adapter = TrackAdapter(tracks)
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
         //переменные VIEW===========================================================================
@@ -69,6 +70,10 @@ class SearchActivity : AppCompatActivity() {
         showHistory(searchHistory)
 
         //слушатели нажатий=========================================================================
+        adapter.onItemClickListener = { track ->
+            Log.d("WTF", track.toString())
+        }
+
         search_editText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 if (search_editText.text.isNotEmpty()) {
@@ -123,16 +128,18 @@ class SearchActivity : AppCompatActivity() {
     @SuppressLint("NotifyDataSetChanged")
     private fun clearHistory(searchHistory: SearchHistory) {
         searchHistory.clearHistory()
-        //historyRecyclerView.adapter = adapter
-        //adapter.notifyDataSetChanged()
+        showHistory(searchHistory)
 
         Toast.makeText(this@SearchActivity, "История поиска была удалена", Toast.LENGTH_SHORT).show()
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private fun showHistory(searchHistory: SearchHistory) {
-        val track = searchHistory.readHistory()
-        tracks.add(track)
+
+        val lastTracks = searchHistory.readHistory()
+        Log.d("WTF", lastTracks.toString())
+        tracks.clear()
+        tracks.addAll(lastTracks)
         historyRecyclerView.adapter = adapter
         adapter.notifyDataSetChanged()
     }
@@ -249,6 +256,7 @@ class SearchActivity : AppCompatActivity() {
 
     private val tracks = ArrayList<Track>()
 
+    //private lateinit var lastTracks: Array<Track>?
     private lateinit var adapter: TrackAdapter
 
     private lateinit var search_back_button: ImageButton

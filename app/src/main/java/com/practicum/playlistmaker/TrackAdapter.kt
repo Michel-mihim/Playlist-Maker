@@ -8,10 +8,10 @@ import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
 import androidx.recyclerview.widget.RecyclerView
 
 class TrackAdapter(
-    private val tracks: List<Track>,
-    private val searchHistory: SearchHistory
+    private val tracks: List<Track>
 ) : RecyclerView.Adapter<TrackViewHolder>() {
 
+    var onItemClickListener: ((Track) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.track_view, parent, false)
@@ -22,9 +22,9 @@ class TrackAdapter(
         holder.bind(tracks[position])
         //слушатель нажатия на трек в результатах поиска
         holder.itemView.setOnClickListener {
-            Log.d("WTF", tracks[position].toString())
-            //запись трека в файл
-            searchHistory.writeHistory(tracks[position])
+            //передача трека в активити
+            onItemClickListener?.invoke(tracks[position])
+
         }
     }
 
