@@ -126,12 +126,7 @@ class SearchActivity : AppCompatActivity() {
 
     //вспомогательные функции=======================================================================
     private fun writeHistory(searchHistory: SearchHistory, trackAdded: Track) {
-        val lastTracks = searchHistory.readHistory()
-        newTracks.clear()
-        newTracks.add(trackAdded)
-        newTracks.addAll(lastTracks)
-        Log.d("WTF", newTracks.toString())
-        searchHistory.writeHistory(newTracks)
+        searchHistory.writeHistory(trackAdded)
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -264,7 +259,6 @@ class SearchActivity : AppCompatActivity() {
     private val iTunesService = retrofit.create(iTunesApi::class.java)
 
     private val tracks = ArrayList<Track>()
-    private var newTracks = ArrayList<Track>()
 
     private lateinit var adapter: TrackAdapter
 
