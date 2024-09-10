@@ -38,7 +38,7 @@ class SearchHistory(val sharedPrefs: SharedPreferences) {
         var tracksNewReady = ArrayList<Track>()
         if (trackListChecker(getTrackId(trackAdded), tracks)) {
             Log.d("WTF", "Есть такой. Будет перемещен на первое место")
-            return moveTrackIfPresent(trackAdded, tracks)
+            return makeFirstTrackIfPresent(trackAdded, tracks)
         }
         Log.d("WTF", "Нет такого. Будет добавлен")
         return addTrackIfAbsent(trackAdded, tracks)
@@ -64,8 +64,24 @@ class SearchHistory(val sharedPrefs: SharedPreferences) {
         return tracksReady
     }
 
-    fun moveTrackIfPresent(trackAdded: Track, tracks: Array<Track>): ArrayList<Track> {
+    fun makeFirstTrackIfPresent(trackAdded: Track, tracks: Array<Track>): ArrayList<Track> {
+        var tracksReady = ArrayList<Track>()
+        var tracksList: MutableList<Track> = ArrayList()
+        tracksList.addAll(tracks)
+        tracksList.removeAt(getDuplicateListId(trackAdded, tracks))
 
-        return
+        tracksReady.add(trackAdded)
+        tracksReady.addAll(tracksList)
+
+        return tracksReady
+    }
+
+    fun getDuplicateListId(trackAdded: Track, tracks: Array<Track>): Int {
+        for (i in 0..tracks.size) {
+            if (getTrackId(track) == trackId) {
+                return true
+            }
+        }
+        return 0
     }
 }
