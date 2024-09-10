@@ -217,21 +217,23 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun hidePlaceholder() {
-        trackNotFoundPlaceholderText.visibility = View.GONE
-        trackNotFoundPlaceholderImage.visibility = View.GONE
+        trackNotFoundPlaceholderText.visibility = View.INVISIBLE
+        trackNotFoundPlaceholderImage.visibility = View.INVISIBLE
     }
 
     private fun renewButtonVisibility(indicator: SearchStatus): Int {
         return when (indicator) {
-            SearchStatus.TRACKS_FOUND -> View.GONE
-            SearchStatus.TRACKS_NOT_FOUND -> View.GONE
+            SearchStatus.TRACKS_FOUND -> View.INVISIBLE
+            SearchStatus.TRACKS_NOT_FOUND -> View.INVISIBLE
             else -> View.VISIBLE
         }
     }
 
+    private fun historyClearButtonVisibility()
+
     private fun searchClearButtonVisibility(s: CharSequence?): Int {
         return if (s.isNullOrEmpty()) {
-            View.GONE
+            View.INVISIBLE
         } else {
             View.VISIBLE
         }
