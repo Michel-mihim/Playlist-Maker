@@ -6,6 +6,7 @@ import android.widget.Toast
 import com.google.gson.Gson
 
 const val SEARCH_HISTORY_KEY = "history"
+const val HISTORY_CAPACITY = 10
 
 class SearchHistory(val sharedPrefs: SharedPreferences) {
 
@@ -15,7 +16,7 @@ class SearchHistory(val sharedPrefs: SharedPreferences) {
 
         val lastTracks = readHistory()
         newTracks.clear()
-        newTracks.addAll(historyNewReady(trackAdded, lastTracks, 10))
+        newTracks.addAll(historyNewGenerator(trackAdded, lastTracks, HISTORY_CAPACITY))
 
         val json = Gson().toJson(newTracks)
         this.sharedPrefs.edit()
@@ -34,14 +35,14 @@ class SearchHistory(val sharedPrefs: SharedPreferences) {
             .apply()
     }
 
-    fun historyNewReady(trackAdded: Track, tracks: Array<Track>, maxTracksCount: Int): ArrayList<Track> {
-        var tracksNewReady = ArrayList<Track>()
-        if (trackListChecker(getTrackId(trackAdded), tracks)) {
-            Log.d("WTF", "Есть такой. Будет перемещен на первое место")
-            return makeFirstTrackIfPresent(trackAdded, tracks)
-        }
-        Log.d("WTF", "Нет такого. Будет добавлен")
-        return addTrackIfAbsent(trackAdded, tracks)
+    fun historyNewGenerator(trackAdded: Track, tracks: Array<Track>, maxTracksCount: Int): ArrayList<Track> {
+        var newTracks = ArrayList<Track>()
+        trackChecker(
+            trackAdded, tracks,
+            onPresent = { id ->   newTracks.addAll(makeFirstTrackIfPresent(trackAdded, tracks))},
+            onAbsent = { newTracks.addAll(addTrackIfAbsent(trackAdded, tracks)) }
+        )
+        return newTracks.take(maxTracksCount).toCollection(ArrayList<Track>())
         }
 
     fun getTrackId(track: Track): String {
@@ -55,6 +56,26 @@ class SearchHistory(val sharedPrefs: SharedPreferences) {
             }
         }
         return false
+    }
+
+    fun getDuplicateListId(trackAdded: Track, tracks: Array<Track>): Int {
+        for (i in 0..tracks.size) {
+            if (getTrackId(tracks[i]) == trackAdded.trackId) {
+                return i
+            }
+        }
+        return 0
+    }
+
+    fun trackChecker(trackAdded: Track, tracks: Array<Track>,
+        onAbsent: (Boolean) -> Unit,
+        onPresent: (Int) -> Unit
+    ) {
+        if (trackListChecker(getTrackId(trackAdded), tracks)) {
+            onPresent(getDuplicateListId(trackAdded, tracks))
+        } else {
+            onAbsent(false)
+        }
     }
 
     fun addTrackIfAbsent(trackAdded: Track, tracks: Array<Track>): ArrayList<Track> {
@@ -76,12 +97,5 @@ class SearchHistory(val sharedPrefs: SharedPreferences) {
         return tracksReady
     }
 
-    fun getDuplicateListId(trackAdded: Track, tracks: Array<Track>): Int {
-        for (i in 0..tracks.size) {
-            if (getTrackId(track) == trackId) {
-                return true
-            }
-        }
-        return 0
-    }
+
 }
