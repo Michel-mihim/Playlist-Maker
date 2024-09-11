@@ -72,9 +72,11 @@ class SearchActivity : AppCompatActivity() {
 
         if (showHistory(searchHistory)) historyViewsShow()
 
+
         //слушатели нажатий=========================================================================
         adapter.onItemClickListener = { track ->
             writeHistory(searchHistory, track)
+            Log.d("WTF", "Слушатель нажатия сработал")
         }
 
         search_editText.setOnEditorActionListener { _, actionId, _ ->
@@ -94,8 +96,6 @@ class SearchActivity : AppCompatActivity() {
         }
 
         search_back_button.setOnClickListener{
-            val search_back_intent = Intent(this, MainActivity::class.java)
-            startActivity(search_back_intent)
             finish()
         }
 
@@ -113,6 +113,12 @@ class SearchActivity : AppCompatActivity() {
             if (search_editText.text.isNotEmpty()) {
                 search()
             }
+        }
+
+        //слушатели фоновых событий=================================================================
+        sharedPrefs.registerOnSharedPreferenceChangeListener { sharedPrefs, key ->
+            showHistory(searchHistory)
+            Log.d("WTF", "Слушатель изменения файла сработал")
         }
 
         //переопределение функций слушателя текста==================================================
@@ -149,7 +155,7 @@ class SearchActivity : AppCompatActivity() {
     private fun showHistory(searchHistory: SearchHistory): Boolean {
 
         val lastTracks = searchHistory.readHistory()
-        Log.d("WTF", lastTracks.toString())
+
         tracks.clear()
         tracks.addAll(lastTracks)
         if (lastTracks.isEmpty()) return false

@@ -21,8 +21,6 @@ class LibActivity : AppCompatActivity() {
 
         val lib_back_button = findViewById<ImageButton>(R.id.lib_back_button)
         lib_back_button.setOnClickListener{
-            val libBackIntent = Intent(this, MainActivity::class.java)
-            startActivity(libBackIntent)
             finish()
         }
 

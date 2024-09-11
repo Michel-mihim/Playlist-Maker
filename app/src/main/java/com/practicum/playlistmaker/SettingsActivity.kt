@@ -63,8 +63,6 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         settings_back_button.setOnClickListener{
-            val settingsBackIntent = Intent(this, MainActivity::class.java)
-            startActivity(settingsBackIntent)
             finish()
         }
     }
