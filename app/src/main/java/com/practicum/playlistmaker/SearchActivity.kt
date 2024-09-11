@@ -60,6 +60,7 @@ class SearchActivity : AppCompatActivity() {
         trackNotFoundPlaceholderText = findViewById(R.id.placeholder_text_not_found)
         searchRenewButton = findViewById(R.id.search_renew_button)
         history_clear_button = findViewById(R.id.history_clear_button)
+        youFoundHistoryText = findViewById(R.id.you_found_text)
 
         //основной листинг==========================================================================
         search_clear_button.visibility = View.GONE
@@ -67,6 +68,7 @@ class SearchActivity : AppCompatActivity() {
         searchRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
         historyRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
 
+        historyViewsShow()
         showHistory(searchHistory)
 
         //слушатели нажатий=========================================================================
@@ -77,6 +79,7 @@ class SearchActivity : AppCompatActivity() {
         search_editText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 if (search_editText.text.isNotEmpty()) {
+                    historyViewsHide()
                     search()
                 }
                 true
@@ -229,7 +232,15 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun historyClearButtonVisibility()
+    private fun historyViewsHide() {
+        youFoundHistoryText.visibility = View.INVISIBLE
+        history_clear_button.visibility = View.INVISIBLE
+    }
+
+    private fun historyViewsShow() {
+        youFoundHistoryText.visibility = View.VISIBLE
+        history_clear_button.visibility = View.VISIBLE
+    }
 
     private fun searchClearButtonVisibility(s: CharSequence?): Int {
         return if (s.isNullOrEmpty()) {
@@ -274,6 +285,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var trackNotFoundPlaceholderText: TextView
     private lateinit var searchRenewButton: Button
     private lateinit var history_clear_button: Button
+    private lateinit var youFoundHistoryText: TextView
 
     //переменная строки поиска======================================================================
     private var search_def : String = SEARCH_DEF
