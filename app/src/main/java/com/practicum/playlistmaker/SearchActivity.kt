@@ -63,13 +63,13 @@ class SearchActivity : AppCompatActivity() {
         youFoundHistoryText = findViewById(R.id.you_found_text)
 
         //основной листинг==========================================================================
-        search_clear_button.visibility = View.GONE
+        search_clear_button.visibility = View.INVISIBLE
         search_editText.setText(search_def)
+
         searchRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
         historyRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
 
-        historyViewsShow()
-        showHistory(searchHistory)
+        if (showHistory(searchHistory)) historyViewsShow()
 
         //слушатели нажатий=========================================================================
         adapter.onItemClickListener = { track ->
@@ -88,6 +88,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         history_clear_button.setOnClickListener{
+            historyViewsHide()
             clearHistory(searchHistory)
         }
 
@@ -140,14 +141,16 @@ class SearchActivity : AppCompatActivity() {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun showHistory(searchHistory: SearchHistory) {
+    private fun showHistory(searchHistory: SearchHistory): Boolean {
 
         val lastTracks = searchHistory.readHistory()
         Log.d("WTF", lastTracks.toString())
         tracks.clear()
         tracks.addAll(lastTracks)
+        if (lastTracks.isEmpty()) return false
         historyRecyclerView.adapter = adapter
         adapter.notifyDataSetChanged()
+        return true
     }
 
     private fun search() {
@@ -235,11 +238,13 @@ class SearchActivity : AppCompatActivity() {
     private fun historyViewsHide() {
         youFoundHistoryText.visibility = View.INVISIBLE
         history_clear_button.visibility = View.INVISIBLE
+        historyRecyclerView.visibility = View.INVISIBLE
     }
 
     private fun historyViewsShow() {
         youFoundHistoryText.visibility = View.VISIBLE
         history_clear_button.visibility = View.VISIBLE
+        historyRecyclerView.visibility = View.VISIBLE
     }
 
     private fun searchClearButtonVisibility(s: CharSequence?): Int {
