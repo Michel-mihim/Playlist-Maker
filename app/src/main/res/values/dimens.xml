@@ -11,7 +11,7 @@
     <!--
     SEARCH ACTIVITY
     -->
-    <dimen name="edit_search_heigth">36dp</dimen>
+    <dimen name="edit_search_height">36dp</dimen>
     <dimen name="radius_tiny">8dp</dimen>
     <dimen name="edit_text_padding">8dp</dimen>
     <dimen name="not_found_text_size">19sp</dimen>

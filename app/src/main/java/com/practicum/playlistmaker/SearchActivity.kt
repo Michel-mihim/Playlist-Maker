@@ -2,8 +2,6 @@ package com.practicum.playlistmaker
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -50,23 +48,23 @@ class SearchActivity : AppCompatActivity() {
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
         //переменные VIEW===========================================================================
-        search_back_button = findViewById(R.id.search_back_button)
-        search_clear_button = findViewById(R.id.search_clear_button)
-        search_editText = findViewById(R.id.search_editText)
-        searchRecyclerView = findViewById(R.id.searchResultsRecycler)
-        historyRecyclerView = findViewById(R.id.historyRecycler)
+        searchBackButton = findViewById(R.id.search_back_button)
+        searchClearButton = findViewById(R.id.search_clear_button)
+        searchEdittext = findViewById(R.id.search_edit_text)
+        searchRecyclerView = findViewById(R.id.search_results_recycler)
+        historyRecyclerView = findViewById(R.id.history_recycler)
 
         trackNotFoundPlaceholderImage = findViewById(R.id.placeholder_pic_not_found)
         trackNotFoundPlaceholderText = findViewById(R.id.placeholder_text_not_found)
         searchRenewButton = findViewById(R.id.search_renew_button)
-        history_clear_button = findViewById(R.id.history_clear_button)
+        historyClearButton = findViewById(R.id.history_clear_button)
         youFoundHistoryText = findViewById(R.id.you_found_text)
 
         //основной листинг==========================================================================
-        search_clear_button.visibility = View.INVISIBLE
-        search_editText.setText(search_def)
+        searchClearButton.visibility = View.INVISIBLE
+        searchEdittext.setText(searchDef)
 
-        openSoftKeyBoard(this@SearchActivity, imm, search_editText)
+        openSoftKeyBoard(this@SearchActivity, imm, searchEdittext)
         searchRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
         historyRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
 
@@ -79,9 +77,9 @@ class SearchActivity : AppCompatActivity() {
             Log.d("WTF", "Слушатель нажатия сработал")
         }
 
-        search_editText.setOnEditorActionListener { _, actionId, _ ->
+        searchEdittext.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                if (search_editText.text.isNotEmpty()) {
+                if (searchEdittext.text.isNotEmpty()) {
                     historyViewsHide()
                     search()
                 }
@@ -90,18 +88,18 @@ class SearchActivity : AppCompatActivity() {
             false
         }
 
-        history_clear_button.setOnClickListener{
+        historyClearButton.setOnClickListener{
             historyViewsHide()
             clearHistory(searchHistory)
         }
 
-        search_back_button.setOnClickListener{
+        searchBackButton.setOnClickListener{
             finish()
         }
 
-        search_clear_button.setOnClickListener {
-            search_editText.setText(getString(R.string.empty_string))
-            imm.showSoftInput(search_editText, InputMethodManager.SHOW_IMPLICIT)
+        searchClearButton.setOnClickListener {
+            searchEdittext.setText(getString(R.string.empty_string))
+            imm.showSoftInput(searchEdittext, InputMethodManager.SHOW_IMPLICIT)
             showHistory(searchHistory)
             searchViewsHide()
             historyViewsShow()
@@ -110,7 +108,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         searchRenewButton.setOnClickListener {
-            if (search_editText.text.isNotEmpty()) {
+            if (searchEdittext.text.isNotEmpty()) {
                 search()
             }
         }
@@ -128,14 +126,14 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                search_clear_button.visibility = searchClearButtonVisibility(s)
+                searchClearButton.visibility = searchClearButtonVisibility(s)
             }
 
             override fun afterTextChanged(s: Editable?) {
-                search_def = s.toString()
+                searchDef = s.toString()
             }
         }
-        search_editText.addTextChangedListener(textWatcher)
+        searchEdittext.addTextChangedListener(textWatcher)
 
     }
 
@@ -165,7 +163,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun search() {
-        iTunesService.search(search_editText.text.toString()).enqueue(object : Callback<SearchResponse> {
+        iTunesService.search(searchEdittext.text.toString()).enqueue(object : Callback<SearchResponse> {
             @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(
                 call: Call<SearchResponse>,
@@ -182,7 +180,7 @@ class SearchActivity : AppCompatActivity() {
                             showStatus(SearchStatus.TRACKS_NOT_FOUND, TRACKS_NOT_FOUND_2)
                         }
                     } else -> {
-                        showStatus(SearchStatus.ERROR_OCCURED,"Код ошибки: ${response.code()}")
+                        showStatus(SearchStatus.ERROR_OCCURRED,"Код ошибки: ${response.code()}")
                     }
                 }
 
@@ -219,9 +217,9 @@ class SearchActivity : AppCompatActivity() {
                 searchRenewButton.visibility = renewButtonVisibility(SearchStatus.TRACKS_FOUND)
 
             }
-            SearchStatus.ERROR_OCCURED -> {
+            SearchStatus.ERROR_OCCURRED -> {
                 showPlaceholder(NETWORK_PROBLEM, R.drawable.net_trouble)
-                searchRenewButton.visibility = renewButtonVisibility(SearchStatus.ERROR_OCCURED)
+                searchRenewButton.visibility = renewButtonVisibility(SearchStatus.ERROR_OCCURRED)
                 Toast.makeText(this@SearchActivity, text, Toast.LENGTH_SHORT).show()
             }
         }
@@ -263,13 +261,13 @@ class SearchActivity : AppCompatActivity() {
 
     private fun historyViewsHide() {
         youFoundHistoryText.visibility = View.INVISIBLE
-        history_clear_button.visibility = View.INVISIBLE
+        historyClearButton.visibility = View.INVISIBLE
         historyRecyclerView.visibility = View.INVISIBLE
     }
 
     private fun historyViewsShow() {
         youFoundHistoryText.visibility = View.VISIBLE
-        history_clear_button.visibility = View.VISIBLE
+        historyClearButton.visibility = View.VISIBLE
         historyRecyclerView.visibility = View.VISIBLE
     }
 
@@ -306,30 +304,30 @@ class SearchActivity : AppCompatActivity() {
 
     private lateinit var adapter: TrackAdapter
 
-    private lateinit var search_back_button: ImageButton
-    private lateinit var search_clear_button: ImageButton
-    private lateinit var search_editText: EditText
+    private lateinit var searchBackButton: ImageButton
+    private lateinit var searchClearButton: ImageButton
+    private lateinit var searchEdittext: EditText
     private lateinit var searchRecyclerView: RecyclerView
     private lateinit var historyRecyclerView: RecyclerView
 
     private lateinit var trackNotFoundPlaceholderImage: ImageView
     private lateinit var trackNotFoundPlaceholderText: TextView
     private lateinit var searchRenewButton: Button
-    private lateinit var history_clear_button: Button
+    private lateinit var historyClearButton: Button
     private lateinit var youFoundHistoryText: TextView
 
     //переменная строки поиска======================================================================
-    private var search_def : String = SEARCH_DEF
+    private var searchDef : String = SEARCH_DEF
 
     //переопределение функций памяти состояния======================================================
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(SEARCH_STRING, search_def)
+        outState.putString(SEARCH_STRING, searchDef)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        search_def = savedInstanceState.getString(SEARCH_STRING, SEARCH_DEF)
+        searchDef = savedInstanceState.getString(SEARCH_STRING, SEARCH_DEF)
     }
 
 }

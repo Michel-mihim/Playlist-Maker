@@ -21,7 +21,7 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         trackNameView = itemView.findViewById(R.id.track_name)
         artistNameView = itemView.findViewById(R.id.artist_name)
         trackTimeView = itemView.findViewById(R.id.track_time)
-        trackImageView = itemView.findViewById(R.id.trackImage)
+        trackImageView = itemView.findViewById(R.id.track_image)
     }
 
     fun bind(track: Track) {

@@ -1,12 +1,9 @@
 package com.practicum.playlistmaker
 
-import android.app.Application
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Button
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -24,8 +21,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         // button_search_reaction через анонимный класс---------------------------------------------
-        val button_search = findViewById<Button>(R.id.button_search)
-        button_search.setOnClickListener{
+        val buttonSearch = findViewById<Button>(R.id.button_search)
+        buttonSearch.setOnClickListener{
             val searchIntent = Intent(this, SearchActivity::class.java)
             startActivity(searchIntent)
         }
@@ -33,18 +30,18 @@ class MainActivity : AppCompatActivity() {
         //------------------------------------------------------------------------------------------
 
         // button_lib_reaction----------------------------------------------------------------------
-        val button_lib = findViewById<Button>(R.id.button_lib)
+        val buttonLib = findViewById<Button>(R.id.button_lib)
 
-        button_lib.setOnClickListener {
+        buttonLib.setOnClickListener {
             val displayIntent = Intent(this, LibActivity::class.java)
             startActivity(displayIntent)
         }
         //------------------------------------------------------------------------------------------
 
         // button_settings_reaction-----------------------------------------------------------------
-        val button_settings = findViewById<Button>(R.id.button_settings)
+        val buttonSettings = findViewById<Button>(R.id.button_settings)
 
-        button_settings.setOnClickListener {
+        buttonSettings.setOnClickListener {
             val displayIntent = Intent(this, SettingsActivity::class.java)
             startActivity(displayIntent)
         }

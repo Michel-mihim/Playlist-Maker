@@ -13,11 +13,11 @@
         style="@style/SettingsActivityMenuListStyle">
 
         <ImageButton
-            style="@style/ArrowBackButtonStyle"
+            style="@style/arrow_back_button_style"
             android:id="@+id/settings_back_button"/>
 
         <TextView
-            style="@style/MenuHeadTextStyle"
+            style="@style/menu_head_text_style"
             android:text="@string/button_settings"/>
 
     </LinearLayout>
@@ -26,7 +26,7 @@
         style="@style/SettingsActivityMenuListStyle">
 
         <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/themeSwitcher"
+            android:id="@+id/theme_switcher"
             style="@style/SettingsActivityMenuItemThemeTextStyle"
             android:layout_width="match_parent"
             android:text="@string/dark_theme"
