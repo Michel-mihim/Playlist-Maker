@@ -66,6 +66,7 @@ class SearchActivity : AppCompatActivity() {
         search_clear_button.visibility = View.INVISIBLE
         search_editText.setText(search_def)
 
+        openSoftKeyBoard(this@SearchActivity, imm, search_editText)
         searchRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
         historyRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
 
@@ -128,7 +129,7 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
-    //вспомогательные функции=======================================================================
+    //расчетные функции=============================================================================
     private fun writeHistory(searchHistory: SearchHistory, trackAdded: Track) {
         searchHistory.writeHistory(trackAdded)
     }
@@ -213,6 +214,12 @@ class SearchActivity : AppCompatActivity() {
                 Toast.makeText(this@SearchActivity, text, Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    //технические функции===========================================================================
+    private fun openSoftKeyBoard(context: Context, imm: InputMethodManager, view: EditText) {
+        view.requestFocus()
+        imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
     }
 
     private fun showPlaceholder(text: String, image: Int) {
