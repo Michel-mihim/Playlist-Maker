@@ -101,8 +101,12 @@ class SearchActivity : AppCompatActivity() {
 
         search_clear_button.setOnClickListener {
             search_editText.setText(getString(R.string.empty_string))
-            imm.hideSoftInputFromWindow(currentFocus!!.windowToken,0)
-            search_editText.clearFocus()
+            imm.showSoftInput(search_editText, InputMethodManager.SHOW_IMPLICIT)
+            showHistory(searchHistory)
+            searchViewsHide()
+            historyViewsShow()
+            //imm.hideSoftInputFromWindow(currentFocus!!.windowToken,0) - так прячется клавиатура
+            //search_editText.clearFocus()
         }
 
         searchRenewButton.setOnClickListener {
@@ -178,6 +182,7 @@ class SearchActivity : AppCompatActivity() {
 
                 searchRecyclerView.adapter = adapter
                 adapter.notifyDataSetChanged()
+                searchViewsShow()
             }
 
             @SuppressLint("NotifyDataSetChanged")
@@ -240,6 +245,14 @@ class SearchActivity : AppCompatActivity() {
             SearchStatus.TRACKS_NOT_FOUND -> View.INVISIBLE
             else -> View.VISIBLE
         }
+    }
+
+    private fun searchViewsHide() {
+        searchRecyclerView.visibility = View.INVISIBLE
+    }
+
+    private fun searchViewsShow() {
+        searchRecyclerView.visibility = View.VISIBLE
     }
 
     private fun historyViewsHide() {
