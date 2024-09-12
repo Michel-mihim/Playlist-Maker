@@ -239,8 +239,6 @@ class SearchActivity : AppCompatActivity() {
             override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
                 tracks.clear()
                 showStatus(SearchStatus.SOMETHING_WRONG, SOMETHING_WRONG)
-                //searchRecyclerView.adapter = adapter тест
-                //adapter.notifyDataSetChanged()
             }
         })
     }
