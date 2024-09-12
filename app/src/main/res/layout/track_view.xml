@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/recycler_height"
     android:orientation="horizontal"
-    android:background="@color/menuColor">
+    android:background="@color/menuColor"
+    android:foreground="?attr/selectableItemBackground">
 
     <ImageView
         android:id="@+id/track_image"
