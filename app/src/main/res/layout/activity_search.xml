@@ -148,7 +148,7 @@
                 android:textColor="@color/not_found_renew_button_text_color"
                 android:textSize="@dimen/not_found_renew_button_text_size"
 
-                android:visibility="visible"/>
+                android:visibility="invisible"/>
 
         </LinearLayout>
 
