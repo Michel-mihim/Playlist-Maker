@@ -2,6 +2,7 @@ package com.practicum.playlistmaker
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -21,6 +22,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import okhttp3.internal.http2.Http2Connection.Listener
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -30,6 +32,48 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 class SearchActivity : AppCompatActivity() {
+
+    //константы=====================================================================================
+    companion object {
+        const val SEARCH_STRING = "SEARCH_STRING"
+        const val SEARCH_DEF = ""
+        const val TRACKS_NOT_FOUND = "Ничего не нашлось"
+        const val TRACKS_NOT_FOUND_2 = "Ничего не найдено"
+        const val NETWORK_PROBLEM = "Проблемы со связью\n" +
+                "\n" +
+                "Загрузка не удалась. Проверьте подключение к интернету"
+        const val SOMETHING_WRONG = "Что-то пошло не так.."
+        const val SEARCH_SUCCESS = "Поиск успешно произведен!"
+        const val HISTORY_CLEARED ="История поиска была удалена"
+    }
+
+    //инициализированные объекты====================================================================
+    private val iTunesBaseUrl = "https://itunes.apple.com"
+    private val retrofit = Retrofit.Builder()
+        .baseUrl(iTunesBaseUrl)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+    private val iTunesService = retrofit.create(iTunesApi::class.java)
+    private val tracks = ArrayList<Track>()
+    private var searchDef: String = SEARCH_DEF
+
+    //не инициализированные объекты=================================================================
+    private lateinit var adapter: TrackAdapter
+    private lateinit var sharedPrefs: SharedPreferences
+    private lateinit var searchHistory: SearchHistory
+    private lateinit var sharedPrefsListener: SharedPreferences.OnSharedPreferenceChangeListener
+    //не инициализированные views===================================================================
+    private lateinit var trackNotFoundPlaceholderImage: ImageView
+    private lateinit var trackNotFoundPlaceholderText: TextView
+    private lateinit var searchRenewButton: Button
+    private lateinit var historyClearButton: Button
+    private lateinit var youFoundHistoryText: TextView
+    private lateinit var searchBackButton: ImageButton
+    private lateinit var searchClearButton: ImageButton
+    private lateinit var searchEdittext: EditText
+    private lateinit var searchRecyclerView: RecyclerView
+    private lateinit var historyRecyclerView: RecyclerView
+    //==============================================================================================
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,19 +85,26 @@ class SearchActivity : AppCompatActivity() {
             insets
         }
 
-        //переменные и списки
-        val sharedPrefs = getSharedPreferences(PREFERENCES, MODE_PRIVATE)
-        val searchHistory = SearchHistory(sharedPrefs)
+        Log.d("WTF", "Новая активити создана")
+        //инициализация объектов
         adapter = TrackAdapter(tracks)
+
+        sharedPrefs = getSharedPreferences(PREFERENCES, MODE_PRIVATE)
+        searchHistory = SearchHistory(sharedPrefs)
+
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
-        //переменные VIEW===========================================================================
+        sharedPrefsListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+            Log.d("WTF", "Слушатель изменения файла сработал для "+this.toString())
+            if (key == SEARCH_HISTORY_KEY) showHistory(searchHistory)
+        }
+
+        //инициализация views
         searchBackButton = findViewById(R.id.search_back_button)
         searchClearButton = findViewById(R.id.search_clear_button)
         searchEdittext = findViewById(R.id.search_edit_text)
         searchRecyclerView = findViewById(R.id.search_results_recycler)
         historyRecyclerView = findViewById(R.id.history_recycler)
-
         trackNotFoundPlaceholderImage = findViewById(R.id.placeholder_pic_not_found)
         trackNotFoundPlaceholderText = findViewById(R.id.placeholder_text_not_found)
         searchRenewButton = findViewById(R.id.search_renew_button)
@@ -61,26 +112,25 @@ class SearchActivity : AppCompatActivity() {
         youFoundHistoryText = findViewById(R.id.you_found_text)
 
         //основной листинг==========================================================================
-        searchClearButton.visibility = View.INVISIBLE
-        searchEdittext.setText(searchDef)
-
+        searchFieldMakeEmpty()
         openSoftKeyBoard(this@SearchActivity, imm, searchEdittext)
         searchRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
         historyRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
 
         if (showHistory(searchHistory)) historyViewsShow()
 
-
-        //слушатели нажатий=========================================================================
+        //слушатели=================================================================================
         adapter.onItemClickListener = { track ->
+            Log.d("WTF", "Слушатель нажатия сработал для "+this.toString())
             writeHistory(searchHistory, track)
-            Log.d("WTF", "Слушатель нажатия сработал")
         }
 
         searchEdittext.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 if (searchEdittext.text.isNotEmpty()) {
                     historyViewsHide()
+                    searchViewsHide()
+                    sharedPrefs.unregisterOnSharedPreferenceChangeListener(sharedPrefsListener)
                     search()
                 }
                 true
@@ -94,6 +144,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         searchBackButton.setOnClickListener{
+            sharedPrefs.unregisterOnSharedPreferenceChangeListener(sharedPrefsListener)
             finish()
         }
 
@@ -111,12 +162,6 @@ class SearchActivity : AppCompatActivity() {
             if (searchEdittext.text.isNotEmpty()) {
                 search()
             }
-        }
-
-        //слушатели фоновых событий=================================================================
-        sharedPrefs.registerOnSharedPreferenceChangeListener { sharedPrefs, key ->
-            showHistory(searchHistory)
-            Log.d("WTF", "Слушатель изменения файла сработал")
         }
 
         //переопределение функций слушателя текста==================================================
@@ -138,8 +183,9 @@ class SearchActivity : AppCompatActivity() {
     }
 
     //расчетные функции=============================================================================
-    private fun writeHistory(searchHistory: SearchHistory, trackAdded: Track) {
-        searchHistory.writeHistory(trackAdded)
+    private fun writeHistory(searchHistory: SearchHistory, trackClicked: Track) {
+        searchHistory.writeHistory(trackClicked)
+        Log.d("WTF", "История записалась")
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -151,14 +197,15 @@ class SearchActivity : AppCompatActivity() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun showHistory(searchHistory: SearchHistory): Boolean {
-
         val lastTracks = searchHistory.readHistory()
-
-        tracks.clear()
-        tracks.addAll(lastTracks)
-        if (lastTracks.isEmpty()) return false
-        historyRecyclerView.adapter = adapter
-        adapter.notifyDataSetChanged()
+        if (lastTracks.isEmpty()) return false else {
+            tracks.clear()
+            tracks.addAll(lastTracks)
+            historyRecyclerView.adapter = adapter
+            adapter.notifyDataSetChanged()
+            sharedPrefs.registerOnSharedPreferenceChangeListener(sharedPrefsListener)
+            Log.d("WTF", "История не пустая. Загрузилась")
+        }
         return true
     }
 
@@ -173,8 +220,11 @@ class SearchActivity : AppCompatActivity() {
 
                 when (response.code()) {
                     200 -> {
-                        if (response.body()?.results!!.isNotEmpty() == true) {
+                        if (response.body()?.results!!.isNotEmpty()) {
                             tracks.addAll(response.body()?.results!!)
+                            searchRecyclerView.adapter = adapter
+                            adapter.notifyDataSetChanged()
+                            searchViewsShow()
                             showStatus(SearchStatus.TRACKS_FOUND, SEARCH_SUCCESS)
                         } else {
                             showStatus(SearchStatus.TRACKS_NOT_FOUND, TRACKS_NOT_FOUND_2)
@@ -183,18 +233,14 @@ class SearchActivity : AppCompatActivity() {
                         showStatus(SearchStatus.ERROR_OCCURRED,"Код ошибки: ${response.code()}")
                     }
                 }
-
-                searchRecyclerView.adapter = adapter
-                adapter.notifyDataSetChanged()
-                searchViewsShow()
             }
 
             @SuppressLint("NotifyDataSetChanged")
             override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
                 tracks.clear()
                 showStatus(SearchStatus.SOMETHING_WRONG, SOMETHING_WRONG)
-                searchRecyclerView.adapter = adapter
-                adapter.notifyDataSetChanged()
+                //searchRecyclerView.adapter = adapter тест
+                //adapter.notifyDataSetChanged()
             }
         })
     }
@@ -226,6 +272,11 @@ class SearchActivity : AppCompatActivity() {
     }
 
     //технические функции===========================================================================
+    private fun searchFieldMakeEmpty() {
+        searchClearButton.visibility = View.INVISIBLE
+        searchEdittext.setText(searchDef)
+    }
+
     private fun openSoftKeyBoard(context: Context, imm: InputMethodManager, view: EditText) {
         view.requestFocus()
         imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
@@ -278,46 +329,6 @@ class SearchActivity : AppCompatActivity() {
             View.VISIBLE
         }
     }
-
-    //константы=====================================================================================
-    companion object {
-        const val SEARCH_STRING = "SEARCH_STRING"
-        const val SEARCH_DEF = ""
-        const val TRACKS_NOT_FOUND = "Ничего не нашлось"
-        const val TRACKS_NOT_FOUND_2 = "Ничего не найдено"
-        const val NETWORK_PROBLEM = "Проблемы со связью\n" +
-                "\n" +
-                "Загрузка не удалась. Проверьте подключение к интернету"
-        const val SOMETHING_WRONG = "Что-то пошло не так.."
-        const val SEARCH_SUCCESS = "Поиск успешно произведен!"
-        const val HISTORY_CLEARED ="История поиска была удалена"
-    }
-
-    private val iTunesBaseUrl = "https://itunes.apple.com"
-    private  val retrofit = Retrofit.Builder()
-        .baseUrl(iTunesBaseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-    private val iTunesService = retrofit.create(iTunesApi::class.java)
-
-    private val tracks = ArrayList<Track>()
-
-    private lateinit var adapter: TrackAdapter
-
-    private lateinit var searchBackButton: ImageButton
-    private lateinit var searchClearButton: ImageButton
-    private lateinit var searchEdittext: EditText
-    private lateinit var searchRecyclerView: RecyclerView
-    private lateinit var historyRecyclerView: RecyclerView
-
-    private lateinit var trackNotFoundPlaceholderImage: ImageView
-    private lateinit var trackNotFoundPlaceholderText: TextView
-    private lateinit var searchRenewButton: Button
-    private lateinit var historyClearButton: Button
-    private lateinit var youFoundHistoryText: TextView
-
-    //переменная строки поиска======================================================================
-    private var searchDef : String = SEARCH_DEF
 
     //переопределение функций памяти состояния======================================================
     override fun onSaveInstanceState(outState: Bundle) {
