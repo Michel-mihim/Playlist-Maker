@@ -5,20 +5,35 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageButton
-import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        //sharing
-        val button_share = findViewById<Button>(R.id.button_share)
-        button_share.setOnClickListener{
+        //переменные VIEW===========================================================================
+        val themeSwitcher = findViewById<SwitchMaterial>(R.id.theme_switcher)
+        val buttonShare = findViewById<Button>(R.id.button_share)
+        val buttonSupport = findViewById<Button>(R.id.button_support)
+        val buttonLicense = findViewById<Button>(R.id.button_license)
+        val settingsBackButton = findViewById<ImageButton>(R.id.settings_back_button)
+
+        //основной листинг
+        if ((applicationContext as App).darkTheme) {
+            themeSwitcher.isChecked = true
+        }
+
+        //слушатели нажатий=========================================================================
+        themeSwitcher.setOnCheckedChangeListener{ switcher, checked ->
+            (applicationContext as App).switchTheme((applicationContext as App)
+                .getSharedPreferences(PREFERENCES, MODE_PRIVATE), checked)
+        }
+
+        buttonShare.setOnClickListener{
             val shareIntent = Intent(Intent.ACTION_SEND)
             val chooser = Intent.createChooser(shareIntent, null)
             shareIntent.setType("text/plain")
@@ -27,9 +42,7 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(chooser)
         }
 
-        //support
-        val button_support = findViewById<Button>(R.id.button_support)
-        button_support.setOnClickListener{
+        buttonSupport.setOnClickListener{
             val supportIntent = Intent(Intent.ACTION_SENDTO)
             supportIntent.data = Uri.parse("mailto:")
             supportIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.student_email)))
@@ -38,19 +51,14 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(supportIntent)
         }
 
-        //license
-        val button_license = findViewById<Button>(R.id.button_license)
-        button_license.setOnClickListener{
+        buttonLicense.setOnClickListener{
             val licenseIntent = Intent(Intent.ACTION_VIEW)
             licenseIntent.data = Uri.parse(getString(R.string.license_url))
             startActivity(licenseIntent)
         }
 
-        //back_button
-        val settings_back_button = findViewById<ImageButton>(R.id.settings_back_button)
-        settings_back_button.setOnClickListener{
-            val settingsBackIntent = Intent(this, MainActivity::class.java)
-            startActivity(settingsBackIntent)
+        settingsBackButton.setOnClickListener{
+            finish()
         }
     }
 

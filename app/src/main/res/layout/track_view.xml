@@ -5,10 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/recycler_height"
     android:orientation="horizontal"
-    android:background="@color/menuColor">
+    android:background="@color/menuColor"
+    android:foreground="?attr/selectableItemBackground">
 
     <ImageView
-        android:id="@+id/trackImage"
+        android:id="@+id/track_image"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/image_padding_left"

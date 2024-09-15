@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 
 data class Track(
+    val trackId:String,
     val trackName: String,
     val artistName: String,
     val trackTimeMillis: Int,

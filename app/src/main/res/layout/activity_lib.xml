@@ -15,11 +15,11 @@
         android:layout_height="wrap_content">
 
         <ImageButton
-            style="@style/ArrowBackButtonStyle"
+            style="@style/arrow_back_button_style"
             android:id="@+id/lib_back_button"/>
 
         <TextView
-            style="@style/MenuHeadTextStyle"
+            style="@style/menu_head_text_style"
             android:text="@string/button_lib"/>
 
     </LinearLayout>

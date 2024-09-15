@@ -1,19 +1,18 @@
 package com.practicum.playlistmaker
 
-import android.content.Context
-import android.util.TypedValue
+import android.content.SharedPreferences
+import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 
 class TrackAdapter(
     private val tracks: List<Track>
 ) : RecyclerView.Adapter<TrackViewHolder>() {
+
+    var onItemClickListener: ((Track) -> Unit)? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.track_view, parent, false)
         return TrackViewHolder(view)
@@ -21,6 +20,12 @@ class TrackAdapter(
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(tracks[position])
+        //слушатель нажатия на трек в результатах поиска
+        holder.itemView.setOnClickListener {
+            //передача трека в активити
+            onItemClickListener?.invoke(tracks[position])
+
+        }
     }
 
     override fun getItemCount() = tracks.size
