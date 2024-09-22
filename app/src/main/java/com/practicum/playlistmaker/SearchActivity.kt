@@ -2,6 +2,7 @@ package com.practicum.playlistmaker
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
@@ -123,6 +124,10 @@ class SearchActivity : AppCompatActivity() {
         adapter.onItemClickListener = { track ->
             Log.d("WTF", "Слушатель нажатия сработал для "+this.toString())
             writeHistory(searchHistory, track)
+            //запуск плеера
+            val displayIntent = Intent(this, PlayerActivity::class.java)
+            Log.d("WTF", displayIntent.toString())
+            //startActivity(displayIntent)
         }
 
         searchEdittext.setOnEditorActionListener { _, actionId, _ ->

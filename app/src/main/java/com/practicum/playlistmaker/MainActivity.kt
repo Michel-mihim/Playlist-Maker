@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        // button_search_reaction через анонимный класс---------------------------------------------
+        // button_search_reaction-------------------------------------------------------------------
         val buttonSearch = findViewById<Button>(R.id.button_search)
         buttonSearch.setOnClickListener{
             val searchIntent = Intent(this, SearchActivity::class.java)
