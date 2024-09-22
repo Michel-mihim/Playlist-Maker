@@ -6,7 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 
 class PlayerActivity : AppCompatActivity() {
 
-    lateinit var trackPlusLikeView: ImageButton
+    private lateinit var trackPlusLikeView: ImageButton
+    private lateinit var playerBackButton: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -16,5 +17,9 @@ class PlayerActivity : AppCompatActivity() {
 
         //trackPlusLikeView.setBackgroundColor(resources.getColor(android.R.color.transparent))
 
+        playerBackButton = findViewById(R.id.player_back_button)
+        playerBackButton.setOnClickListener {
+            finish()
+        }
     }
 }

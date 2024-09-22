@@ -125,9 +125,9 @@ class SearchActivity : AppCompatActivity() {
             Log.d("WTF", "Слушатель нажатия сработал для "+this.toString())
             writeHistory(searchHistory, track)
             //запуск плеера
-            val displayIntent = Intent(this, PlayerActivity::class.java)
-            Log.d("WTF", displayIntent.toString())
-            //startActivity(displayIntent)
+            val playerIntent = Intent(this, PlayerActivity::class.java)
+            Log.d("WTF", playerIntent.toString())
+            startActivity(playerIntent)
         }
 
         searchEdittext.setOnEditorActionListener { _, actionId, _ ->
