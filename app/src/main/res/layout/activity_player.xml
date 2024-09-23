@@ -59,7 +59,7 @@
         app:layout_constraintTop_toBottomOf="@id/imageView" />
 
     <TextView
-        android:id="@+id/artist_name"
+        android:id="@+id/track_artist_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/ys_display_medium"
@@ -97,7 +97,7 @@
         android:layout_marginTop="28dp"
         app:layout_constraintEnd_toStartOf="@id/button_like_3"
         app:layout_constraintStart_toEndOf="@id/button_plus_1"
-        app:layout_constraintTop_toBottomOf="@id/artist_name" />
+        app:layout_constraintTop_toBottomOf="@id/track_artist_name" />
 
     <ImageButton
         android:id="@+id/button_like_3"
@@ -113,10 +113,10 @@
         app:layout_constraintBottom_toBottomOf="@id/button_play_2" />
 
     <TextView
-        android:id="@+id/track_player_time"
+        android:id="@+id/track_player_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="0:30"
+        android:text="0:00"
         android:fontFamily="@font/ys_display_medium"
         android:textSize="14sp"
         android:textStyle="bold"
@@ -138,20 +138,22 @@
         android:textSize="13sp"
 
         app:layout_constraintStart_toStartOf="@id/leftBorder"
-        app:layout_constraintTop_toBottomOf="@id/track_player_time"/>
+        app:layout_constraintTop_toBottomOf="@id/track_player_progress"/>
 
     <TextView
         android:id="@+id/attr1_2_time"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="5:35"
         android:fontFamily="@font/ys_display_medium"
-        android:textSize="13sp"
         android:gravity="right"
+        android:text="5:35"
+        android:textSize="13sp"
 
-        app:layout_constraintStart_toEndOf="@id/attr1_1_time"
         app:layout_constraintEnd_toEndOf="@id/rightBorder"
-        app:layout_constraintTop_toBottomOf="@id/track_player_time"/>
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@id/attr1_1_time"
+        app:layout_constraintTop_toBottomOf="@id/track_player_progress" />
+
 
     <!--
     Альбом

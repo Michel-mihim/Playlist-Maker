@@ -126,9 +126,18 @@ class SearchActivity : AppCompatActivity() {
             writeHistory(searchHistory, track)
             //запуск плеера
             val playerIntent = Intent(this, PlayerActivity::class.java)
-            //Log.d("WTF", playerIntent.toString())
-            startActivity(playerIntent)
+            Log.d("WTF", track.toString())
 
+            val bundle = Bundle()
+            bundle.putString("b_track_name", track.trackName)
+            bundle.putString("b_artist_name", track.artistName)
+            bundle.putString("b_track_time", track.trackTimeMillis.toString())
+            bundle.putString("b_track_album", track.collectionName)
+            bundle.putString("b_track_year", track.releaseDate)
+            bundle.putString("b_track_genre", track.primaryGenreName)
+            bundle.putString("b_track_country", track.country)
+            playerIntent.putExtras(bundle)
+            startActivity(playerIntent)
         }
 
         searchEdittext.setOnEditorActionListener { _, actionId, _ ->
