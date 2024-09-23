@@ -126,8 +126,9 @@ class SearchActivity : AppCompatActivity() {
             writeHistory(searchHistory, track)
             //запуск плеера
             val playerIntent = Intent(this, PlayerActivity::class.java)
-            Log.d("WTF", playerIntent.toString())
+            //Log.d("WTF", playerIntent.toString())
             startActivity(playerIntent)
+
         }
 
         searchEdittext.setOnEditorActionListener { _, actionId, _ ->
