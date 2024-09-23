@@ -37,6 +37,6 @@
     <color name="round_button_grey_color">#1A1B22</color>
     <color name="round_play_button_main_color">#FFFFFF</color>
     <color name="track_play_color">#1A1B22</color>
-    <color name="track_plus_and_like_button_color">#1A1B22</color>
+    <color name="track_plus_and_like_button_color">#401A1B22</color>
 
 </resources>
