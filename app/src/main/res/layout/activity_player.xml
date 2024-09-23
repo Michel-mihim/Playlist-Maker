@@ -112,4 +112,154 @@
         app:layout_constraintTop_toTopOf="@id/button_play_2"
         app:layout_constraintBottom_toBottomOf="@id/button_play_2" />
 
+    <TextView
+        android:id="@+id/track_player_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0:30"
+        android:fontFamily="@font/ys_display_medium"
+        android:textSize="14sp"
+        android:textStyle="bold"
+
+        app:layout_constraintTop_toBottomOf="@id/button_play_2"
+        app:layout_constraintStart_toStartOf="@id/leftBorder"
+        app:layout_constraintEnd_toEndOf="@id/rightBorder"
+        app:layout_constrainedWidth="true"/>
+
+    <!--
+    Длительность
+    -->
+    <TextView
+        android:id="@+id/attr1_1_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Длительность"
+        android:fontFamily="@font/ys_display_medium"
+        android:textSize="13sp"
+
+        app:layout_constraintStart_toStartOf="@id/leftBorder"
+        app:layout_constraintTop_toBottomOf="@id/track_player_time"/>
+
+    <TextView
+        android:id="@+id/attr1_2_time"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="5:35"
+        android:fontFamily="@font/ys_display_medium"
+        android:textSize="13sp"
+        android:gravity="right"
+
+        app:layout_constraintStart_toEndOf="@id/attr1_1_time"
+        app:layout_constraintEnd_toEndOf="@id/rightBorder"
+        app:layout_constraintTop_toBottomOf="@id/track_player_time"/>
+
+    <!--
+    Альбом
+    -->
+    <TextView
+        android:id="@+id/attr2_1_album"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Альбом"
+        android:fontFamily="@font/ys_display_medium"
+        android:textSize="13sp"
+
+        app:layout_constraintStart_toStartOf="@id/leftBorder"
+        app:layout_constraintTop_toBottomOf="@id/attr1_1_time"/>
+
+    <TextView
+        android:id="@+id/attr2_2_album"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Yesterday (Remastered 2009)"
+        android:fontFamily="@font/ys_display_medium"
+        android:textSize="13sp"
+        android:gravity="right"
+
+        app:layout_constraintStart_toEndOf="@id/attr1_1_time"
+        app:layout_constraintEnd_toEndOf="@id/rightBorder"
+        app:layout_constraintTop_toBottomOf="@id/attr1_2_time"/>
+
+    <!--
+    Год
+    -->
+    <TextView
+        android:id="@+id/attr3_1_year"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Год"
+        android:fontFamily="@font/ys_display_medium"
+        android:textSize="13sp"
+
+        app:layout_constraintStart_toStartOf="@id/leftBorder"
+        app:layout_constraintTop_toBottomOf="@id/attr2_1_album"/>
+
+    <TextView
+        android:id="@+id/attr3_2_year"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="1965"
+        android:fontFamily="@font/ys_display_medium"
+        android:textSize="13sp"
+        android:gravity="right"
+
+        app:layout_constraintStart_toEndOf="@id/attr1_1_time"
+        app:layout_constraintEnd_toEndOf="@id/rightBorder"
+        app:layout_constraintTop_toBottomOf="@id/attr2_2_album"/>
+
+    <!--
+    Жанр
+    -->
+    <TextView
+        android:id="@+id/attr4_1_genre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Жанр"
+        android:fontFamily="@font/ys_display_medium"
+        android:textSize="13sp"
+
+        app:layout_constraintStart_toStartOf="@id/leftBorder"
+        app:layout_constraintTop_toBottomOf="@id/attr3_1_year"/>
+
+    <TextView
+        android:id="@+id/attr4_2_genre"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Rock"
+        android:fontFamily="@font/ys_display_medium"
+        android:textSize="13sp"
+        android:gravity="right"
+
+        app:layout_constraintStart_toEndOf="@id/attr1_1_time"
+        app:layout_constraintEnd_toEndOf="@id/rightBorder"
+        app:layout_constraintTop_toBottomOf="@id/attr3_2_year"/>
+
+    <!--
+    Страна
+    -->
+    <TextView
+        android:id="@+id/attr5_1_country"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Страна"
+        android:fontFamily="@font/ys_display_medium"
+        android:textSize="13sp"
+
+        app:layout_constraintStart_toStartOf="@id/leftBorder"
+        app:layout_constraintTop_toBottomOf="@id/attr4_1_genre"/>
+
+    <TextView
+        android:id="@+id/attr5_2_country"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Великобритания"
+        android:fontFamily="@font/ys_display_medium"
+        android:textSize="13sp"
+        android:gravity="right"
+
+        app:layout_constraintStart_toEndOf="@id/attr1_1_time"
+        app:layout_constraintEnd_toEndOf="@id/rightBorder"
+        app:layout_constraintTop_toBottomOf="@id/attr4_2_genre"/>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
