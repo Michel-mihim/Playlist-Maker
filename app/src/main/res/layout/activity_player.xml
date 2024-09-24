@@ -32,7 +32,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/player_track_image"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="82dp"
@@ -56,7 +56,7 @@
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="@id/rightBorder"
         app:layout_constraintStart_toStartOf="@id/leftBorder"
-        app:layout_constraintTop_toBottomOf="@id/imageView" />
+        app:layout_constraintTop_toBottomOf="@id/player_track_image" />
 
     <TextView
         android:id="@+id/track_artist_name"
@@ -167,7 +167,8 @@
         android:textSize="13sp"
 
         app:layout_constraintStart_toStartOf="@id/leftBorder"
-        app:layout_constraintTop_toBottomOf="@id/attr1_1_time"/>
+        app:layout_constraintTop_toBottomOf="@id/attr1_1_time"
+        app:layout_constraintBottom_toTopOf="@id/attr3_1_year"/>
 
     <TextView
         android:id="@+id/attr2_2_album"
@@ -180,7 +181,8 @@
 
         app:layout_constraintStart_toEndOf="@id/attr1_1_time"
         app:layout_constraintEnd_toEndOf="@id/rightBorder"
-        app:layout_constraintTop_toBottomOf="@id/attr1_2_time"/>
+        app:layout_constraintTop_toBottomOf="@id/attr1_2_time"
+        app:layout_constraintBottom_toTopOf="@id/attr3_2_year"/>
 
     <!--
     Год
@@ -194,7 +196,8 @@
         android:textSize="13sp"
 
         app:layout_constraintStart_toStartOf="@id/leftBorder"
-        app:layout_constraintTop_toBottomOf="@id/attr2_1_album"/>
+        app:layout_constraintTop_toBottomOf="@id/attr2_1_album"
+        app:layout_constraintBottom_toTopOf="@id/attr4_1_genre"/>
 
     <TextView
         android:id="@+id/attr3_2_year"
@@ -207,7 +210,8 @@
 
         app:layout_constraintStart_toEndOf="@id/attr1_1_time"
         app:layout_constraintEnd_toEndOf="@id/rightBorder"
-        app:layout_constraintTop_toBottomOf="@id/attr2_2_album"/>
+        app:layout_constraintTop_toBottomOf="@id/attr2_2_album"
+        app:layout_constraintBottom_toTopOf="@id/attr4_2_genre"/>
 
     <!--
     Жанр
@@ -221,7 +225,8 @@
         android:textSize="13sp"
 
         app:layout_constraintStart_toStartOf="@id/leftBorder"
-        app:layout_constraintTop_toBottomOf="@id/attr3_1_year"/>
+        app:layout_constraintTop_toBottomOf="@id/attr3_1_year"
+        app:layout_constraintBottom_toTopOf="@id/attr5_1_country"/>
 
     <TextView
         android:id="@+id/attr4_2_genre"
@@ -234,7 +239,8 @@
 
         app:layout_constraintStart_toEndOf="@id/attr1_1_time"
         app:layout_constraintEnd_toEndOf="@id/rightBorder"
-        app:layout_constraintTop_toBottomOf="@id/attr3_2_year"/>
+        app:layout_constraintTop_toBottomOf="@id/attr3_2_year"
+        app:layout_constraintBottom_toTopOf="@id/attr5_2_country"/>
 
     <!--
     Страна
@@ -248,7 +254,8 @@
         android:textSize="13sp"
 
         app:layout_constraintStart_toStartOf="@id/leftBorder"
-        app:layout_constraintTop_toBottomOf="@id/attr4_1_genre"/>
+        app:layout_constraintTop_toBottomOf="@id/attr4_1_genre"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
     <TextView
         android:id="@+id/attr5_2_country"
@@ -261,7 +268,8 @@
 
         app:layout_constraintStart_toEndOf="@id/attr1_1_time"
         app:layout_constraintEnd_toEndOf="@id/rightBorder"
-        app:layout_constraintTop_toBottomOf="@id/attr4_2_genre"/>
+        app:layout_constraintTop_toBottomOf="@id/attr4_2_genre"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

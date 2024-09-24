@@ -132,6 +132,7 @@ class SearchActivity : AppCompatActivity() {
             bundle.putString("b_track_name", track.trackName)
             bundle.putString("b_artist_name", track.artistName)
             bundle.putString("b_track_time", track.trackTimeMillis.toString())
+            bundle.putString("b_artworkUrl100", getCoverArtwork(track.artworkUrl100))
             bundle.putString("b_track_album", track.collectionName)
             bundle.putString("b_track_year", track.releaseDate)
             bundle.putString("b_track_genre", track.primaryGenreName)
@@ -285,6 +286,10 @@ class SearchActivity : AppCompatActivity() {
     }
 
     //технические функции===========================================================================
+    fun getCoverArtwork(artworkUrl100: String): String {
+        return artworkUrl100.replaceAfterLast('/',"512x512bb.jpg")
+    }
+
     private fun searchFieldMakeEmpty() {
         searchClearButton.visibility = View.INVISIBLE
         searchEdittext.setText(searchDef)

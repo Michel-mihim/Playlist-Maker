@@ -2,11 +2,13 @@ package com.practicum.playlistmaker
 
 import android.os.Bundle
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.bumptech.glide.Glide
 
 class PlayerActivity : AppCompatActivity() {
 
@@ -19,8 +21,8 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var playerTrackYear: TextView
     private lateinit var playerTrackGenre: TextView
     private lateinit var playerTrackCountry: TextView
+    private lateinit var playerTrackImage: ImageView
 
-    private lateinit var track: Track
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +41,7 @@ class PlayerActivity : AppCompatActivity() {
         playerTrackYear = findViewById(R.id.attr3_2_year)
         playerTrackGenre = findViewById(R.id.attr4_2_genre)
         playerTrackCountry = findViewById(R.id.attr5_2_country)
+        playerTrackImage = findViewById(R.id.player_track_image)
 
         //основной листинг
         val bundle = intent.extras
@@ -50,6 +53,12 @@ class PlayerActivity : AppCompatActivity() {
             playerTrackYear.text = bundle.getString("b_track_year")
             playerTrackGenre.text = bundle.getString("b_track_genre")
             playerTrackCountry.text = bundle.getString("b_track_country")
+
+            Glide.with(this)
+                .load(bundle.getString("b_artworkUrl100"))
+                .placeholder(R.drawable.placeholder_large)
+                .centerInside()
+                .into(playerTrackImage)
         }
 
         //нажатие на кнопку "назад"
