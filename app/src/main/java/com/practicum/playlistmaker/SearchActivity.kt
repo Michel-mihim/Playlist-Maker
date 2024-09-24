@@ -29,7 +29,13 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-
+import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Date
+import java.util.Locale
 
 
 class SearchActivity : AppCompatActivity() {
@@ -123,7 +129,6 @@ class SearchActivity : AppCompatActivity() {
         //слушатели=================================================================================
         adapter.onItemClickListener = { track ->
             Log.d("WTF", "Слушатель нажатия сработал для "+this.toString())
-            writeHistory(searchHistory, track)
             //запуск плеера
             val playerIntent = Intent(this, PlayerActivity::class.java)
             Log.d("WTF", track.toString())
@@ -131,14 +136,16 @@ class SearchActivity : AppCompatActivity() {
             val bundle = Bundle()
             bundle.putString("b_track_name", track.trackName)
             bundle.putString("b_artist_name", track.artistName)
-            bundle.putString("b_track_time", track.trackTimeMillis.toString())
+            bundle.putString("b_track_time", SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis))
             bundle.putString("b_artworkUrl100", getCoverArtwork(track.artworkUrl100))
             bundle.putString("b_track_album", track.collectionName)
-            bundle.putString("b_track_year", track.releaseDate)
+            bundle.putString("b_track_year", isoDateToYearConvert(track.releaseDate))
             bundle.putString("b_track_genre", track.primaryGenreName)
             bundle.putString("b_track_country", track.country)
             playerIntent.putExtras(bundle)
             startActivity(playerIntent)
+
+            writeHistory(searchHistory, track)
         }
 
         searchEdittext.setOnEditorActionListener { _, actionId, _ ->
@@ -286,8 +293,21 @@ class SearchActivity : AppCompatActivity() {
     }
 
     //технические функции===========================================================================
-    fun getCoverArtwork(artworkUrl100: String): String {
+    private fun getCoverArtwork(artworkUrl100: String): String {
         return artworkUrl100.replaceAfterLast('/',"512x512bb.jpg")
+    }
+
+    private fun isoDateToYearConvert(isoDate: String): String {
+        var year: String
+        val isoDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+        val targetDateFormat = SimpleDateFormat("yyyy")
+        try {
+            val date: Date = isoDateFormat.parse(isoDate)
+            year = targetDateFormat.format(date)
+        } catch (e: Exception) {
+            year = ""
+        }
+        return year
     }
 
     private fun searchFieldMakeEmpty() {
