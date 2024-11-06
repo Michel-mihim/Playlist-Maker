@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -52,6 +54,7 @@ class SearchActivity : AppCompatActivity() {
         const val SOMETHING_WRONG = "Что-то пошло не так.."
         const val SEARCH_SUCCESS = "Поиск успешно произведен!"
         const val HISTORY_CLEARED ="История поиска была удалена"
+
     }
 
     //инициализированные объекты====================================================================
@@ -62,6 +65,7 @@ class SearchActivity : AppCompatActivity() {
         .build()
     private val iTunesService = retrofit.create(iTunesApi::class.java)
     private val tracks = ArrayList<Track>()
+
     private var searchDef: String = SEARCH_DEF
 
     //не инициализированные объекты=================================================================
