@@ -23,8 +23,10 @@ class TrackAdapter(
         //слушатель нажатия на трек в результатах поиска
         holder.itemView.setOnClickListener {
             //передача трека в активити
-            onItemClickListener?.invoke(tracks[position])
+            val track: Track = tracks[position]
+            onItemClickListener?.invoke(track)
 
+            Log.d("WTF", "Слушатель нажатия in adapter: "+track.trackName)
         }
     }
 

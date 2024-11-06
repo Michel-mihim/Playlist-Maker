@@ -128,7 +128,7 @@ class SearchActivity : AppCompatActivity() {
 
         //слушатели=================================================================================
         adapter.onItemClickListener = { track ->
-            Log.d("WTF", "Слушатель нажатия сработал для "+this.toString())
+            Log.d("WTF", "Слушатель нажатия in activity: "+track.trackName)
             //запуск плеера
             val playerIntent = Intent(this, PlayerActivity::class.java)
             Log.d("WTF", track.toString())
