@@ -55,6 +55,7 @@ class SearchActivity : AppCompatActivity() {
         const val SEARCH_SUCCESS = "Поиск успешно произведен!"
         const val HISTORY_CLEARED ="История поиска была удалена"
 
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 
     //инициализированные объекты====================================================================
@@ -65,6 +66,8 @@ class SearchActivity : AppCompatActivity() {
         .build()
     private val iTunesService = retrofit.create(iTunesApi::class.java)
     private val tracks = ArrayList<Track>()
+    private val searchRunnable = Runnable { searchRequest() }
+    private val handler = Handler(Looper.getMainLooper())
 
     private var searchDef: String = SEARCH_DEF
 
@@ -152,18 +155,18 @@ class SearchActivity : AppCompatActivity() {
             writeHistory(searchHistory, track)
         }
 
-        searchEdittext.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                if (searchEdittext.text.isNotEmpty()) {
-                    historyViewsHide()
-                    searchViewsHide()
-                    sharedPrefs.unregisterOnSharedPreferenceChangeListener(sharedPrefsListener)
-                    search()
-                }
-                true
+        searchEdittext.addTextChangedListener(object  : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                TODO("Not yet implemented")
             }
-            false
-        }
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                searchDebounce()
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                TODO("Not yet implemented")
+            }
+        })
 
         historyClearButton.setOnClickListener{
             historyViewsHide()
@@ -210,6 +213,20 @@ class SearchActivity : AppCompatActivity() {
     }
 
     //расчетные функции=============================================================================
+    private fun searchDebounce(){
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+    }
+
+    private fun searchRequest(){
+        if (searchEdittext.text.isNotEmpty()) {
+            historyViewsHide()
+            searchViewsHide()
+            sharedPrefs.unregisterOnSharedPreferenceChangeListener(sharedPrefsListener)
+            search()
+        }
+    }
+
     private fun writeHistory(searchHistory: SearchHistory, trackClicked: Track) {
         searchHistory.writeHistory(trackClicked)
         Log.d("WTF", "История записалась")
