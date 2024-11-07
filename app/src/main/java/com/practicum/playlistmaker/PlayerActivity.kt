@@ -25,7 +25,7 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var playerTrackGenre: TextView
     private lateinit var playerTrackCountry: TextView
     private lateinit var playerTrackImage: ImageView
-    private lateinit var playButton2: Button
+    private lateinit var trackPlayButton: ImageButton
 
     //VARS
     private var mediaPlayer = MediaPlayer()
@@ -52,7 +52,7 @@ class PlayerActivity : AppCompatActivity() {
         playerTrackCountry = findViewById(R.id.attr5_2_country)
         playerTrackImage = findViewById(R.id.player_track_image)
         playerBackButton = findViewById(R.id.player_back_button)
-        //playButton2 = findViewById(R.id.button_play_2)
+        trackPlayButton = findViewById(R.id.button_play_2)
         Log.d("wtf", "point")
         //основной листинг
         val bundle = intent.extras
@@ -73,12 +73,16 @@ class PlayerActivity : AppCompatActivity() {
                 .into(playerTrackImage)
         }
 
-        //preparePlayer(bundle?.getString("b_previewUrl"))
+        preparePlayer(bundle?.getString("b_previewUrl"))
 
         //слушатели нажатий
 
         playerBackButton.setOnClickListener{
             finish()
+        }
+
+        trackPlayButton.setOnClickListener {
+            playbackControl()
         }
     }
 
@@ -87,12 +91,39 @@ class PlayerActivity : AppCompatActivity() {
         mediaPlayer.setDataSource(url)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener{
-            playButton2.isEnabled = true
+            trackPlayButton.isEnabled = true
             playerStatus = PlayerStatus.STATE_PREPARED
         }
         mediaPlayer.setOnCompletionListener{
-            playButton2.background = getDrawable(R.drawable.track_play)
+            trackPlayButton.background = getDrawable(R.drawable.track_play)
             playerStatus = PlayerStatus.STATE_PREPARED
+        }
+    }
+
+    private fun startPlayer(){
+        mediaPlayer.start()
+        trackPlayButton.setImageResource(R.drawable.track_pause)
+        playerStatus = PlayerStatus.STATE_PLAYING
+    }
+
+    private fun pausePlayer(){
+        mediaPlayer.pause()
+        trackPlayButton.background = getDrawable(R.drawable.track_play)
+        playerStatus = PlayerStatus.STATE_PAUSED
+    }
+
+    private fun playbackControl() {
+        when (playerStatus) {
+            PlayerStatus.STATE_PLAYING -> {
+                pausePlayer()
+            }
+            PlayerStatus.STATE_PREPARED -> {
+                startPlayer()
+            }
+            PlayerStatus.STATE_PAUSED -> {
+                startPlayer()
+            }
+            PlayerStatus.STATE_DEFAULT -> TODO()
         }
     }
 }
