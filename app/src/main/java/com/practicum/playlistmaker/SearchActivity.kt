@@ -155,19 +155,6 @@ class SearchActivity : AppCompatActivity() {
             writeHistory(searchHistory, track)
         }
 
-        searchEdittext.addTextChangedListener(object  : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                TODO("Not yet implemented")
-            }
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                searchDebounce()
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-                TODO("Not yet implemented")
-            }
-        })
-
         historyClearButton.setOnClickListener{
             historyViewsHide()
             clearHistory(searchHistory)
@@ -202,6 +189,8 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 searchClearButton.visibility = searchClearButtonVisibility(s)
+                Log.d("wtf", s.toString())
+                searchDebounce()
             }
 
             override fun afterTextChanged(s: Editable?) {
