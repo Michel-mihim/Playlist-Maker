@@ -17,6 +17,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -87,6 +88,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var searchEdittext: EditText
     private lateinit var searchRecyclerView: RecyclerView
     private lateinit var historyRecyclerView: RecyclerView
+    private lateinit var searchProgressBar: ProgressBar
     //==============================================================================================
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -124,6 +126,7 @@ class SearchActivity : AppCompatActivity() {
         searchRenewButton = findViewById(R.id.search_renew_button)
         historyClearButton = findViewById(R.id.history_clear_button)
         youFoundHistoryText = findViewById(R.id.you_found_text)
+        searchProgressBar = findViewById(R.id.search_progress_bar)
 
         //основной листинг==========================================================================
         searchFieldMakeEmpty()
@@ -212,6 +215,7 @@ class SearchActivity : AppCompatActivity() {
             historyViewsHide()
             searchViewsHide()
             sharedPrefs.unregisterOnSharedPreferenceChangeListener(sharedPrefsListener)
+            showSearchProgressbar()
             search()
         }
     }
@@ -242,6 +246,17 @@ class SearchActivity : AppCompatActivity() {
         return true
     }
 
+    private fun showSearchProgressbar(){
+
+        searchProgressBar.visibility = View.VISIBLE
+    }
+
+    private fun hideSearchProgressbar(){
+
+        searchProgressBar.visibility = View.INVISIBLE
+    }
+
+
     private fun search() {
         iTunesService.search(searchEdittext.text.toString()).enqueue(object : Callback<SearchResponse> {
             @SuppressLint("NotifyDataSetChanged")
@@ -250,6 +265,8 @@ class SearchActivity : AppCompatActivity() {
                 response: Response<SearchResponse>
             ) {
                 tracks.clear()
+
+                hideSearchProgressbar()
 
                 when (response.code()) {
                     200 -> {
