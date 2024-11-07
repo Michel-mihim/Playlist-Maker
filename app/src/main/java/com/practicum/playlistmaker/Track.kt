@@ -11,6 +11,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import retrofit2.http.Url
+import java.net.URL
 
 data class Track(
     val trackId:String,
@@ -21,5 +23,6 @@ data class Track(
     val collectionName: String,
     val releaseDate: String,
     val primaryGenreName: String,
-    val country: String
+    val country: String,
+    val previewUrl: String
 )

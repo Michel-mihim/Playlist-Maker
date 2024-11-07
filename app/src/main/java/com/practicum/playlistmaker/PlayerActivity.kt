@@ -1,6 +1,9 @@
 package com.practicum.playlistmaker
 
+import android.media.MediaPlayer
 import android.os.Bundle
+import android.util.Log
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -12,8 +15,8 @@ import com.bumptech.glide.Glide
 
 class PlayerActivity : AppCompatActivity() {
 
+    //VIEWS
     private lateinit var playerBackButton: ImageButton
-
     private lateinit var playerTrackName: TextView
     private lateinit var playerArtistName: TextView
     private lateinit var playerTrackTime: TextView
@@ -22,8 +25,14 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var playerTrackGenre: TextView
     private lateinit var playerTrackCountry: TextView
     private lateinit var playerTrackImage: ImageView
+    private lateinit var playButton2: Button
 
+    //VARS
+    private var mediaPlayer = MediaPlayer()
 
+    private var playerStatus: PlayerStatus = PlayerStatus.STATE_DEFAULT
+
+    //основной листинг==============================================================================
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -42,7 +51,9 @@ class PlayerActivity : AppCompatActivity() {
         playerTrackGenre = findViewById(R.id.attr4_2_genre)
         playerTrackCountry = findViewById(R.id.attr5_2_country)
         playerTrackImage = findViewById(R.id.player_track_image)
-
+        playerBackButton = findViewById(R.id.player_back_button)
+        //playButton2 = findViewById(R.id.button_play_2)
+        Log.d("wtf", "point")
         //основной листинг
         val bundle = intent.extras
         if (bundle != null) {
@@ -54,6 +65,7 @@ class PlayerActivity : AppCompatActivity() {
             playerTrackGenre.text = bundle.getString("b_track_genre")
             playerTrackCountry.text = bundle.getString("b_track_country")
 
+
             Glide.with(this)
                 .load(bundle.getString("b_artworkUrl100"))
                 .placeholder(R.drawable.placeholder_large)
@@ -61,10 +73,26 @@ class PlayerActivity : AppCompatActivity() {
                 .into(playerTrackImage)
         }
 
-        //нажатие на кнопку "назад"
-        playerBackButton = findViewById(R.id.player_back_button)
+        //preparePlayer(bundle?.getString("b_previewUrl"))
+
+        //слушатели нажатий
+
         playerBackButton.setOnClickListener{
             finish()
+        }
+    }
+
+
+    private fun preparePlayer(url: String?){
+        mediaPlayer.setDataSource(url)
+        mediaPlayer.prepareAsync()
+        mediaPlayer.setOnPreparedListener{
+            playButton2.isEnabled = true
+            playerStatus = PlayerStatus.STATE_PREPARED
+        }
+        mediaPlayer.setOnCompletionListener{
+            playButton2.background = getDrawable(R.drawable.track_play)
+            playerStatus = PlayerStatus.STATE_PREPARED
         }
     }
 }

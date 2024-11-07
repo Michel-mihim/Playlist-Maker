@@ -152,6 +152,7 @@ class SearchActivity : AppCompatActivity() {
             bundle.putString("b_track_year", isoDateToYearConvert(track.releaseDate))
             bundle.putString("b_track_genre", track.primaryGenreName)
             bundle.putString("b_track_country", track.country)
+            bundle.putString("b_previewUrl", track.previewUrl)
             playerIntent.putExtras(bundle)
             startActivity(playerIntent)
 
