@@ -95,7 +95,7 @@ class PlayerActivity : AppCompatActivity() {
             playerStatus = PlayerStatus.STATE_PREPARED
         }
         mediaPlayer.setOnCompletionListener{
-            trackPlayButton.background = getDrawable(R.drawable.track_play)
+            trackPlayButton.setImageResource(R.drawable.track_play)
             playerStatus = PlayerStatus.STATE_PREPARED
         }
     }
@@ -108,7 +108,7 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun pausePlayer(){
         mediaPlayer.pause()
-        trackPlayButton.background = getDrawable(R.drawable.track_play)
+        trackPlayButton.setImageResource(R.drawable.track_play)
         playerStatus = PlayerStatus.STATE_PAUSED
     }
 
