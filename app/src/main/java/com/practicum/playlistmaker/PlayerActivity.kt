@@ -126,4 +126,14 @@ class PlayerActivity : AppCompatActivity() {
             PlayerStatus.STATE_DEFAULT -> TODO()
         }
     }
+
+    override fun onPause() {
+        super.onPause()
+        pausePlayer()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer.release()
+    }
 }
