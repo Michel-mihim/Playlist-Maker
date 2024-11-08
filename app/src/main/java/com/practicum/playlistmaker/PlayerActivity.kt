@@ -66,7 +66,7 @@ class PlayerActivity : AppCompatActivity() {
         playerBackButton = findViewById(R.id.player_back_button)
         trackPlayButton = findViewById(R.id.button_play_2)
         trackProgress = findViewById(R.id.track_player_progress)
-        Log.d("wtf", "point")
+
         //основной листинг
         val bundle = intent.extras
         if (bundle != null) {
