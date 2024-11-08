@@ -38,7 +38,6 @@ class TrackAdapter(
 
                 Log.d("WTF", "Слушатель нажатия in adapter: "+track.trackName)
             }
-
         }
     }
 

@@ -2,6 +2,8 @@ package com.practicum.playlistmaker
 
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
@@ -12,9 +14,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class PlayerActivity : AppCompatActivity() {
 
+    companion object {
+        private const val SHOW_PROGRESS_DELAY = 500L
+    }
     //VIEWS
     private lateinit var playerBackButton: ImageButton
     private lateinit var playerTrackName: TextView
@@ -26,6 +33,11 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var playerTrackCountry: TextView
     private lateinit var playerTrackImage: ImageView
     private lateinit var trackPlayButton: ImageButton
+    private lateinit var trackProgress: TextView
+
+    //VALS
+    private val handler = Handler(Looper.getMainLooper())
+    private val showProgressRunnable = Runnable { showProgressState() }
 
     //VARS
     private var mediaPlayer = MediaPlayer()
@@ -53,6 +65,7 @@ class PlayerActivity : AppCompatActivity() {
         playerTrackImage = findViewById(R.id.player_track_image)
         playerBackButton = findViewById(R.id.player_back_button)
         trackPlayButton = findViewById(R.id.button_play_2)
+        trackProgress = findViewById(R.id.track_player_progress)
         Log.d("wtf", "point")
         //основной листинг
         val bundle = intent.extras
@@ -86,6 +99,11 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
 
+    private fun showProgressState(){
+        trackProgress.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
+        handler.postDelayed(showProgressRunnable, SHOW_PROGRESS_DELAY)
+        Log.d("wtf", mediaPlayer.currentPosition.toString())
+    }
 
     private fun preparePlayer(url: String?){
         mediaPlayer.setDataSource(url)
@@ -97,19 +115,24 @@ class PlayerActivity : AppCompatActivity() {
         mediaPlayer.setOnCompletionListener{
             trackPlayButton.setImageResource(R.drawable.track_play)
             playerStatus = PlayerStatus.STATE_PREPARED
+            handler.removeCallbacks(showProgressRunnable)
+            trackProgress.text = "00:00"
         }
+
     }
 
     private fun startPlayer(){
         mediaPlayer.start()
         trackPlayButton.setImageResource(R.drawable.track_pause)
         playerStatus = PlayerStatus.STATE_PLAYING
+        handler.post(showProgressRunnable)
     }
 
     private fun pausePlayer(){
         mediaPlayer.pause()
         trackPlayButton.setImageResource(R.drawable.track_play)
         playerStatus = PlayerStatus.STATE_PAUSED
+        handler.removeCallbacks(showProgressRunnable)
     }
 
     private fun playbackControl() {
@@ -134,6 +157,7 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        handler.removeCallbacks(showProgressRunnable)
         mediaPlayer.release()
     }
 }

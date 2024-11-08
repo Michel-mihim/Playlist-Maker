@@ -207,7 +207,7 @@ class SearchActivity : AppCompatActivity() {
 
     //расчетные функции=============================================================================
     private fun searchDebounce(){
-        handler.removeCallbacks(searchRunnable)
+        handler.removeCallbacks(searchRunnable) // runnable - fun searchRequest()
         handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }
 
