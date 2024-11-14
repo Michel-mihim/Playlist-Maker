@@ -52,6 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:fontFamily="@font/ys_display_medium"
+        android:textColor="@color/player_track_info_text_color"
         android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constrainedWidth="true"
@@ -66,6 +67,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:fontFamily="@font/ys_display_medium"
+        android:textColor="@color/player_track_info_text_color"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constrainedWidth="true"
@@ -86,22 +88,20 @@
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="@id/leftBorder"
         app:layout_constraintTop_toTopOf="@id/button_play_2"
-        app:layout_constraintBottom_toBottomOf="@id/button_play_2"
-
-        />
+        app:layout_constraintBottom_toBottomOf="@id/button_play_2"/>
 
     <ImageButton
         android:id="@+id/button_play_2"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:background="@drawable/round_button"
-        android:src="@drawable/track_play"
-        android:paddingVertical="8dp"
         android:layout_marginTop="28dp"
+        android:background="@drawable/round_button"
+        android:paddingVertical="8dp"
+        android:src="@drawable/track_play"
+        app:layout_constraintBottom_toTopOf="@id/track_player_progress"
         app:layout_constraintEnd_toStartOf="@id/button_like_3"
         app:layout_constraintStart_toEndOf="@id/button_plus_1"
-        app:layout_constraintTop_toBottomOf="@id/track_artist_name"
-        app:layout_constraintBottom_toTopOf="@id/track_player_progress"/>
+        app:layout_constraintTop_toBottomOf="@id/track_artist_name" />
 
     <ImageButton
         android:id="@+id/button_like_3"
@@ -124,6 +124,7 @@
         android:fontFamily="@font/ys_display_medium"
         android:textSize="14sp"
         android:textStyle="bold"
+        android:textColor="@color/player_track_info_text_color"
 
         app:layout_constraintTop_toBottomOf="@id/button_play_2"
         app:layout_constraintStart_toStartOf="@id/leftBorder"
@@ -150,6 +151,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/ys_display_medium"
+        android:textColor="@color/player_track_info_text_color"
         android:gravity="right"
         android:textSize="13sp"
 
@@ -179,6 +181,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/ys_display_medium"
+        android:textColor="@color/player_track_info_text_color"
         android:textSize="13sp"
         android:gravity="right"
 
@@ -207,6 +210,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/ys_display_medium"
+        android:textColor="@color/player_track_info_text_color"
         android:textSize="13sp"
         android:gravity="right"
 
@@ -235,6 +239,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/ys_display_medium"
+        android:textColor="@color/player_track_info_text_color"
         android:textSize="13sp"
         android:gravity="right"
 
@@ -263,6 +268,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/ys_display_medium"
+        android:textColor="@color/player_track_info_text_color"
         android:textSize="13sp"
         android:gravity="right"
 

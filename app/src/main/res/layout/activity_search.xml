@@ -152,6 +152,14 @@
 
         </LinearLayout>
 
+        <ProgressBar
+            android:layout_width="@dimen/progressbar_size"
+            android:layout_height="@dimen/progressbar_size"
+            android:layout_marginTop="@dimen/progressbar_margin_top"
+            android:layout_gravity="center_horizontal"
+            android:indeterminateTint="@color/search_cursor_color"
+            android:visibility="invisible"
+            android:id="@+id/search_progress_bar"/>
     </FrameLayout>
 
 </LinearLayout>

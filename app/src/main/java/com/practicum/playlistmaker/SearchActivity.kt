@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -15,6 +17,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -52,6 +55,8 @@ class SearchActivity : AppCompatActivity() {
         const val SOMETHING_WRONG = "Что-то пошло не так.."
         const val SEARCH_SUCCESS = "Поиск успешно произведен!"
         const val HISTORY_CLEARED ="История поиска была удалена"
+
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 
     //инициализированные объекты====================================================================
@@ -62,6 +67,9 @@ class SearchActivity : AppCompatActivity() {
         .build()
     private val iTunesService = retrofit.create(iTunesApi::class.java)
     private val tracks = ArrayList<Track>()
+    private val searchRunnable = Runnable { searchRequest() }
+    private val handler = Handler(Looper.getMainLooper())
+
     private var searchDef: String = SEARCH_DEF
 
     //не инициализированные объекты=================================================================
@@ -80,6 +88,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var searchEdittext: EditText
     private lateinit var searchRecyclerView: RecyclerView
     private lateinit var historyRecyclerView: RecyclerView
+    private lateinit var searchProgressBar: ProgressBar
     //==============================================================================================
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -117,6 +126,7 @@ class SearchActivity : AppCompatActivity() {
         searchRenewButton = findViewById(R.id.search_renew_button)
         historyClearButton = findViewById(R.id.history_clear_button)
         youFoundHistoryText = findViewById(R.id.you_found_text)
+        searchProgressBar = findViewById(R.id.search_progress_bar)
 
         //основной листинг==========================================================================
         searchFieldMakeEmpty()
@@ -128,7 +138,7 @@ class SearchActivity : AppCompatActivity() {
 
         //слушатели=================================================================================
         adapter.onItemClickListener = { track ->
-            Log.d("WTF", "Слушатель нажатия сработал для "+this.toString())
+            Log.d("WTF", "Слушатель нажатия in activity: "+track.trackName)
             //запуск плеера
             val playerIntent = Intent(this, PlayerActivity::class.java)
             Log.d("WTF", track.toString())
@@ -142,23 +152,11 @@ class SearchActivity : AppCompatActivity() {
             bundle.putString("b_track_year", isoDateToYearConvert(track.releaseDate))
             bundle.putString("b_track_genre", track.primaryGenreName)
             bundle.putString("b_track_country", track.country)
+            bundle.putString("b_previewUrl", track.previewUrl)
             playerIntent.putExtras(bundle)
             startActivity(playerIntent)
 
             writeHistory(searchHistory, track)
-        }
-
-        searchEdittext.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                if (searchEdittext.text.isNotEmpty()) {
-                    historyViewsHide()
-                    searchViewsHide()
-                    sharedPrefs.unregisterOnSharedPreferenceChangeListener(sharedPrefsListener)
-                    search()
-                }
-                true
-            }
-            false
         }
 
         historyClearButton.setOnClickListener{
@@ -195,6 +193,8 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 searchClearButton.visibility = searchClearButtonVisibility(s)
+                Log.d("wtf", s.toString())
+                searchDebounce()
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -206,6 +206,21 @@ class SearchActivity : AppCompatActivity() {
     }
 
     //расчетные функции=============================================================================
+    private fun searchDebounce(){
+        handler.removeCallbacks(searchRunnable) // runnable - fun searchRequest()
+        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+    }
+
+    private fun searchRequest(){
+        if (searchEdittext.text.isNotEmpty()) {
+            historyViewsHide()
+            searchViewsHide()
+            sharedPrefs.unregisterOnSharedPreferenceChangeListener(sharedPrefsListener)
+            showSearchProgressbar()
+            search()
+        }
+    }
+
     private fun writeHistory(searchHistory: SearchHistory, trackClicked: Track) {
         searchHistory.writeHistory(trackClicked)
         Log.d("WTF", "История записалась")
@@ -232,6 +247,17 @@ class SearchActivity : AppCompatActivity() {
         return true
     }
 
+    private fun showSearchProgressbar(){
+
+        searchProgressBar.visibility = View.VISIBLE
+    }
+
+    private fun hideSearchProgressbar(){
+
+        searchProgressBar.visibility = View.INVISIBLE
+    }
+
+
     private fun search() {
         iTunesService.search(searchEdittext.text.toString()).enqueue(object : Callback<SearchResponse> {
             @SuppressLint("NotifyDataSetChanged")
@@ -240,6 +266,8 @@ class SearchActivity : AppCompatActivity() {
                 response: Response<SearchResponse>
             ) {
                 tracks.clear()
+
+                hideSearchProgressbar()
 
                 when (response.code()) {
                     200 -> {
