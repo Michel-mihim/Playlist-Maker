@@ -25,7 +25,7 @@
             android:name=".ui.lib.LibActivity"
             android:exported="false" />
         <activity
-            android:name=".SettingsActivity"
+            android:name=".ui.settings.SettingsActivity"
             android:exported="false" />
         <activity
             android:name=".ui.main.MainActivity"
