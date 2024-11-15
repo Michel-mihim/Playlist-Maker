@@ -33,13 +33,10 @@ import com.practicum.playlistmaker.data.dto.TrackSearchResponse
 import com.practicum.playlistmaker.SearchStatus
 import com.practicum.playlistmaker.domain.models.Track
 import com.practicum.playlistmaker.TrackAdapter
-import com.practicum.playlistmaker.iTunesApi
 import com.practicum.playlistmaker.ui.player.PlayerActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -64,12 +61,12 @@ class SearchActivity : AppCompatActivity() {
     }
 
     //инициализированные объекты====================================================================
-    private val iTunesBaseUrl = "https://itunes.apple.com"
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(iTunesBaseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-    private val iTunesService = retrofit.create(iTunesApi::class.java)
+    //private val iTunesBaseUrl = "https://itunes.apple.com"
+    //private val retrofit = Retrofit.Builder()
+    //    .baseUrl(iTunesBaseUrl)
+    //    .addConverterFactory(GsonConverterFactory.create())
+    //    .build()
+    //private val iTunesService = retrofit.create(iTunesApi::class.java)
     private val tracks = ArrayList<Track>()
     private val searchRunnable = Runnable { searchRequest() }
     private val handler = Handler(Looper.getMainLooper())
@@ -263,7 +260,7 @@ class SearchActivity : AppCompatActivity() {
 
 
     private fun search() {
-        iTunesService.search(searchEdittext.text.toString()).enqueue(object : Callback<TrackSearchResponse> {
+        iTunesService.searchTrack(searchEdittext.text.toString()).enqueue(object : Callback<TrackSearchResponse> {
             @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(
                 call: Call<TrackSearchResponse>,
