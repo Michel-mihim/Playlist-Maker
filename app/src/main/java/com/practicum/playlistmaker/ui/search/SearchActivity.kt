@@ -29,7 +29,7 @@ import com.practicum.playlistmaker.PREFERENCES
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.SEARCH_HISTORY_KEY
 import com.practicum.playlistmaker.SearchHistory
-import com.practicum.playlistmaker.data.dto.TrackSearchResponse
+import com.practicum.playlistmaker.data.dto.TracksSearchResponse
 import com.practicum.playlistmaker.SearchStatus
 import com.practicum.playlistmaker.domain.models.Track
 import com.practicum.playlistmaker.TrackAdapter
@@ -260,11 +260,11 @@ class SearchActivity : AppCompatActivity() {
 
 
     private fun search() {
-        iTunesService.searchTrack(searchEdittext.text.toString()).enqueue(object : Callback<TrackSearchResponse> {
+        iTunesService.searchTrack(searchEdittext.text.toString()).enqueue(object : Callback<TracksSearchResponse> {
             @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(
-                call: Call<TrackSearchResponse>,
-                response: Response<TrackSearchResponse>
+                call: Call<TracksSearchResponse>,
+                response: Response<TracksSearchResponse>
             ) {
                 tracks.clear()
 
@@ -288,7 +288,7 @@ class SearchActivity : AppCompatActivity() {
             }
 
             @SuppressLint("NotifyDataSetChanged")
-            override fun onFailure(call: Call<TrackSearchResponse>, t: Throwable) {
+            override fun onFailure(call: Call<TracksSearchResponse>, t: Throwable) {
                 tracks.clear()
                 showStatus(SearchStatus.SOMETHING_WRONG, SOMETHING_WRONG)
             }
