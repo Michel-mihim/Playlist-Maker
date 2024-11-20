@@ -29,11 +29,11 @@ import com.practicum.playlistmaker.PREFERENCES
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.SEARCH_HISTORY_KEY
 import com.practicum.playlistmaker.SearchHistory
-import com.practicum.playlistmaker.data.dto.TrackSearchResponse
+import com.practicum.playlistmaker.data.dto.TracksSearchResponse
 import com.practicum.playlistmaker.SearchStatus
 import com.practicum.playlistmaker.domain.models.Track
-import com.practicum.playlistmaker.TrackAdapter
-import com.practicum.playlistmaker.iTunesApi
+import com.practicum.playlistmaker.presentation.TrackAdapter
+import com.practicum.playlistmaker.data.network.iTunesApiService
 import com.practicum.playlistmaker.ui.player.PlayerActivity
 import retrofit2.Call
 import retrofit2.Callback
@@ -64,12 +64,6 @@ class SearchActivity : AppCompatActivity() {
     }
 
     //инициализированные объекты====================================================================
-    private val iTunesBaseUrl = "https://itunes.apple.com"
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(iTunesBaseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-    private val iTunesService = retrofit.create(iTunesApi::class.java)
     private val tracks = ArrayList<Track>()
     private val searchRunnable = Runnable { searchRequest() }
     private val handler = Handler(Looper.getMainLooper())
@@ -263,11 +257,11 @@ class SearchActivity : AppCompatActivity() {
 
 
     private fun search() {
-        iTunesService.search(searchEdittext.text.toString()).enqueue(object : Callback<TrackSearchResponse> {
+        iTunesService.search(searchEdittext.text.toString()).enqueue(object : Callback<TracksSearchResponse> {
             @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(
-                call: Call<TrackSearchResponse>,
-                response: Response<TrackSearchResponse>
+                call: Call<TracksSearchResponse>,
+                response: Response<TracksSearchResponse>
             ) {
                 tracks.clear()
 
@@ -291,7 +285,7 @@ class SearchActivity : AppCompatActivity() {
             }
 
             @SuppressLint("NotifyDataSetChanged")
-            override fun onFailure(call: Call<TrackSearchResponse>, t: Throwable) {
+            override fun onFailure(call: Call<TracksSearchResponse>, t: Throwable) {
                 tracks.clear()
                 showStatus(SearchStatus.SOMETHING_WRONG, SOMETHING_WRONG)
             }
