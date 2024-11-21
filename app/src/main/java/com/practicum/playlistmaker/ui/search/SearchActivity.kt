@@ -31,9 +31,11 @@ import com.practicum.playlistmaker.SEARCH_HISTORY_KEY
 import com.practicum.playlistmaker.SearchHistory
 import com.practicum.playlistmaker.data.dto.TracksSearchResponse
 import com.practicum.playlistmaker.SearchStatus
+import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.domain.models.Track
 import com.practicum.playlistmaker.presentation.TrackAdapter
 import com.practicum.playlistmaker.data.network.iTunesApiService
+import com.practicum.playlistmaker.domain.api.TracksInteractor
 import com.practicum.playlistmaker.ui.player.PlayerActivity
 import retrofit2.Call
 import retrofit2.Callback
@@ -179,7 +181,7 @@ class SearchActivity : AppCompatActivity() {
 
         searchRenewButton.setOnClickListener {
             if (searchEdittext.text.isNotEmpty()) {
-                search()
+                searchDebounce()
             }
         }
 
@@ -215,7 +217,50 @@ class SearchActivity : AppCompatActivity() {
             searchViewsHide()
             sharedPrefs.unregisterOnSharedPreferenceChangeListener(sharedPrefsListener)
             showSearchProgressbar()
-            search()
+
+            val trackInteractor = Creator.getTracksInteractor()
+
+            trackInteractor.searchTracks(searchEdittext.text.toString(), object : TracksInteractor.TracksConsumer {
+                override fun consume(foundTracks: List<Track>) {
+                    if (foundTracks != null) {
+
+                    }
+                }
+            })
+
+            iTunesService.search(searchEdittext.text.toString()).enqueue(object : Callback<TracksSearchResponse> {
+                @SuppressLint("NotifyDataSetChanged")
+                override fun onResponse(
+                    call: Call<TracksSearchResponse>,
+                    response: Response<TracksSearchResponse>
+                ) {
+                    tracks.clear()
+
+                    hideSearchProgressbar()
+
+                    when (response.code()) {
+                        200 -> {
+                            if (response.body()?.results!!.isNotEmpty()) {
+                                tracks.addAll(response.body()?.results!!)
+                                searchRecyclerView.adapter = adapter
+                                adapter.notifyDataSetChanged()
+                                searchViewsShow()
+                                showStatus(SearchStatus.TRACKS_FOUND, SEARCH_SUCCESS)
+                            } else {
+                                showStatus(SearchStatus.TRACKS_NOT_FOUND, TRACKS_NOT_FOUND_2)
+                            }
+                        } else -> {
+                        showStatus(SearchStatus.ERROR_OCCURRED,"Код ошибки: ${response.code()}")
+                    }
+                    }
+                }
+
+                @SuppressLint("NotifyDataSetChanged")
+                override fun onFailure(call: Call<TracksSearchResponse>, t: Throwable) {
+                    tracks.clear()
+                    showStatus(SearchStatus.SOMETHING_WRONG, SOMETHING_WRONG)
+                }
+            })
         }
     }
 
@@ -255,42 +300,6 @@ class SearchActivity : AppCompatActivity() {
         searchProgressBar.visibility = View.INVISIBLE
     }
 
-
-    private fun search() {
-        iTunesService.search(searchEdittext.text.toString()).enqueue(object : Callback<TracksSearchResponse> {
-            @SuppressLint("NotifyDataSetChanged")
-            override fun onResponse(
-                call: Call<TracksSearchResponse>,
-                response: Response<TracksSearchResponse>
-            ) {
-                tracks.clear()
-
-                hideSearchProgressbar()
-
-                when (response.code()) {
-                    200 -> {
-                        if (response.body()?.results!!.isNotEmpty()) {
-                            tracks.addAll(response.body()?.results!!)
-                            searchRecyclerView.adapter = adapter
-                            adapter.notifyDataSetChanged()
-                            searchViewsShow()
-                            showStatus(SearchStatus.TRACKS_FOUND, SEARCH_SUCCESS)
-                        } else {
-                            showStatus(SearchStatus.TRACKS_NOT_FOUND, TRACKS_NOT_FOUND_2)
-                        }
-                    } else -> {
-                        showStatus(SearchStatus.ERROR_OCCURRED,"Код ошибки: ${response.code()}")
-                    }
-                }
-            }
-
-            @SuppressLint("NotifyDataSetChanged")
-            override fun onFailure(call: Call<TracksSearchResponse>, t: Throwable) {
-                tracks.clear()
-                showStatus(SearchStatus.SOMETHING_WRONG, SOMETHING_WRONG)
-            }
-        })
-    }
 
     @SuppressLint("NotifyDataSetChanged")
     private fun showStatus(indicator: SearchStatus, text: String) {
