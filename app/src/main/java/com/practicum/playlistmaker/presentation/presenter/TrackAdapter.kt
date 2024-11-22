@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.presentation
+package com.practicum.playlistmaker.presentation.presenter
 
 import android.os.Handler
 import android.os.Looper

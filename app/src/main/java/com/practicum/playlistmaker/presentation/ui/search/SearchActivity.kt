@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.ui.search
+package com.practicum.playlistmaker.presentation.ui.search
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -33,15 +33,12 @@ import com.practicum.playlistmaker.data.dto.TracksSearchResponse
 import com.practicum.playlistmaker.SearchStatus
 import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.domain.models.Track
-import com.practicum.playlistmaker.presentation.TrackAdapter
-import com.practicum.playlistmaker.data.network.iTunesApiService
+import com.practicum.playlistmaker.presentation.presenter.TrackAdapter
 import com.practicum.playlistmaker.domain.api.TracksInteractor
-import com.practicum.playlistmaker.ui.player.PlayerActivity
+import com.practicum.playlistmaker.presentation.ui.player.PlayerActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -218,9 +215,11 @@ class SearchActivity : AppCompatActivity() {
             sharedPrefs.unregisterOnSharedPreferenceChangeListener(sharedPrefsListener)
             showSearchProgressbar()
 
-            val trackInteractor = Creator.getTracksInteractor()
+            tracks.clear()
 
-            trackInteractor.searchTracks(searchEdittext.text.toString(), object : TracksInteractor.TracksConsumer {
+            val tracksInteractor = Creator.getTracksInteractor()
+
+            tracksInteractor.searchTracks(searchEdittext.text.toString(), object : TracksInteractor.TracksConsumer {
                 override fun consume(foundTracks: List<Track>) {
                     if (foundTracks != null) {
 
@@ -228,16 +227,15 @@ class SearchActivity : AppCompatActivity() {
                 }
             })
 
-            iTunesService.search(searchEdittext.text.toString()).enqueue(object : Callback<TracksSearchResponse> {
+            hideSearchProgressbar()
+
+            iTunesService.search(searchEdittext.text.toString()).enqueue(
+                object : Callback<TracksSearchResponse> {
                 @SuppressLint("NotifyDataSetChanged")
                 override fun onResponse(
                     call: Call<TracksSearchResponse>,
                     response: Response<TracksSearchResponse>
                 ) {
-                    tracks.clear()
-
-                    hideSearchProgressbar()
-
                     when (response.code()) {
                         200 -> {
                             if (response.body()?.results!!.isNotEmpty()) {
@@ -260,7 +258,11 @@ class SearchActivity : AppCompatActivity() {
                     tracks.clear()
                     showStatus(SearchStatus.SOMETHING_WRONG, SOMETHING_WRONG)
                 }
-            })
+                }
+            )
+
+
+
         }
     }
 
