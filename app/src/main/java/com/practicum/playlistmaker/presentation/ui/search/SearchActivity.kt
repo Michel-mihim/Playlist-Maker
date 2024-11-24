@@ -214,21 +214,31 @@ class SearchActivity : AppCompatActivity() {
             searchViewsHide()
             sharedPrefs.unregisterOnSharedPreferenceChangeListener(sharedPrefsListener)
             showSearchProgressbar()
-
             tracks.clear()
 
             val tracksInteractor = Creator.getTracksInteractor()
 
             tracksInteractor.searchTracks(searchEdittext.text.toString(), object : TracksInteractor.TracksConsumer {
                 override fun consume(foundTracks: List<Track>) {
-                    if (foundTracks != null) {
+                    handler.post{
+                        if (foundTracks != null) {
+                            tracks.addAll(foundTracks)
 
+                        }
+
+                        searchRecyclerView.adapter = adapter
+                        adapter.notifyDataSetChanged()
+                        searchViewsShow()
+                        showStatus(SearchStatus.TRACKS_FOUND, SEARCH_SUCCESS)
+                        hideSearchProgressbar()
                     }
+
                 }
             })
 
-            hideSearchProgressbar()
 
+
+            /*
             iTunesService.search(searchEdittext.text.toString()).enqueue(
                 object : Callback<TracksSearchResponse> {
                 @SuppressLint("NotifyDataSetChanged")
@@ -261,7 +271,7 @@ class SearchActivity : AppCompatActivity() {
                 }
             )
 
-
+            */
 
         }
     }
