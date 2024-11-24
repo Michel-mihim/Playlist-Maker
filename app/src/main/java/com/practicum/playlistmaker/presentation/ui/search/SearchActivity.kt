@@ -219,18 +219,27 @@ class SearchActivity : AppCompatActivity() {
             val tracksInteractor = Creator.getTracksInteractor()
 
             tracksInteractor.searchTracks(searchEdittext.text.toString(), object : TracksInteractor.TracksConsumer {
-                override fun consume(foundTracks: List<Track>) {
+                override fun consume(result: Any) {
+
                     handler.post{
-                        if (foundTracks != null) {
+                        /*
+                        foundTracks?.let {
+                            if (foundTracks.isNotEmpty()) {
+                                showStatus(SearchStatus.TRACKS_FOUND, SEARCH_SUCCESS)
+                            } else {
+                                showStatus(SearchStatus.TRACKS_NOT_FOUND, TRACKS_NOT_FOUND_2)
+                            }
                             tracks.addAll(foundTracks)
-
                         }
-
+                        */
+                        Log.d("WTF", result.toString())
+                        //    if (foundTracks == null) {
+                        //    showStatus(SearchStatus.ERROR_OCCURRED,"Код ошибки: ...")
+                        //}
+                        hideSearchProgressbar()
                         searchRecyclerView.adapter = adapter
                         adapter.notifyDataSetChanged()
                         searchViewsShow()
-                        showStatus(SearchStatus.TRACKS_FOUND, SEARCH_SUCCESS)
-                        hideSearchProgressbar()
                     }
 
                 }

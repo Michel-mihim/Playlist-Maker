@@ -1,7 +1,9 @@
 package com.practicum.playlistmaker.domain.impl
 
+import android.util.Log
 import com.practicum.playlistmaker.domain.api.TracksInteractor
 import com.practicum.playlistmaker.domain.api.TracksRepository
+import com.practicum.playlistmaker.domain.models.Track
 import java.util.concurrent.Executors
 
 class TracksInteractorImpl(private val repository: TracksRepository): TracksInteractor {
@@ -10,7 +12,11 @@ class TracksInteractorImpl(private val repository: TracksRepository): TracksInte
 
     override fun searchTracks(expression: String, consumer: TracksInteractor.TracksConsumer) {
         executor.execute {
-            consumer.consume(repository.searchTracks(expression))
+            consumer.consume(repository.searchTracks(
+                expression,
+                onSuccess = {tracks -> Log.d("WTF", "from top level "+tracks.toString()) },
+                onFailure = {error -> Log.d("WTF", "from top level "+error.toString()) }
+                ))
         }
     }
 }
