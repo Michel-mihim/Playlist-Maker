@@ -12,10 +12,9 @@ class TracksRepositoryImpl(private val networkClient: NetworkClient) : TracksRep
 
     override fun searchTracks(
         expression: String
-    ): Any {
+    ): SearchTracksResult {
         val response = networkClient.doRequest(TracksSearchRequest(expression))
-        Log.d("WTF", "from TracksRepositoryImp code: "+response.resultCode.toString())
-        Log.d("WTF", "from TracksRepositoryImp response: "+response.toString())
+
         if (response.resultCode == 200) {
 
             val tracks = (response as TracksSearchResponse).results.map {
@@ -32,11 +31,11 @@ class TracksRepositoryImpl(private val networkClient: NetworkClient) : TracksRep
                     it.previewUrl
                 )
             }
-            Log.d("WTF", "from searchActivityTracksRepositoryImp tracks: "+tracks.toString())
-            return tracks
-        } else {
-            return response.resultCode
-            }
+
+            return if (tracks.isNotEmpty()) SearchTracksResult.Success(tracks, response.resultCode)
+            else SearchTracksResult.Empty(emptyList(), response.resultCode)
+
+        } else return SearchTracksResult.Failure(emptyList(), response.resultCode)
     }
 
 }

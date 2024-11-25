@@ -32,6 +32,7 @@ import com.practicum.playlistmaker.SearchHistory
 import com.practicum.playlistmaker.data.dto.TracksSearchResponse
 import com.practicum.playlistmaker.SearchStatus
 import com.practicum.playlistmaker.creator.Creator
+import com.practicum.playlistmaker.data.SearchTracksResult
 import com.practicum.playlistmaker.domain.models.Track
 import com.practicum.playlistmaker.presentation.presenter.TrackAdapter
 import com.practicum.playlistmaker.domain.api.TracksInteractor
@@ -219,21 +220,24 @@ class SearchActivity : AppCompatActivity() {
             val tracksInteractor = Creator.getTracksInteractor()
 
             tracksInteractor.searchTracks(searchEdittext.text.toString(), object : TracksInteractor.TracksConsumer {
-                override fun consume(result: Any) {
+                override fun consume(result: SearchTracksResult) {
 
                     handler.post{
-                        if (result is List<Track>) {
+                        when (result) {
+                            is SearchTracksResult.Success -> {
+                                tracks.addAll(result.tracks)
                                 showStatus(SearchStatus.TRACKS_FOUND, SEARCH_SUCCESS)
-                            } else {
+                            }
+                            is SearchTracksResult.Empty -> {
+                                tracks.addAll(result.tracks)
                                 showStatus(SearchStatus.TRACKS_NOT_FOUND, TRACKS_NOT_FOUND_2)
                             }
-                            tracks.addAll(foundTracks)
+                            is SearchTracksResult.Failure -> {
+                                tracks.addAll(result.tracks)
+                                showStatus(SearchStatus.ERROR_OCCURRED,"Код ошибки: ${result.code}")
+                            }
                         }
 
-                        Log.d("WTF", "from searchActivity: "+result.toString())
-                        //    if (foundTracks == null) {
-                        //    showStatus(SearchStatus.ERROR_OCCURRED,"Код ошибки: ...")
-                        //}
                         hideSearchProgressbar()
                         searchRecyclerView.adapter = adapter
                         adapter.notifyDataSetChanged()
@@ -242,44 +246,6 @@ class SearchActivity : AppCompatActivity() {
 
                 }
             })
-
-
-
-            /*
-            iTunesService.search(searchEdittext.text.toString()).enqueue(
-                object : Callback<TracksSearchResponse> {
-                @SuppressLint("NotifyDataSetChanged")
-                override fun onResponse(
-                    call: Call<TracksSearchResponse>,
-                    response: Response<TracksSearchResponse>
-                ) {
-                    when (response.code()) {
-                        200 -> {
-                            if (response.body()?.results!!.isNotEmpty()) {
-                                tracks.addAll(response.body()?.results!!)
-                                searchRecyclerView.adapter = adapter
-                                adapter.notifyDataSetChanged()
-                                searchViewsShow()
-                                showStatus(SearchStatus.TRACKS_FOUND, SEARCH_SUCCESS)
-                            } else {
-                                showStatus(SearchStatus.TRACKS_NOT_FOUND, TRACKS_NOT_FOUND_2)
-                            }
-                        } else -> {
-                        showStatus(SearchStatus.ERROR_OCCURRED,"Код ошибки: ${response.code()}")
-                    }
-                    }
-                }
-
-                @SuppressLint("NotifyDataSetChanged")
-                override fun onFailure(call: Call<TracksSearchResponse>, t: Throwable) {
-                    tracks.clear()
-                    showStatus(SearchStatus.SOMETHING_WRONG, SOMETHING_WRONG)
-                }
-                }
-            )
-
-            */
-
         }
     }
 
