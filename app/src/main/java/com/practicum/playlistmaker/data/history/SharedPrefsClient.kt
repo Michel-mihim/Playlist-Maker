@@ -1,6 +1,6 @@
 package com.practicum.playlistmaker.data.history
 
-interface DbClient {
+interface SharedPrefsClient {
     fun writeTrack()
 
     fun readTracks()

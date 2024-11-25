@@ -13,4 +13,7 @@ object Constants {
     const val HISTORY_CLEARED ="История поиска была удалена"
 
     const val SEARCH_DEBOUNCE_DELAY = 2000L
+
+    const val SEARCH_HISTORY_KEY = "history"
+    const val HISTORY_CAPACITY = 10
 }

@@ -34,7 +34,7 @@ import com.practicum.playlistmaker.data.PREFERENCES
 import com.practicum.playlistmaker.domain.searchTracks.models.SearchTracksResult
 import com.practicum.playlistmaker.domain.searchTracks.models.Track
 import com.practicum.playlistmaker.presentation.presenter.TrackAdapter
-import com.practicum.playlistmaker.domain.searchTracks.api.TracksInteractor
+import com.practicum.playlistmaker.domain.searchTracks.api.searchTracksInteractor
 import com.practicum.playlistmaker.presentation.Constants
 import com.practicum.playlistmaker.presentation.ui.player.PlayerActivity
 import java.text.SimpleDateFormat
@@ -201,7 +201,7 @@ class SearchActivity : AppCompatActivity() {
 
             val tracksInteractor = Creator.getTracksInteractor()
 
-            tracksInteractor.searchTracks(searchEdittext.text.toString(), object : TracksInteractor.TracksConsumer {
+            tracksInteractor.searchTracks(searchEdittext.text.toString(), object : searchTracksInteractor.TracksConsumer {
                 override fun consume(result: SearchTracksResult) {
 
                     handler.post{

@@ -3,9 +3,8 @@ package com.practicum.playlistmaker
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.practicum.playlistmaker.domain.searchTracks.models.Track
+import com.practicum.playlistmaker.presentation.Constants
 
-const val SEARCH_HISTORY_KEY = "history"
-const val HISTORY_CAPACITY = 10
 
 class SearchHistory(private val sharedPrefs: SharedPreferences) {
 
@@ -19,18 +18,14 @@ class SearchHistory(private val sharedPrefs: SharedPreferences) {
 
         val json = Gson().toJson(newTracks)
         this.sharedPrefs.edit()
-            .putString(SEARCH_HISTORY_KEY, json)
+            .putString(Constants.SEARCH_HISTORY_KEY, json)
             .apply()
     }
 
-    fun readHistory(): Array<Track> {
-        val json = this.sharedPrefs.getString(SEARCH_HISTORY_KEY, null) ?: return emptyArray()
-        return Gson().fromJson(json, Array<Track>::class.java)
-    }
 
     fun clearHistory() {
         this.sharedPrefs.edit()
-            .remove(SEARCH_HISTORY_KEY)
+            .remove(Constants.SEARCH_HISTORY_KEY)
             .apply()
     }
 
@@ -41,7 +36,7 @@ class SearchHistory(private val sharedPrefs: SharedPreferences) {
             onPresent = { track ->   newTracks.addAll(makeFirstTrackIfPresent(trackAdded, tracks))},
             onAbsent = { newTracks.addAll(addTrackIfAbsent(trackAdded, tracks)) }
         )
-        return newTracks.take(HISTORY_CAPACITY).toCollection(ArrayList())
+        return newTracks.take(Constants.HISTORY_CAPACITY).toCollection(ArrayList())
         }
 
     private fun getTrackId(track: Track): String {
