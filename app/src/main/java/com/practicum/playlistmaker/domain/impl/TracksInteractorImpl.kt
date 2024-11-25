@@ -16,4 +16,8 @@ class TracksInteractorImpl(private val repository: TracksRepository): TracksInte
             consumer.consume(repository.searchTracks(expression))
         }
     }
+
+    override fun writeHistoryTracks(trackClicked: Track) {
+
+    }
 }

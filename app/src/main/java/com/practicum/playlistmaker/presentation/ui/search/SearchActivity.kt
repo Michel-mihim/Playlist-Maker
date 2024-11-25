@@ -25,7 +25,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.practicum.playlistmaker.PREFERENCES
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.SEARCH_HISTORY_KEY
 import com.practicum.playlistmaker.SearchHistory
@@ -53,7 +52,7 @@ class SearchActivity : AppCompatActivity() {
 
     //не инициализированные объекты=================================================================
     private lateinit var adapter: TrackAdapter
-    private lateinit var sharedPrefs: SharedPreferences
+
     private lateinit var searchHistory: SearchHistory
     private lateinit var sharedPrefsListener: SharedPreferences.OnSharedPreferenceChangeListener
     //не инициализированные views===================================================================
@@ -83,9 +82,6 @@ class SearchActivity : AppCompatActivity() {
         Log.d("WTF", "Новая активити создана")
         //инициализация объектов
         adapter = TrackAdapter(tracks)
-
-        sharedPrefs = getSharedPreferences(PREFERENCES, MODE_PRIVATE)
-        searchHistory = SearchHistory(sharedPrefs)
 
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 

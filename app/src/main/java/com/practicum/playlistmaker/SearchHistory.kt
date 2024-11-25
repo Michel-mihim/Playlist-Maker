@@ -38,7 +38,7 @@ class SearchHistory(private val sharedPrefs: SharedPreferences) {
         val newTracks = ArrayList<Track>()
         trackChecker(
             trackAdded, tracks,
-            onPresent = { _ ->   newTracks.addAll(makeFirstTrackIfPresent(trackAdded, tracks))},
+            onPresent = { track ->   newTracks.addAll(makeFirstTrackIfPresent(trackAdded, tracks))},
             onAbsent = { newTracks.addAll(addTrackIfAbsent(trackAdded, tracks)) }
         )
         return newTracks.take(HISTORY_CAPACITY).toCollection(ArrayList())

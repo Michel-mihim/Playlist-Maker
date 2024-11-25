@@ -36,4 +36,8 @@ class TracksRepositoryImpl(private val networkClient: NetworkClient) : TracksRep
         } else return SearchTracksResult.Failure(emptyList(), response.resultCode)
     }
 
+    override fun writeTrack(trackClicked: Track) {
+
+    }
+
 }
