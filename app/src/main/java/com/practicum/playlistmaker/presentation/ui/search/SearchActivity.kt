@@ -35,6 +35,7 @@ import com.practicum.playlistmaker.domain.models.SearchTracksResult
 import com.practicum.playlistmaker.domain.models.Track
 import com.practicum.playlistmaker.presentation.presenter.TrackAdapter
 import com.practicum.playlistmaker.domain.api.TracksInteractor
+import com.practicum.playlistmaker.presentation.Constants
 import com.practicum.playlistmaker.presentation.ui.player.PlayerActivity
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -43,28 +44,12 @@ import java.util.Locale
 
 class SearchActivity : AppCompatActivity() {
 
-    //константы=====================================================================================
-    companion object {
-        const val SEARCH_STRING = "SEARCH_STRING"
-        const val SEARCH_DEF = ""
-        const val TRACKS_NOT_FOUND = "Ничего не нашлось"
-        const val TRACKS_NOT_FOUND_2 = "Ничего не найдено"
-        const val NETWORK_PROBLEM = "Проблемы со связью\n" +
-                "\n" +
-                "Загрузка не удалась. Проверьте подключение к интернету"
-        const val SOMETHING_WRONG = "Что-то пошло не так.."
-        const val SEARCH_SUCCESS = "Поиск успешно произведен!"
-        const val HISTORY_CLEARED ="История поиска была удалена"
-
-        private const val SEARCH_DEBOUNCE_DELAY = 2000L
-    }
-
     //инициализированные объекты====================================================================
     private val tracks = ArrayList<Track>()
     private val searchRunnable = Runnable { searchRequest() }
     private val handler = Handler(Looper.getMainLooper())
 
-    private var searchDef: String = SEARCH_DEF
+    private var searchDef: String = Constants.SEARCH_DEF
 
     //не инициализированные объекты=================================================================
     private lateinit var adapter: TrackAdapter
@@ -202,7 +187,7 @@ class SearchActivity : AppCompatActivity() {
     //расчетные функции=============================================================================
     private fun searchDebounce(){
         handler.removeCallbacks(searchRunnable) // runnable - fun searchRequest()
-        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+        handler.postDelayed(searchRunnable, Constants.SEARCH_DEBOUNCE_DELAY)
     }
 
     private fun searchRequest(){
@@ -222,11 +207,11 @@ class SearchActivity : AppCompatActivity() {
                         when (result) {
                             is SearchTracksResult.Success -> {
                                 tracks.addAll(result.tracks)
-                                showStatus(SearchStatus.TRACKS_FOUND, SEARCH_SUCCESS)
+                                showStatus(SearchStatus.TRACKS_FOUND, Constants.SEARCH_SUCCESS)
                             }
                             is SearchTracksResult.Empty -> {
                                 tracks.addAll(result.tracks)
-                                showStatus(SearchStatus.TRACKS_NOT_FOUND, TRACKS_NOT_FOUND_2)
+                                showStatus(SearchStatus.TRACKS_NOT_FOUND, Constants.TRACKS_NOT_FOUND_2)
                             }
                             is SearchTracksResult.Failure -> {
                                 tracks.addAll(result.tracks)
@@ -254,7 +239,7 @@ class SearchActivity : AppCompatActivity() {
     private fun clearHistory(searchHistory: SearchHistory) {
         searchHistory.clearHistory()
 
-        Toast.makeText(this@SearchActivity, HISTORY_CLEARED, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this@SearchActivity, Constants.HISTORY_CLEARED, Toast.LENGTH_SHORT).show()
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -286,12 +271,12 @@ class SearchActivity : AppCompatActivity() {
     private fun showStatus(indicator: SearchStatus, text: String) {
         when (indicator) {
             SearchStatus.TRACKS_NOT_FOUND -> {
-                showPlaceholder(TRACKS_NOT_FOUND, R.drawable.not_found)
+                showPlaceholder(Constants.TRACKS_NOT_FOUND, R.drawable.not_found)
                 searchRenewButton.visibility = renewButtonVisibility(SearchStatus.TRACKS_NOT_FOUND)
                 Toast.makeText(this@SearchActivity, text, Toast.LENGTH_SHORT).show()
             }
             SearchStatus.SOMETHING_WRONG -> {
-                showPlaceholder(NETWORK_PROBLEM, R.drawable.net_trouble)
+                showPlaceholder(Constants.NETWORK_PROBLEM, R.drawable.net_trouble)
                 searchRenewButton.visibility = renewButtonVisibility(SearchStatus.SOMETHING_WRONG)
                 Toast.makeText(this@SearchActivity, text, Toast.LENGTH_SHORT).show()
             }
@@ -301,7 +286,7 @@ class SearchActivity : AppCompatActivity() {
 
             }
             SearchStatus.ERROR_OCCURRED -> {
-                showPlaceholder(NETWORK_PROBLEM, R.drawable.net_trouble)
+                showPlaceholder(Constants.NETWORK_PROBLEM, R.drawable.net_trouble)
                 searchRenewButton.visibility = renewButtonVisibility(SearchStatus.ERROR_OCCURRED)
                 Toast.makeText(this@SearchActivity, text, Toast.LENGTH_SHORT).show()
             }
@@ -387,12 +372,12 @@ class SearchActivity : AppCompatActivity() {
     //переопределение функций памяти состояния======================================================
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(SEARCH_STRING, searchDef)
+        outState.putString(Constants.SEARCH_STRING, searchDef)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        searchDef = savedInstanceState.getString(SEARCH_STRING, SEARCH_DEF)
+        searchDef = savedInstanceState.getString(Constants.SEARCH_STRING, Constants.SEARCH_DEF)
     }
 
 }
