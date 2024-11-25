@@ -11,12 +11,9 @@ class TracksInteractorImpl(private val repository: TracksRepository): TracksInte
     private val executor = Executors.newCachedThreadPool()
 
     override fun searchTracks(expression: String, consumer: TracksInteractor.TracksConsumer) {
+
         executor.execute {
-            consumer.consume(repository.searchTracks(
-                expression,
-                onSuccess = {tracks -> Log.d("WTF", "from top level "+tracks.toString()) },
-                onFailure = {error -> Log.d("WTF", "from top level "+error.toString()) }
-                ))
+            consumer.consume(repository.searchTracks(expression))
         }
     }
 }

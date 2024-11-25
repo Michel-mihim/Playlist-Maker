@@ -11,13 +11,11 @@ import com.practicum.playlistmaker.domain.models.Track
 class TracksRepositoryImpl(private val networkClient: NetworkClient) : TracksRepository {
 
     override fun searchTracks(
-        expression: String,
-        onSuccess: (List<Track>) -> Unit,
-        onFailure: (Int) -> Unit
-    ) {
+        expression: String
+    ): Any {
         val response = networkClient.doRequest(TracksSearchRequest(expression))
-        Log.d("WTF", response.resultCode.toString())
-        Log.d("WTF", response.toString())
+        Log.d("WTF", "from TracksRepositoryImp code: "+response.resultCode.toString())
+        Log.d("WTF", "from TracksRepositoryImp response: "+response.toString())
         if (response.resultCode == 200) {
 
             val tracks = (response as TracksSearchResponse).results.map {
@@ -34,10 +32,10 @@ class TracksRepositoryImpl(private val networkClient: NetworkClient) : TracksRep
                     it.previewUrl
                 )
             }
-
-            onSuccess(tracks)
+            Log.d("WTF", "from searchActivityTracksRepositoryImp tracks: "+tracks.toString())
+            return tracks
         } else {
-            onFailure(response.resultCode)
+            return response.resultCode
             }
     }
 

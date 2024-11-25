@@ -222,17 +222,15 @@ class SearchActivity : AppCompatActivity() {
                 override fun consume(result: Any) {
 
                     handler.post{
-                        /*
-                        foundTracks?.let {
-                            if (foundTracks.isNotEmpty()) {
+                        if (result is List<Track>) {
                                 showStatus(SearchStatus.TRACKS_FOUND, SEARCH_SUCCESS)
                             } else {
                                 showStatus(SearchStatus.TRACKS_NOT_FOUND, TRACKS_NOT_FOUND_2)
                             }
                             tracks.addAll(foundTracks)
                         }
-                        */
-                        Log.d("WTF", result.toString())
+
+                        Log.d("WTF", "from searchActivity: "+result.toString())
                         //    if (foundTracks == null) {
                         //    showStatus(SearchStatus.ERROR_OCCURRED,"Код ошибки: ...")
                         //}
