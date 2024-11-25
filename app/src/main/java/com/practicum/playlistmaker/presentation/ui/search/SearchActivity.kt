@@ -28,12 +28,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.SEARCH_HISTORY_KEY
 import com.practicum.playlistmaker.SearchHistory
-import com.practicum.playlistmaker.domain.models.SearchStatus
+import com.practicum.playlistmaker.domain.searchTracks.models.SearchStatus
 import com.practicum.playlistmaker.creator.Creator
-import com.practicum.playlistmaker.domain.models.SearchTracksResult
-import com.practicum.playlistmaker.domain.models.Track
+import com.practicum.playlistmaker.data.PREFERENCES
+import com.practicum.playlistmaker.domain.searchTracks.models.SearchTracksResult
+import com.practicum.playlistmaker.domain.searchTracks.models.Track
 import com.practicum.playlistmaker.presentation.presenter.TrackAdapter
-import com.practicum.playlistmaker.domain.api.TracksInteractor
+import com.practicum.playlistmaker.domain.searchTracks.api.TracksInteractor
 import com.practicum.playlistmaker.presentation.Constants
 import com.practicum.playlistmaker.presentation.ui.player.PlayerActivity
 import java.text.SimpleDateFormat
@@ -52,7 +53,7 @@ class SearchActivity : AppCompatActivity() {
 
     //не инициализированные объекты=================================================================
     private lateinit var adapter: TrackAdapter
-
+    private lateinit var sharedPrefs: SharedPreferences
     private lateinit var searchHistory: SearchHistory
     private lateinit var sharedPrefsListener: SharedPreferences.OnSharedPreferenceChangeListener
     //не инициализированные views===================================================================
@@ -82,6 +83,9 @@ class SearchActivity : AppCompatActivity() {
         Log.d("WTF", "Новая активити создана")
         //инициализация объектов
         adapter = TrackAdapter(tracks)
+
+        sharedPrefs = getSharedPreferences(PREFERENCES, MODE_PRIVATE)
+        searchHistory = SearchHistory(sharedPrefs)
 
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
@@ -190,6 +194,7 @@ class SearchActivity : AppCompatActivity() {
         if (searchEdittext.text.isNotEmpty()) {
             historyViewsHide()
             searchViewsHide()
+            hidePlaceholder()
             sharedPrefs.unregisterOnSharedPreferenceChangeListener(sharedPrefsListener)
             showSearchProgressbar()
             tracks.clear()

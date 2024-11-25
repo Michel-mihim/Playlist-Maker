@@ -1,6 +1,4 @@
-package com.practicum.playlistmaker.data.dto
-
-import com.practicum.playlistmaker.domain.models.Track
+package com.practicum.playlistmaker.data.searchTracks.dto
 
 data class TracksSearchResponse(
     val resultCount: Int,

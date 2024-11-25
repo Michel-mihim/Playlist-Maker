@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.domain.models
+package com.practicum.playlistmaker.domain.searchTracks.models
 
 sealed class SearchTracksResult(val tracks: List<Track>, val code: Int) {
     class Success(tracks: List<Track>, code: Int): SearchTracksResult(tracks, code){}

@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.data
+package com.practicum.playlistmaker.data.history
 
 interface DbClient {
     fun writeTrack()

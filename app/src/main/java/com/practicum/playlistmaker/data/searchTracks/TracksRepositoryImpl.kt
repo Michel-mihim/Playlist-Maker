@@ -1,10 +1,10 @@
-package com.practicum.playlistmaker.data
+package com.practicum.playlistmaker.data.searchTracks
 
-import com.practicum.playlistmaker.data.dto.TracksSearchRequest
-import com.practicum.playlistmaker.data.dto.TracksSearchResponse
-import com.practicum.playlistmaker.domain.api.TracksRepository
-import com.practicum.playlistmaker.domain.models.SearchTracksResult
-import com.practicum.playlistmaker.domain.models.Track
+import com.practicum.playlistmaker.data.searchTracks.dto.TracksSearchRequest
+import com.practicum.playlistmaker.data.searchTracks.dto.TracksSearchResponse
+import com.practicum.playlistmaker.domain.searchTracks.api.TracksRepository
+import com.practicum.playlistmaker.domain.searchTracks.models.SearchTracksResult
+import com.practicum.playlistmaker.domain.searchTracks.models.Track
 
 class TracksRepositoryImpl(private val networkClient: NetworkClient) : TracksRepository {
 
@@ -34,10 +34,6 @@ class TracksRepositoryImpl(private val networkClient: NetworkClient) : TracksRep
             else SearchTracksResult.Empty(emptyList(), response.resultCode)
 
         } else return SearchTracksResult.Failure(emptyList(), response.resultCode)
-    }
-
-    override fun writeTrack(trackClicked: Track) {
-
     }
 
 }
