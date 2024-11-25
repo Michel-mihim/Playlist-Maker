@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
-import com.practicum.playlistmaker.PlayerStatus
+import com.practicum.playlistmaker.domain.models.PlayerStatus
 import com.practicum.playlistmaker.R
 import java.text.SimpleDateFormat
 import java.util.Locale

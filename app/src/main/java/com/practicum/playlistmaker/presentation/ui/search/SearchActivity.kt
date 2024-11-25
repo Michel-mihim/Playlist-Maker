@@ -29,7 +29,7 @@ import com.practicum.playlistmaker.PREFERENCES
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.SEARCH_HISTORY_KEY
 import com.practicum.playlistmaker.SearchHistory
-import com.practicum.playlistmaker.SearchStatus
+import com.practicum.playlistmaker.domain.models.SearchStatus
 import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.domain.models.SearchTracksResult
 import com.practicum.playlistmaker.domain.models.Track

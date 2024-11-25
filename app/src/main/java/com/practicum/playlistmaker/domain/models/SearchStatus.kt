@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.domain.models
 
 enum class SearchStatus {
     TRACKS_FOUND,
