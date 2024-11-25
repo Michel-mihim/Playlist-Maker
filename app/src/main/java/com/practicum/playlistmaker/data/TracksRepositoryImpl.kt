@@ -1,11 +1,9 @@
 package com.practicum.playlistmaker.data
 
-import android.util.Log
-import com.practicum.playlistmaker.data.dto.Response
-import com.practicum.playlistmaker.data.dto.TrackDto
 import com.practicum.playlistmaker.data.dto.TracksSearchRequest
 import com.practicum.playlistmaker.data.dto.TracksSearchResponse
 import com.practicum.playlistmaker.domain.api.TracksRepository
+import com.practicum.playlistmaker.domain.models.SearchTracksResult
 import com.practicum.playlistmaker.domain.models.Track
 
 class TracksRepositoryImpl(private val networkClient: NetworkClient) : TracksRepository {
