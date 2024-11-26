@@ -52,6 +52,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var adapter: TrackAdapter
     private lateinit var sharedPrefs: SharedPreferences
     private lateinit var sharedPrefsListener: SharedPreferences.OnSharedPreferenceChangeListener
+    private lateinit var historyTracksInteractor: HistoryTracksInteractor
     //не инициализированные views===================================================================
     private lateinit var trackNotFoundPlaceholderImage: ImageView
     private lateinit var trackNotFoundPlaceholderText: TextView
@@ -69,7 +70,6 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d("WTF", "пройдено")
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_search)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -80,7 +80,7 @@ class SearchActivity : AppCompatActivity() {
         //инициализация объектов
         adapter = TrackAdapter(tracks)
 
-        val historyTracksInteractor = Creator.getHistoryTracksInteractor(this)
+        historyTracksInteractor = Creator.getHistoryTracksInteractor(this)
 
         sharedPrefsListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
             if (key == Constants.SEARCH_HISTORY_KEY) showHistory(historyTracksInteractor)

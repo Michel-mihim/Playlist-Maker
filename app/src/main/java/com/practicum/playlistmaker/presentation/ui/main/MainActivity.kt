@@ -31,8 +31,6 @@ class MainActivity : AppCompatActivity() {
             startActivity(searchIntent)
         }
 
-        //------------------------------------------------------------------------------------------
-
         // button_lib_reaction----------------------------------------------------------------------
         val buttonLib = findViewById<Button>(R.id.button_lib)
 
@@ -40,7 +38,6 @@ class MainActivity : AppCompatActivity() {
             val libIntent = Intent(this, LibActivity::class.java)
             startActivity(libIntent)
         }
-        //------------------------------------------------------------------------------------------
 
         // button_settings_reaction-----------------------------------------------------------------
         val buttonSettings = findViewById<Button>(R.id.button_settings)
@@ -49,8 +46,5 @@ class MainActivity : AppCompatActivity() {
             val settingsIntent = Intent(this, SettingsActivity::class.java)
             startActivity(settingsIntent)
         }
-        //------------------------------------------------------------------------------------------
-
-        Log.d("MainActivity", "Я выполнилось")
     }
 }

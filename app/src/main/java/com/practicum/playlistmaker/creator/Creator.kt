@@ -24,7 +24,7 @@ object Creator {
         return SearchTracksInteractorImpl(getTracksRepository())
     }
 
-    //history==============================================================================================
+    //history=======================================================================================
 
     fun getHistoryTracksInteractor(context: Context): HistoryTracksInteractor{
         return HistoryTracksInteractorImpl(getHistoryTracksRepository(context))

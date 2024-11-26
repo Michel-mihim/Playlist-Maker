@@ -13,11 +13,11 @@ class HistoryTracksRepositoryImpl(private val sharedPrefs: SharedPreferences) : 
         return Gson().fromJson(json, Array<Track>::class.java)
     }
 
-    override fun addTrack(trackClicked: Track) {
+    override fun addTrack(track: Track) {
         val newTracks = ArrayList<Track>()
         val lastTracks = getTracks()
         newTracks.clear()
-        newTracks.addAll(newHistoryGenerator(trackClicked, lastTracks))
+        newTracks.addAll(newHistoryGenerator(track, lastTracks))
         val json = Gson().toJson(newTracks)
         sharedPrefs.edit()
             .putString(Constants.SEARCH_HISTORY_KEY, json)
