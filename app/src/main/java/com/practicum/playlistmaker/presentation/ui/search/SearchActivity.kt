@@ -67,6 +67,7 @@ class SearchActivity : AppCompatActivity() {
     //==============================================================================================
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d("WTF", "пройдено")
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_search)
@@ -78,7 +79,6 @@ class SearchActivity : AppCompatActivity() {
 
         //инициализация объектов
         adapter = TrackAdapter(tracks)
-        sharedPrefs = getSharedPreferences(Constants.PREFERENCES, MODE_PRIVATE)
 
         val historyTracksInteractor = Creator.getHistoryTracksInteractor(this)
 

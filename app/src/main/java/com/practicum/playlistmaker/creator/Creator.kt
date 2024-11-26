@@ -16,7 +16,7 @@ import com.practicum.playlistmaker.utils.constants.Constants
 object Creator {
 
     //searchTracks==================================================================================
-    fun getTracksRepository(): SearchTracksRepository {
+    private fun getTracksRepository(): SearchTracksRepository {
         return searchTracksRepositoryImpl(RetrofitNetworkClient())
     }
 
