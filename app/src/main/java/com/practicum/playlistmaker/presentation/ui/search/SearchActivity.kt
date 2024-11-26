@@ -45,7 +45,6 @@ class SearchActivity : AppCompatActivity() {
     private val searchRunnable = Runnable { searchRequest() }
     private val handler = Handler(Looper.getMainLooper())
     private var searchDef: String = Constants.SEARCH_DEF
-    private val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
     //не инициализированные объекты=================================================================
     private lateinit var adapter: TrackAdapter
@@ -77,6 +76,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         //инициализация объектов
+        val manager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         adapter = TrackAdapter(tracks)
 
         historyTracksInteractor = Creator.getHistoryTracksInteractor(this)
@@ -100,7 +100,7 @@ class SearchActivity : AppCompatActivity() {
 
         //основной листинг==========================================================================
         searchFieldMakeEmpty()
-        openSoftKeyBoard(this@SearchActivity, imm, searchEdittext)
+        openSoftKeyBoard(this@SearchActivity, manager, searchEdittext)
         searchRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
         historyRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
 
@@ -139,7 +139,7 @@ class SearchActivity : AppCompatActivity() {
 
         searchClearButton.setOnClickListener {
             searchEdittext.setText(getString(R.string.empty_string))
-            imm.showSoftInput(searchEdittext, InputMethodManager.SHOW_IMPLICIT)
+            manager.showSoftInput(searchEdittext, InputMethodManager.SHOW_IMPLICIT)
             showHistory(historyTracksInteractor)
             searchViewsHide()
             historyViewsShow()
