@@ -26,15 +26,13 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.SEARCH_HISTORY_KEY
-import com.practicum.playlistmaker.SearchHistory
 import com.practicum.playlistmaker.domain.searchTracks.models.SearchStatus
 import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.data.PREFERENCES
 import com.practicum.playlistmaker.domain.searchTracks.models.SearchTracksResult
 import com.practicum.playlistmaker.domain.searchTracks.models.Track
 import com.practicum.playlistmaker.presentation.presenter.TrackAdapter
-import com.practicum.playlistmaker.domain.searchTracks.api.searchTracksInteractor
+import com.practicum.playlistmaker.domain.searchTracks.api.SearchTracksInteractor
 import com.practicum.playlistmaker.presentation.Constants
 import com.practicum.playlistmaker.presentation.ui.player.PlayerActivity
 import java.text.SimpleDateFormat
@@ -48,13 +46,12 @@ class SearchActivity : AppCompatActivity() {
     private val tracks = ArrayList<Track>()
     private val searchRunnable = Runnable { searchRequest() }
     private val handler = Handler(Looper.getMainLooper())
-
     private var searchDef: String = Constants.SEARCH_DEF
+    private val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
     //не инициализированные объекты=================================================================
     private lateinit var adapter: TrackAdapter
     private lateinit var sharedPrefs: SharedPreferences
-    private lateinit var searchHistory: SearchHistory
     private lateinit var sharedPrefsListener: SharedPreferences.OnSharedPreferenceChangeListener
     //не инициализированные views===================================================================
     private lateinit var trackNotFoundPlaceholderImage: ImageView
@@ -80,18 +77,15 @@ class SearchActivity : AppCompatActivity() {
             insets
         }
 
-        Log.d("WTF", "Новая активити создана")
         //инициализация объектов
         adapter = TrackAdapter(tracks)
-
         sharedPrefs = getSharedPreferences(PREFERENCES, MODE_PRIVATE)
+
         searchHistory = SearchHistory(sharedPrefs)
 
-        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
         sharedPrefsListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
-            Log.d("WTF", "Слушатель изменения файла сработал для "+this.toString())
-            if (key == SEARCH_HISTORY_KEY) showHistory(searchHistory)
+            if (key == Constants.SEARCH_HISTORY_KEY) showHistory(searchHistory)
         }
 
         //инициализация views
@@ -200,8 +194,7 @@ class SearchActivity : AppCompatActivity() {
             tracks.clear()
 
             val tracksInteractor = Creator.getTracksInteractor()
-
-            tracksInteractor.searchTracks(searchEdittext.text.toString(), object : searchTracksInteractor.TracksConsumer {
+            tracksInteractor.searchTracks(searchEdittext.text.toString(), object : SearchTracksInteractor.TracksConsumer {
                 override fun consume(result: SearchTracksResult) {
 
                     handler.post{
@@ -258,12 +251,10 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showSearchProgressbar(){
-
         searchProgressBar.visibility = View.VISIBLE
     }
 
     private fun hideSearchProgressbar(){
-
         searchProgressBar.visibility = View.INVISIBLE
     }
 
