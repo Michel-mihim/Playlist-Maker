@@ -18,7 +18,6 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -125,12 +124,12 @@ class SearchActivity : AppCompatActivity() {
             playerIntent.putExtras(bundle)
             startActivity(playerIntent)
 
-            writeHistory(historyTracksInteractor, track)
+            //writeHistory(historyTracksInteractor, track)
         }
 
         historyClearButton.setOnClickListener{
             historyViewsHide()
-            clearHistory(historyTracksInteractor)
+            //clearHistory(historyTracksInteractor)
         }
 
         searchBackButton.setOnClickListener{
@@ -162,7 +161,6 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 searchClearButton.visibility = searchClearButtonVisibility(s)
-                Log.d("wtf", s.toString())
                 searchDebounce()
             }
 
