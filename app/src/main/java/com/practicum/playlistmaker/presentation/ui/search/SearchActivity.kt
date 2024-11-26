@@ -50,7 +50,7 @@ class SearchActivity : AppCompatActivity() {
 
     //не инициализированные объекты=================================================================
     private lateinit var adapter: TrackAdapter
-    private lateinit var sharedPrefs: SharedPreferences
+    //private lateinit var sharedPrefs: SharedPreferences
     private lateinit var searchHistory: SearchHistory
     private lateinit var sharedPrefsListener: SharedPreferences.OnSharedPreferenceChangeListener
     //не инициализированные views===================================================================
@@ -79,17 +79,16 @@ class SearchActivity : AppCompatActivity() {
 
         //инициализация объектов
         adapter = TrackAdapter(tracks)
-
-        sharedPrefs = getSharedPreferences(Constants.PREFERENCES, MODE_PRIVATE)
-        searchHistory = SearchHistory(sharedPrefs)
-
         val manager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        val sharedPrefs = getSharedPreferences(Constants.PREFERENCES, MODE_PRIVATE)
+        //searchHistory = SearchHistory(sharedPrefs)
+        val historyTracksInteractor = Creator.getHistoryTracksInteractor(this)
 
+        /*
         sharedPrefsListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
-            Log.d("WTF", "Слушатель изменения файла сработал для "+this.toString())
             if (key == Constants.SEARCH_HISTORY_KEY) showHistory(searchHistory)
         }
-
+        */
         //инициализация views
         searchBackButton = findViewById(R.id.search_back_button)
         searchClearButton = findViewById(R.id.search_clear_button)
@@ -109,7 +108,7 @@ class SearchActivity : AppCompatActivity() {
         searchRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
         historyRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
 
-        if (showHistory(searchHistory)) historyViewsShow()
+        //if (showHistory(searchHistory)) historyViewsShow()
 
         //слушатели=================================================================================
         adapter.onItemClickListener = { track ->
@@ -131,7 +130,7 @@ class SearchActivity : AppCompatActivity() {
             playerIntent.putExtras(bundle)
             startActivity(playerIntent)
 
-            writeHistory(searchHistory, track)
+            //writeHistory(searchHistory, track)
         }
 
         historyClearButton.setOnClickListener{
@@ -139,11 +138,12 @@ class SearchActivity : AppCompatActivity() {
             clearHistory(searchHistory)
         }
 
+        /*реализовать позже
         searchBackButton.setOnClickListener{
             sharedPrefs.unregisterOnSharedPreferenceChangeListener(sharedPrefsListener)
             finish()
         }
-
+        */
         searchClearButton.setOnClickListener {
             searchEdittext.setText(getString(R.string.empty_string))
             manager.showSoftInput(searchEdittext, InputMethodManager.SHOW_IMPLICIT)
@@ -191,7 +191,7 @@ class SearchActivity : AppCompatActivity() {
             historyViewsHide()
             searchViewsHide()
             hidePlaceholder()
-            sharedPrefs.unregisterOnSharedPreferenceChangeListener(sharedPrefsListener)
+            //sharedPrefs.unregisterOnSharedPreferenceChangeListener(sharedPrefsListener)реализовать
             showSearchProgressbar()
             tracks.clear()
 
@@ -233,7 +233,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun clearHistory(searchHistory: SearchHistory) {
-        searchHistory.clearHistory()
+        //searchHistory.clearHistory()
 
         Toast.makeText(this@SearchActivity, Constants.HISTORY_CLEARED, Toast.LENGTH_SHORT).show()
     }
@@ -245,7 +245,7 @@ class SearchActivity : AppCompatActivity() {
             tracks.addAll(lastTracks)
             historyRecyclerView.adapter = adapter
             adapter.notifyDataSetChanged()
-            sharedPrefs.registerOnSharedPreferenceChangeListener(sharedPrefsListener)
+            //sharedPrefs.registerOnSharedPreferenceChangeListener(sharedPrefsListener) реализовать
             Log.d("WTF", "История не пустая. Загрузилась")
         }
         return true
