@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker.presentation.ui.search
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -47,7 +46,7 @@ class SearchActivity : AppCompatActivity() {
     private val searchRunnable = Runnable { searchRequest() }
     private val handler = Handler(Looper.getMainLooper())
 
-    private var searchDef: String = Constants.SEARCH_DEF
+    private var searchEmpty: String = Constants.SEARCH_EMPTY
 
     //не инициализированные объекты=================================================================
     private lateinit var adapter: TrackAdapter
@@ -78,7 +77,6 @@ class SearchActivity : AppCompatActivity() {
             insets
         }
 
-        Log.d("WTF", "Новая активити создана")
         //инициализация объектов
         adapter = TrackAdapter(tracks)
 
@@ -175,7 +173,7 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                searchDef = s.toString()
+                searchEmpty = s.toString()
             }
         }
         searchEdittext.addTextChangedListener(textWatcher)
@@ -234,14 +232,12 @@ class SearchActivity : AppCompatActivity() {
         Log.d("WTF", "История записалась")
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private fun clearHistory(searchHistory: SearchHistory) {
         searchHistory.clearHistory()
 
         Toast.makeText(this@SearchActivity, Constants.HISTORY_CLEARED, Toast.LENGTH_SHORT).show()
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private fun showHistory(searchHistory: SearchHistory): Boolean {
         val lastTracks = searchHistory.readHistory()
         if (lastTracks.isEmpty()) return false else {
@@ -265,8 +261,6 @@ class SearchActivity : AppCompatActivity() {
         searchProgressBar.visibility = View.INVISIBLE
     }
 
-
-    @SuppressLint("NotifyDataSetChanged")
     private fun showStatus(indicator: SearchStatus, text: String) {
         when (indicator) {
             SearchStatus.TRACKS_NOT_FOUND -> {
@@ -312,7 +306,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun searchFieldMakeEmpty() {
         searchClearButton.visibility = View.INVISIBLE
-        searchEdittext.setText(searchDef)
+        searchEdittext.setText(searchEmpty)
     }
 
     private fun openSoftKeyBoard(context: Context, imm: InputMethodManager, view: EditText) {
@@ -371,12 +365,12 @@ class SearchActivity : AppCompatActivity() {
     //переопределение функций памяти состояния======================================================
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(Constants.SEARCH_STRING, searchDef)
+        outState.putString(Constants.SEARCH_STRING, searchEmpty)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        searchDef = savedInstanceState.getString(Constants.SEARCH_STRING, Constants.SEARCH_DEF)
+        searchEmpty = savedInstanceState.getString(Constants.SEARCH_STRING, Constants.SEARCH_EMPTY)
     }
 
 }
