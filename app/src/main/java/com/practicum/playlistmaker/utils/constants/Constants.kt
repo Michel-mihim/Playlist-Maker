@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.presentation
+package com.practicum.playlistmaker.utils.constants
 
 object Constants {
     const val SEARCH_STRING = "SEARCH_STRING"
@@ -13,4 +13,11 @@ object Constants {
     const val HISTORY_CLEARED ="История поиска была удалена"
 
     const val SEARCH_DEBOUNCE_DELAY = 2000L
+
+    const val PREFERENCES = "shared_preferences"
+    const val SEARCH_HISTORY_KEY = "history"
+    const val HISTORY_CAPACITY = 10
+
+    const val THEME_KEY = "night_theme"
+
 }

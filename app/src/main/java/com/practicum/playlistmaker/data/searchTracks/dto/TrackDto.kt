@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.data.dto
+package com.practicum.playlistmaker.data.searchTracks.dto
 
 data class TrackDto(val trackId:String,
                     val trackName: String,

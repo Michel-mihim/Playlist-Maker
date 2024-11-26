@@ -1,14 +1,10 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.data
 
 import android.app.Application
 import android.content.SharedPreferences
 import android.content.res.Configuration
-import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
-
-
-const val THEME_KEY = "night_theme"
-const val PREFERENCES = "shared_preferences"
+import com.practicum.playlistmaker.utils.constants.Constants
 
 class App: Application() {
 
@@ -17,7 +13,7 @@ class App: Application() {
     override fun onCreate() {
         super.onCreate()
 
-        val sharedPrefs = getSharedPreferences(PREFERENCES, MODE_PRIVATE)
+        val sharedPrefs = getSharedPreferences(Constants.PREFERENCES, MODE_PRIVATE)
         darkTheme = readThemePrefsDark(sharedPrefs)
         switchTheme(sharedPrefs, darkTheme)
 
@@ -41,12 +37,12 @@ class App: Application() {
     }
 
     fun readThemePrefsDark(sharedPrefs: SharedPreferences): Boolean {
-        return (sharedPrefs.getBoolean(THEME_KEY, isSysThemeDark()))
+        return (sharedPrefs.getBoolean(Constants.THEME_KEY, isSysThemeDark()))
     }
 
     fun writeThemePrefsDark(sharedPrefs: SharedPreferences, darkThemeEnabled: Boolean) {
         sharedPrefs.edit()
-            .putBoolean(THEME_KEY, darkThemeEnabled)
+            .putBoolean(Constants.THEME_KEY, darkThemeEnabled)
             .apply()
     }
 }

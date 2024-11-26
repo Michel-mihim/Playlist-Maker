@@ -25,17 +25,15 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.practicum.playlistmaker.PREFERENCES
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.SEARCH_HISTORY_KEY
 import com.practicum.playlistmaker.SearchHistory
-import com.practicum.playlistmaker.domain.models.SearchStatus
+import com.practicum.playlistmaker.domain.searchTracks.models.SearchStatus
 import com.practicum.playlistmaker.creator.Creator
-import com.practicum.playlistmaker.domain.models.SearchTracksResult
-import com.practicum.playlistmaker.domain.models.Track
+import com.practicum.playlistmaker.domain.searchTracks.models.SearchTracksResult
+import com.practicum.playlistmaker.domain.searchTracks.models.Track
 import com.practicum.playlistmaker.presentation.presenter.TrackAdapter
-import com.practicum.playlistmaker.domain.api.TracksInteractor
-import com.practicum.playlistmaker.presentation.Constants
+import com.practicum.playlistmaker.domain.searchTracks.api.TracksInteractor
+import com.practicum.playlistmaker.utils.constants.Constants
 import com.practicum.playlistmaker.presentation.ui.player.PlayerActivity
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -84,14 +82,14 @@ class SearchActivity : AppCompatActivity() {
         //инициализация объектов
         adapter = TrackAdapter(tracks)
 
-        sharedPrefs = getSharedPreferences(PREFERENCES, MODE_PRIVATE)
+        sharedPrefs = getSharedPreferences(Constants.PREFERENCES, MODE_PRIVATE)
         searchHistory = SearchHistory(sharedPrefs)
 
-        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val manager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
 
         sharedPrefsListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
             Log.d("WTF", "Слушатель изменения файла сработал для "+this.toString())
-            if (key == SEARCH_HISTORY_KEY) showHistory(searchHistory)
+            if (key == Constants.SEARCH_HISTORY_KEY) showHistory(searchHistory)
         }
 
         //инициализация views
@@ -109,7 +107,7 @@ class SearchActivity : AppCompatActivity() {
 
         //основной листинг==========================================================================
         searchFieldMakeEmpty()
-        openSoftKeyBoard(this@SearchActivity, imm, searchEdittext)
+        openSoftKeyBoard(this@SearchActivity, manager, searchEdittext)
         searchRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
         historyRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
 
@@ -150,7 +148,7 @@ class SearchActivity : AppCompatActivity() {
 
         searchClearButton.setOnClickListener {
             searchEdittext.setText(getString(R.string.empty_string))
-            imm.showSoftInput(searchEdittext, InputMethodManager.SHOW_IMPLICIT)
+            manager.showSoftInput(searchEdittext, InputMethodManager.SHOW_IMPLICIT)
             showHistory(searchHistory)
             searchViewsHide()
             historyViewsShow()
@@ -194,6 +192,7 @@ class SearchActivity : AppCompatActivity() {
         if (searchEdittext.text.isNotEmpty()) {
             historyViewsHide()
             searchViewsHide()
+            hidePlaceholder()
             sharedPrefs.unregisterOnSharedPreferenceChangeListener(sharedPrefsListener)
             showSearchProgressbar()
             tracks.clear()

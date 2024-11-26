@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.domain.models.Track
+import com.practicum.playlistmaker.domain.searchTracks.models.Track
 
 class TrackAdapter(
     private val tracks: List<Track>

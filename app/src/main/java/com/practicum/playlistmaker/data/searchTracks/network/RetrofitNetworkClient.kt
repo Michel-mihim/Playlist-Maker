@@ -1,9 +1,8 @@
-package com.practicum.playlistmaker.data.network
+package com.practicum.playlistmaker.data.searchTracks.network
 
-import androidx.activity.result.ActivityResult
-import com.practicum.playlistmaker.data.NetworkClient
-import com.practicum.playlistmaker.data.dto.Response
-import com.practicum.playlistmaker.data.dto.TracksSearchRequest
+import com.practicum.playlistmaker.data.searchTracks.NetworkClient
+import com.practicum.playlistmaker.data.searchTracks.dto.Response
+import com.practicum.playlistmaker.data.searchTracks.dto.TracksSearchRequest
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
