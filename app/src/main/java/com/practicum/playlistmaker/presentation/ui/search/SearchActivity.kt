@@ -48,8 +48,8 @@ class SearchActivity : AppCompatActivity() {
 
     //не инициализированные объекты=================================================================
     private lateinit var adapter: TrackAdapter
-    private lateinit var sharedPrefs: SharedPreferences
-    private lateinit var sharedPrefsListener: SharedPreferences.OnSharedPreferenceChangeListener
+    //private lateinit var sharedPrefs: SharedPreferences
+    //private lateinit var sharedPrefsListener: SharedPreferences.OnSharedPreferenceChangeListener
     private lateinit var historyTracksInteractor: HistoryTracksInteractor
     //не инициализированные views===================================================================
     private lateinit var trackNotFoundPlaceholderImage: ImageView
@@ -80,11 +80,11 @@ class SearchActivity : AppCompatActivity() {
         adapter = TrackAdapter(tracks)
 
         historyTracksInteractor = Creator.getHistoryTracksInteractor(this)
-
+        /*
         sharedPrefsListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
             if (key == Constants.SEARCH_HISTORY_KEY) showHistory(historyTracksInteractor)
         }
-
+        */
         //инициализация views
         searchBackButton = findViewById(R.id.search_back_button)
         searchClearButton = findViewById(R.id.search_clear_button)
@@ -131,12 +131,12 @@ class SearchActivity : AppCompatActivity() {
             historyViewsHide()
             clearHistory(historyTracksInteractor)
         }
-
+        /*
         searchBackButton.setOnClickListener{
             sharedPrefs.unregisterOnSharedPreferenceChangeListener(sharedPrefsListener)
             finish()
         }
-
+        */
         searchClearButton.setOnClickListener {
             searchEdittext.setText(getString(R.string.empty_string))
             manager.showSoftInput(searchEdittext, InputMethodManager.SHOW_IMPLICIT)
@@ -182,7 +182,7 @@ class SearchActivity : AppCompatActivity() {
             historyViewsHide()
             searchViewsHide()
             hidePlaceholder()
-            sharedPrefs.unregisterOnSharedPreferenceChangeListener(sharedPrefsListener)
+            //sharedPrefs.unregisterOnSharedPreferenceChangeListener(sharedPrefsListener)
             showSearchProgressbar()
             tracks.clear()
 
@@ -233,7 +233,7 @@ class SearchActivity : AppCompatActivity() {
             tracks.addAll(lastTracks)
             historyRecyclerView.adapter = adapter
             adapter.notifyDataSetChanged()
-            sharedPrefs.registerOnSharedPreferenceChangeListener(sharedPrefsListener)
+            //sharedPrefs.registerOnSharedPreferenceChangeListener(sharedPrefsListener)
         }
         return true
     }
