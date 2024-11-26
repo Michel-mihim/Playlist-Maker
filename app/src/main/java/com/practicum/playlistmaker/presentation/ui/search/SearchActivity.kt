@@ -27,7 +27,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.domain.searchTracks.models.SearchStatus
 import com.practicum.playlistmaker.creator.Creator
-import com.practicum.playlistmaker.data.PREFERENCES
 import com.practicum.playlistmaker.domain.history.api.HistoryTracksInteractor
 import com.practicum.playlistmaker.domain.searchTracks.models.SearchTracksResult
 import com.practicum.playlistmaker.domain.searchTracks.models.Track
@@ -79,9 +78,8 @@ class SearchActivity : AppCompatActivity() {
 
         //инициализация объектов
         adapter = TrackAdapter(tracks)
-        sharedPrefs = getSharedPreferences(PREFERENCES, MODE_PRIVATE)
+        sharedPrefs = getSharedPreferences(Constants.PREFERENCES, MODE_PRIVATE)
 
-        //searchHistory = SearchHistory(sharedPrefs)
         val historyTracksInteractor = Creator.getHistoryTracksInteractor(this)
 
         sharedPrefsListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
@@ -111,10 +109,8 @@ class SearchActivity : AppCompatActivity() {
 
         //слушатели=================================================================================
         adapter.onItemClickListener = { track ->
-            Log.d("WTF", "Слушатель нажатия in activity: "+track.trackName)
             //запуск плеера
             val playerIntent = Intent(this, PlayerActivity::class.java)
-            Log.d("WTF", track.toString())
 
             val bundle = Bundle()
             bundle.putString("b_track_name", track.trackName)
@@ -229,7 +225,6 @@ class SearchActivity : AppCompatActivity() {
 
     private fun clearHistory(historyTracksInteractor: HistoryTracksInteractor) {
         historyTracksInteractor.clearTracks()
-
         Toast.makeText(this@SearchActivity, Constants.HISTORY_CLEARED, Toast.LENGTH_SHORT).show()
     }
 

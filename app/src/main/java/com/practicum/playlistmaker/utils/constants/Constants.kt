@@ -14,6 +14,8 @@ object Constants {
 
     const val SEARCH_DEBOUNCE_DELAY = 2000L
 
+    const val PREFERENCES = "shared_preferences"
+    const val THEME_KEY = "night_theme"
     const val SEARCH_HISTORY_KEY = "history"
     const val HISTORY_CAPACITY = 10
 }

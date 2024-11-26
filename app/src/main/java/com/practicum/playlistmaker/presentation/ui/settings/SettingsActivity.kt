@@ -8,8 +8,8 @@ import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.practicum.playlistmaker.data.App
-import com.practicum.playlistmaker.data.PREFERENCES
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.utils.constants.Constants
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -33,7 +33,7 @@ class SettingsActivity : AppCompatActivity() {
         //слушатели нажатий=========================================================================
         themeSwitcher.setOnCheckedChangeListener{ switcher, checked ->
             (applicationContext as App).switchTheme((applicationContext as App)
-                .getSharedPreferences(PREFERENCES, MODE_PRIVATE), checked)
+                .getSharedPreferences(Constants.PREFERENCES, MODE_PRIVATE), checked)
         }
 
         buttonShare.setOnClickListener{

@@ -35,7 +35,7 @@ object Creator {
     }
 
     private fun getSharedPreferences(context: Context): SharedPreferences {
-        return context.getSharedPreferences(Constants.SEARCH_HISTORY_KEY, Context.MODE_PRIVATE)
+        return context.getSharedPreferences(Constants.PREFERENCES, Context.MODE_PRIVATE)
     }
 
 
