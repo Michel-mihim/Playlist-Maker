@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker.presentation.ui.search
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -29,11 +28,12 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.domain.searchTracks.models.SearchStatus
 import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.data.PREFERENCES
+import com.practicum.playlistmaker.domain.history.api.HistoryTracksInteractor
 import com.practicum.playlistmaker.domain.searchTracks.models.SearchTracksResult
 import com.practicum.playlistmaker.domain.searchTracks.models.Track
 import com.practicum.playlistmaker.presentation.presenter.TrackAdapter
 import com.practicum.playlistmaker.domain.searchTracks.api.SearchTracksInteractor
-import com.practicum.playlistmaker.presentation.Constants
+import com.practicum.playlistmaker.utils.constants.Constants
 import com.practicum.playlistmaker.presentation.ui.player.PlayerActivity
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -81,11 +81,11 @@ class SearchActivity : AppCompatActivity() {
         adapter = TrackAdapter(tracks)
         sharedPrefs = getSharedPreferences(PREFERENCES, MODE_PRIVATE)
 
-        searchHistory = SearchHistory(sharedPrefs)
-
+        //searchHistory = SearchHistory(sharedPrefs)
+        val historyTracksInteractor = Creator.getHistoryTracksInteractor(this)
 
         sharedPrefsListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
-            if (key == Constants.SEARCH_HISTORY_KEY) showHistory(searchHistory)
+            if (key == Constants.SEARCH_HISTORY_KEY) showHistory(historyTracksInteractor)
         }
 
         //инициализация views
@@ -107,7 +107,7 @@ class SearchActivity : AppCompatActivity() {
         searchRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
         historyRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
 
-        if (showHistory(searchHistory)) historyViewsShow()
+        if (showHistory(historyTracksInteractor)) historyViewsShow()
 
         //слушатели=================================================================================
         adapter.onItemClickListener = { track ->
@@ -129,12 +129,12 @@ class SearchActivity : AppCompatActivity() {
             playerIntent.putExtras(bundle)
             startActivity(playerIntent)
 
-            writeHistory(searchHistory, track)
+            writeHistory(historyTracksInteractor, track)
         }
 
         historyClearButton.setOnClickListener{
             historyViewsHide()
-            clearHistory(searchHistory)
+            clearHistory(historyTracksInteractor)
         }
 
         searchBackButton.setOnClickListener{
@@ -145,7 +145,7 @@ class SearchActivity : AppCompatActivity() {
         searchClearButton.setOnClickListener {
             searchEdittext.setText(getString(R.string.empty_string))
             imm.showSoftInput(searchEdittext, InputMethodManager.SHOW_IMPLICIT)
-            showHistory(searchHistory)
+            showHistory(historyTracksInteractor)
             searchViewsHide()
             historyViewsShow()
             //imm.hideSoftInputFromWindow(currentFocus!!.windowToken,0) - так прячется клавиатура
@@ -175,7 +175,6 @@ class SearchActivity : AppCompatActivity() {
             }
         }
         searchEdittext.addTextChangedListener(textWatcher)
-
     }
 
     //расчетные функции=============================================================================
@@ -224,28 +223,24 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun writeHistory(searchHistory: SearchHistory, trackClicked: Track) {
-        searchHistory.writeHistory(trackClicked)
-        Log.d("WTF", "История записалась")
+    private fun writeHistory(historyTracksInteractor: HistoryTracksInteractor, trackClicked: Track) {
+        historyTracksInteractor.addTrack(trackClicked)
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    private fun clearHistory(searchHistory: SearchHistory) {
-        searchHistory.clearHistory()
+    private fun clearHistory(historyTracksInteractor: HistoryTracksInteractor) {
+        historyTracksInteractor.clearTracks()
 
         Toast.makeText(this@SearchActivity, Constants.HISTORY_CLEARED, Toast.LENGTH_SHORT).show()
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    private fun showHistory(searchHistory: SearchHistory): Boolean {
-        val lastTracks = searchHistory.readHistory()
+    private fun showHistory(historyTracksInteractor: HistoryTracksInteractor): Boolean {
+        val lastTracks = historyTracksInteractor.getTracks()
         if (lastTracks.isEmpty()) return false else {
             tracks.clear()
             tracks.addAll(lastTracks)
             historyRecyclerView.adapter = adapter
             adapter.notifyDataSetChanged()
             sharedPrefs.registerOnSharedPreferenceChangeListener(sharedPrefsListener)
-            Log.d("WTF", "История не пустая. Загрузилась")
         }
         return true
     }
@@ -258,8 +253,6 @@ class SearchActivity : AppCompatActivity() {
         searchProgressBar.visibility = View.INVISIBLE
     }
 
-
-    @SuppressLint("NotifyDataSetChanged")
     private fun showStatus(indicator: SearchStatus, text: String) {
         when (indicator) {
             SearchStatus.TRACKS_NOT_FOUND -> {

@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.presentation
+package com.practicum.playlistmaker.utils.constants
 
 object Constants {
     const val SEARCH_STRING = "SEARCH_STRING"

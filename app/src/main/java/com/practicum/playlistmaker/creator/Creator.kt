@@ -11,7 +11,7 @@ import com.practicum.playlistmaker.domain.history.impl.HistoryTracksInteractorIm
 import com.practicum.playlistmaker.domain.searchTracks.api.SearchTracksInteractor
 import com.practicum.playlistmaker.domain.searchTracks.api.SearchTracksRepository
 import com.practicum.playlistmaker.domain.searchTracks.impl.SearchTracksInteractorImpl
-import com.practicum.playlistmaker.presentation.Constants
+import com.practicum.playlistmaker.utils.constants.Constants
 
 object Creator {
 
