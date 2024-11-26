@@ -124,12 +124,12 @@ class SearchActivity : AppCompatActivity() {
             playerIntent.putExtras(bundle)
             startActivity(playerIntent)
 
-            //writeHistory(historyTracksInteractor, track)
+            writeHistory(historyTracksInteractor, track)
         }
 
         historyClearButton.setOnClickListener{
             historyViewsHide()
-            //clearHistory(historyTracksInteractor)
+            clearHistory(historyTracksInteractor)
         }
 
         searchBackButton.setOnClickListener{
