@@ -84,11 +84,11 @@ class SearchActivity : AppCompatActivity() {
         searchTracksInteractor = Creator.provideTracksInteractor()
         historyTracksInteractor = Creator.provideHistoryTracksInteractor(this)
 
-
+/*
         sharedPrefsListener = sharedPreferences.OnSharedPreferenceChangeListener { _, key ->
             if (key == Constants.SEARCH_HISTORY_KEY) showHistory(historyTracksInteractor)
         }
-
+*/
         //инициализация views
         searchBackButton = findViewById(R.id.search_back_button)
         searchClearButton = findViewById(R.id.search_clear_button)

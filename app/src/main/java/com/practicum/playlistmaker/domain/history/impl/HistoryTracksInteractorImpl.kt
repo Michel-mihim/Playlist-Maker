@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.domain.history.impl
 
+import android.content.SharedPreferences
 import com.practicum.playlistmaker.domain.history.api.HistoryTracksInteractor
 import com.practicum.playlistmaker.domain.history.api.HistoryTracksRepository
 import com.practicum.playlistmaker.domain.searchTracks.models.Track
@@ -17,4 +18,7 @@ class HistoryTracksInteractorImpl(private val repository: HistoryTracksRepositor
     override fun clearTracks() {
         repository.clearTracks()
     }
+
+
+
 }
