@@ -48,9 +48,12 @@ class SearchActivity : AppCompatActivity() {
 
     //не инициализированные объекты=================================================================
     private lateinit var adapter: TrackAdapter
-    //private lateinit var sharedPrefs: SharedPreferences
     //private lateinit var sharedPrefsListener: SharedPreferences.OnSharedPreferenceChangeListener
+
+    //интеракторы===================================================================================
     private lateinit var historyTracksInteractor: HistoryTracksInteractor
+    private lateinit var searchTracksInteractor: SearchTracksInteractor
+
     //не инициализированные views===================================================================
     private lateinit var trackNotFoundPlaceholderImage: ImageView
     private lateinit var trackNotFoundPlaceholderText: TextView
@@ -66,7 +69,6 @@ class SearchActivity : AppCompatActivity() {
     //==============================================================================================
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d("WTF", "пройдено")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -79,12 +81,14 @@ class SearchActivity : AppCompatActivity() {
         val manager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         adapter = TrackAdapter(tracks)
 
-        historyTracksInteractor = Creator.getHistoryTracksInteractor(this)
-        /*
-        sharedPrefsListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+        searchTracksInteractor = Creator.provideTracksInteractor()
+        historyTracksInteractor = Creator.provideHistoryTracksInteractor(this)
+
+
+        sharedPrefsListener = sharedPreferences.OnSharedPreferenceChangeListener { _, key ->
             if (key == Constants.SEARCH_HISTORY_KEY) showHistory(historyTracksInteractor)
         }
-        */
+
         //инициализация views
         searchBackButton = findViewById(R.id.search_back_button)
         searchClearButton = findViewById(R.id.search_clear_button)
@@ -179,15 +183,15 @@ class SearchActivity : AppCompatActivity() {
 
     private fun searchRequest(){
         if (searchEdittext.text.isNotEmpty()) {
+            //sharedPrefs.unregisterOnSharedPreferenceChangeListener(sharedPrefsListener)
+
             historyViewsHide()
             searchViewsHide()
             hidePlaceholder()
-            //sharedPrefs.unregisterOnSharedPreferenceChangeListener(sharedPrefsListener)
             showSearchProgressbar()
             tracks.clear()
 
-            val tracksInteractor = Creator.getTracksInteractor()
-            tracksInteractor.searchTracks(searchEdittext.text.toString(), object : SearchTracksInteractor.TracksConsumer {
+            searchTracksInteractor.searchTracks(searchEdittext.text.toString(), object : SearchTracksInteractor.TracksConsumer {
                 override fun consume(result: SearchTracksResult) {
 
                     handler.post{
@@ -233,6 +237,7 @@ class SearchActivity : AppCompatActivity() {
             tracks.addAll(lastTracks)
             historyRecyclerView.adapter = adapter
             adapter.notifyDataSetChanged()
+
             //sharedPrefs.registerOnSharedPreferenceChangeListener(sharedPrefsListener)
         }
         return true

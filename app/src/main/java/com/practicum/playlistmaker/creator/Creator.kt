@@ -16,27 +16,25 @@ import com.practicum.playlistmaker.utils.constants.Constants
 object Creator {
 
     //searchTracks==================================================================================
-    private fun getTracksRepository(): SearchTracksRepository {
+    fun provideTracksInteractor(): SearchTracksInteractor {
+        return SearchTracksInteractorImpl(provideTracksRepository())
+    }
+
+    private fun provideTracksRepository(): SearchTracksRepository {
         return searchTracksRepositoryImpl(RetrofitNetworkClient())
     }
 
-    fun getTracksInteractor(): SearchTracksInteractor {
-        return SearchTracksInteractorImpl(getTracksRepository())
-    }
-
     //history=======================================================================================
-
-    fun getHistoryTracksInteractor(context: Context): HistoryTracksInteractor{
-        return HistoryTracksInteractorImpl(getHistoryTracksRepository(context))
+    fun provideHistoryTracksInteractor(context: Context): HistoryTracksInteractor{
+        return HistoryTracksInteractorImpl(provideHistoryTracksRepository(context))
     }
 
-    private fun getHistoryTracksRepository(context: Context): HistoryTracksRepository {
-        return HistoryTracksRepositoryImpl(getSharedPreferences(context))
+    private fun provideHistoryTracksRepository(context: Context): HistoryTracksRepository {
+        return HistoryTracksRepositoryImpl(provideSharedPreferences(context))
     }
 
-    private fun getSharedPreferences(context: Context): SharedPreferences {
+    private fun provideSharedPreferences(context: Context): SharedPreferences {
         return context.getSharedPreferences(Constants.PREFERENCES, Context.MODE_PRIVATE)
     }
-
 
 }
