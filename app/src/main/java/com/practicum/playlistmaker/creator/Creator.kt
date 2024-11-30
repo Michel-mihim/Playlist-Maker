@@ -6,12 +6,16 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import com.practicum.playlistmaker.data.history.HistoryTracksRepositoryImpl
 import com.practicum.playlistmaker.data.searchTracks.searchTracksRepositoryImpl
 import com.practicum.playlistmaker.data.searchTracks.network.RetrofitNetworkClient
+import com.practicum.playlistmaker.data.settings.SettingsRepositoryImpl
 import com.practicum.playlistmaker.domain.history.api.HistoryTracksInteractor
 import com.practicum.playlistmaker.domain.history.api.HistoryTracksRepository
 import com.practicum.playlistmaker.domain.history.impl.HistoryTracksInteractorImpl
 import com.practicum.playlistmaker.domain.searchTracks.api.SearchTracksInteractor
 import com.practicum.playlistmaker.domain.searchTracks.api.SearchTracksRepository
 import com.practicum.playlistmaker.domain.searchTracks.impl.SearchTracksInteractorImpl
+import com.practicum.playlistmaker.domain.settings.api.SettingsInteractor
+import com.practicum.playlistmaker.domain.settings.api.SettingsRepository
+import com.practicum.playlistmaker.domain.settings.impl.SettingsInteractorImpl
 import com.practicum.playlistmaker.presentation.ui.search.SearchActivity
 import com.practicum.playlistmaker.utils.constants.Constants
 
@@ -48,4 +52,13 @@ object Creator {
     }
 
      */
+
+    //settings======================================================================================
+    fun provideSettingsInteractor(context: Context): SettingsInteractor {
+        return SettingsInteractorImpl(provideSettingsRepository(context))
+    }
+
+    private fun provideSettingsRepository(context: Context): SettingsRepository {
+        return SettingsRepositoryImpl(provideSharedPreferences(context))
+    }
 }
