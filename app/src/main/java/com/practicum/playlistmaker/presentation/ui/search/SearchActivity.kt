@@ -107,7 +107,7 @@ class SearchActivity : AppCompatActivity() {
         searchRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
         historyRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
 
-        if (showHistory(historyTracksInteractor)) historyViewsShow()
+        if (showHistory(historyTracksInteractor)) historyViewsShow() //отображается "Вы искали"
 
         //слушатели=================================================================================
         adapter.onItemClickListener = { track ->
@@ -128,6 +128,8 @@ class SearchActivity : AppCompatActivity() {
             startActivity(playerIntent)
 
             writeHistory(historyTracksInteractor, track)
+            showHistory(historyTracksInteractor) //лучше производить обновление постановкой слушателя sharedPreferences
+            //не знаю как, наставники молчат, не отвечают на этот вопрос((
         }
 
         historyClearButton.setOnClickListener{
@@ -231,7 +233,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun showHistory(historyTracksInteractor: HistoryTracksInteractor): Boolean {
         val lastTracks = historyTracksInteractor.getTracks()
-        if (lastTracks.isEmpty()) return false else {
+        if (lastTracks.isEmpty()) return false else { //отображается "Вы искали"
             tracks.clear()
             tracks.addAll(lastTracks)
             historyRecyclerView.adapter = adapter
