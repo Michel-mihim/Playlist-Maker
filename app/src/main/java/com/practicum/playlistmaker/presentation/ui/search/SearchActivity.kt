@@ -48,7 +48,7 @@ class SearchActivity : AppCompatActivity() {
 
     //не инициализированные объекты=================================================================
     private lateinit var adapter: TrackAdapter
-    //private lateinit var sharedPrefsListener: SharedPreferences.OnSharedPreferenceChangeListener
+    private lateinit var sharedPrefsListener: SharedPreferences.OnSharedPreferenceChangeListener
 
     //интеракторы===================================================================================
     private lateinit var historyTracksInteractor: HistoryTracksInteractor
@@ -84,11 +84,10 @@ class SearchActivity : AppCompatActivity() {
         searchTracksInteractor = Creator.provideTracksInteractor()
         historyTracksInteractor = Creator.provideHistoryTracksInteractor(this)
 
-/*
-        sharedPrefsListener = sharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+        sharedPrefsListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
             if (key == Constants.SEARCH_HISTORY_KEY) showHistory(historyTracksInteractor)
         }
-*/
+
         //инициализация views
         searchBackButton = findViewById(R.id.search_back_button)
         searchClearButton = findViewById(R.id.search_clear_button)
@@ -135,12 +134,12 @@ class SearchActivity : AppCompatActivity() {
             historyViewsHide()
             clearHistory(historyTracksInteractor)
         }
-        /*
+
         searchBackButton.setOnClickListener{
-            sharedPrefs.unregisterOnSharedPreferenceChangeListener(sharedPrefsListener)
+            //sharedPrefs.unregisterOnSharedPreferenceChangeListener(sharedPrefsListener) надо обрабатывать!!
             finish()
         }
-        */
+
         searchClearButton.setOnClickListener {
             searchEdittext.setText(getString(R.string.empty_string))
             manager.showSoftInput(searchEdittext, InputMethodManager.SHOW_IMPLICIT)
@@ -183,7 +182,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun searchRequest(){
         if (searchEdittext.text.isNotEmpty()) {
-            //sharedPrefs.unregisterOnSharedPreferenceChangeListener(sharedPrefsListener)
+            //sharedPrefs.unregisterOnSharedPreferenceChangeListener(sharedPrefsListener) надо обрабатывать!!
 
             historyViewsHide()
             searchViewsHide()
@@ -238,7 +237,7 @@ class SearchActivity : AppCompatActivity() {
             historyRecyclerView.adapter = adapter
             adapter.notifyDataSetChanged()
 
-            //sharedPrefs.registerOnSharedPreferenceChangeListener(sharedPrefsListener)
+            //sharedPrefs.registerOnSharedPreferenceChangeListener(sharedPrefsListener) надо обрабатывать!!
         }
         return true
     }

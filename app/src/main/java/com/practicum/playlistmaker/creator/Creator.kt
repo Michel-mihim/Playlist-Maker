@@ -2,6 +2,7 @@ package com.practicum.playlistmaker.creator
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import com.practicum.playlistmaker.data.history.HistoryTracksRepositoryImpl
 import com.practicum.playlistmaker.data.searchTracks.searchTracksRepositoryImpl
 import com.practicum.playlistmaker.data.searchTracks.network.RetrofitNetworkClient
@@ -11,9 +12,11 @@ import com.practicum.playlistmaker.domain.history.impl.HistoryTracksInteractorIm
 import com.practicum.playlistmaker.domain.searchTracks.api.SearchTracksInteractor
 import com.practicum.playlistmaker.domain.searchTracks.api.SearchTracksRepository
 import com.practicum.playlistmaker.domain.searchTracks.impl.SearchTracksInteractorImpl
+import com.practicum.playlistmaker.presentation.ui.search.SearchActivity
 import com.practicum.playlistmaker.utils.constants.Constants
 
 object Creator {
+    var onProvideSharedPreferenceChangeListener: ((key: String) -> Unit)? = null
 
     //searchTracks==================================================================================
     fun provideTracksInteractor(): SearchTracksInteractor {
@@ -37,4 +40,12 @@ object Creator {
         return context.getSharedPreferences(Constants.PREFERENCES, Context.MODE_PRIVATE)
     }
 
+    /*
+    fun provideSharedPreferencesChangeListener(): SharedPreferences.OnSharedPreferenceChangeListener {
+        return SharedPreferences.OnSharedPreferenceChangeListener{ _, key ->
+            if (key == Constants.SEARCH_HISTORY_KEY) onProvideSharedPreferenceChangeListener?.invoke(key)
+        }
+    }
+
+     */
 }
