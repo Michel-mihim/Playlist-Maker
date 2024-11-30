@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker.data.history
 
 import android.content.SharedPreferences
+import android.util.Log
 import com.google.gson.Gson
 import com.practicum.playlistmaker.domain.history.api.HistoryTracksRepository
 import com.practicum.playlistmaker.domain.searchTracks.models.Track
@@ -17,6 +18,7 @@ class HistoryTracksRepositoryImpl(private val sharedPrefs: SharedPreferences) : 
         val newTracks = ArrayList<Track>()
         val lastTracks = getTracks()
         newTracks.clear()
+        Log.d("wtf", "add "+track.trackName)
         newTracks.addAll(newHistoryGenerator(track, lastTracks))
         val json = Gson().toJson(newTracks)
         sharedPrefs.edit()
@@ -57,6 +59,7 @@ class HistoryTracksRepositoryImpl(private val sharedPrefs: SharedPreferences) : 
         val tracksWhereNewFirst = ArrayList<Track>()
         tracksWhereNewFirst.add(trackAdded)
         tracksWhereNewFirst.addAll(tracks)
+        Log.d("wtf", "absent")
         return tracksWhereNewFirst
     }
 
@@ -65,7 +68,6 @@ class HistoryTracksRepositoryImpl(private val sharedPrefs: SharedPreferences) : 
         val tracksList: MutableList<Track> = ArrayList()
         tracksList.addAll(tracks)
         tracksList.removeAt(getDuplicateTrackPos(trackAdded, tracks))
-
         tracksWhereDuplicateTrackFirst.add(trackAdded)
         tracksWhereDuplicateTrackFirst.addAll(tracksList)
 
@@ -87,11 +89,10 @@ class HistoryTracksRepositoryImpl(private val sharedPrefs: SharedPreferences) : 
 
     private fun getDuplicateTrackPos(trackAdded: Track, tracks: Array<Track>): Int {
         var pos = 0
-        for (i in 0..tracks.size) {
-            if (getTrackId(tracks[i]) == trackAdded.trackId) {
-                pos = i
-            }
+        for (i in 0..<tracks.size) {
+            if (trackAdded.trackId == tracks[i].trackId) pos = i
         }
+        Log.d("wtf", pos.toString())
         return pos
     }
 
