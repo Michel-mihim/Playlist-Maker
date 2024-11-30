@@ -34,7 +34,7 @@ class App: Application() {
                 AppCompatDelegate.MODE_NIGHT_NO
             }
         )
-        isThemeDarkForChecker = darkThemeEnabled
+        isThemeDarkForChecker = darkThemeEnabled            //актуализируем значение на какую тему переключились
         settingsInteractor.writeThemeDark(darkThemeEnabled) //заодно запишем/перепишем тему в файл настроек
     }
 
