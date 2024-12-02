@@ -35,9 +35,7 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         trackTimeView.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
 
         val cornerDp = itemView.context.resources.getDimension(R.dimen.track_image_corner)
-        Log.d("wtf", "cornerDp "+cornerDp.toString())
         val cornerPx = dimensionsFloatToIntConvert(cornerDp, itemView.context)
-        Log.d("wtf", "cornerPx "+cornerPx.toString())
         Glide.with(itemView.context)
             .load(track.artworkUrl100)
             .placeholder(R.drawable.placeholder)

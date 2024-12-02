@@ -84,9 +84,7 @@ class PlayerActivity : AppCompatActivity() {
             playerTrackCountry.text = bundle.getString("b_track_country")
 
             val cornerDp = resources.getDimension(R.dimen.track_poster_corner)
-            Log.d("wtf", "cornerDp "+cornerDp.toString())
             val cornerPx = dimensionsFloatToIntConvert(cornerDp, this)
-            Log.d("wtf", "cornerPx "+cornerPx.toString())
             Glide.with(this)
                 .load(bundle.getString("b_artworkUrl100"))
                 .placeholder(R.drawable.placeholder_large)

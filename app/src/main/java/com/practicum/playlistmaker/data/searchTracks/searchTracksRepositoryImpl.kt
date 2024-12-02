@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.data.searchTracks
 
+import android.util.Log
 import com.practicum.playlistmaker.data.searchTracks.dto.TracksSearchRequest
 import com.practicum.playlistmaker.data.searchTracks.dto.TracksSearchResponse
 import com.practicum.playlistmaker.domain.searchTracks.api.SearchTracksRepository
@@ -30,10 +31,19 @@ class searchTracksRepositoryImpl(private val networkClient: NetworkClient) : Sea
                 )
             }
 
-            return if (tracks.isNotEmpty()) SearchTracksResult.Success(tracks, response.resultCode)
-            else SearchTracksResult.Empty(emptyList(), response.resultCode)
+            if (tracks.isNotEmpty()) {//not empty
+                Log.d("wtf","response code: "+response.resultCode.toString())
+                return SearchTracksResult.Success(tracks, response.resultCode)}
+            else {//empty
+                Log.d("wtf","response code: "+response.resultCode.toString())
+                return SearchTracksResult.Empty(emptyList(), response.resultCode)}
 
-        } else return SearchTracksResult.Failure(emptyList(), response.resultCode)
+        } else
+        {//code!=200
+            Log.d("wtf","response code: "+response.resultCode.toString())
+            return SearchTracksResult.Failure(emptyList(), response.resultCode)
+        }
+
     }
 
 }
