@@ -10,7 +10,6 @@ import com.google.android.material.switchmaterial.SwitchMaterial
 import com.practicum.playlistmaker.App
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.creator.Creator
-import com.practicum.playlistmaker.utils.constants.Constants
 
 class SettingsActivity : AppCompatActivity() {
 

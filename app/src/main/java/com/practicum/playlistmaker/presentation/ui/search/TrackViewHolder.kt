@@ -1,15 +1,18 @@
-package com.practicum.playlistmaker.presentation.presenter
+package com.practicum.playlistmaker.presentation.ui.search
 
 import android.content.Context
+import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.util.TypedValueCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.domain.searchTracks.models.Track
+import com.practicum.playlistmaker.utils.converters.dimensionsFloatToIntConvert
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -32,22 +35,15 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         trackTimeView.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
 
         val cornerDp = itemView.context.resources.getDimension(R.dimen.track_image_corner)
-        val cornerPx = dpToPx(cornerDp, itemView.context)
+        Log.d("wtf", "cornerDp "+cornerDp.toString())
+        val cornerPx = dimensionsFloatToIntConvert(cornerDp, itemView.context)
+        Log.d("wtf", "cornerPx "+cornerPx.toString())
         Glide.with(itemView.context)
             .load(track.artworkUrl100)
             .placeholder(R.drawable.placeholder)
-            .centerInside()
             .transform(RoundedCorners(cornerPx))
             .into(trackImageView)
     }
 
-    //не понял как использовать эту функцию, он требует на вход FLOAT, а в dimens INT
-    fun dpToPx(dp: Float, context: Context): Int {
-        return TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            dp,
-            context.resources.displayMetrics
-        ).toInt()
-    }
 
 }

@@ -8,7 +8,6 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -29,7 +28,6 @@ import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.domain.history.api.HistoryTracksInteractor
 import com.practicum.playlistmaker.domain.searchTracks.models.SearchTracksResult
 import com.practicum.playlistmaker.domain.searchTracks.models.Track
-import com.practicum.playlistmaker.presentation.presenter.TrackAdapter
 import com.practicum.playlistmaker.domain.searchTracks.api.SearchTracksInteractor
 import com.practicum.playlistmaker.utils.constants.Constants
 import com.practicum.playlistmaker.presentation.ui.player.PlayerActivity
@@ -78,7 +76,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         //инициализация объектов
-        val manager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         adapter = TrackAdapter(tracks)
 
         searchTracksInteractor = Creator.provideTracksInteractor()
@@ -103,7 +101,7 @@ class SearchActivity : AppCompatActivity() {
 
         //основной листинг==========================================================================
         searchFieldMakeEmpty()
-        openSoftKeyBoard(this@SearchActivity, manager, searchEdittext)
+        openSoftKeyBoard(this@SearchActivity, inputManager, searchEdittext)
         searchRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
         historyRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
 
@@ -144,7 +142,7 @@ class SearchActivity : AppCompatActivity() {
 
         searchClearButton.setOnClickListener {
             searchEdittext.setText(getString(R.string.empty_string))
-            manager.showSoftInput(searchEdittext, InputMethodManager.SHOW_IMPLICIT)
+            inputManager.showSoftInput(searchEdittext, InputMethodManager.SHOW_IMPLICIT)
             showHistory(historyTracksInteractor)
             searchViewsHide()
             historyViewsShow()

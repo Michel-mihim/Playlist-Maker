@@ -1,10 +1,12 @@
 package com.practicum.playlistmaker.presentation.ui.player
 
+import android.content.Context
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.util.TypedValue
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -13,8 +15,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.domain.searchTracks.models.PlayerStatus
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.utils.converters.dimensionsFloatToIntConvert
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -79,11 +83,14 @@ class PlayerActivity : AppCompatActivity() {
             playerTrackGenre.text = bundle.getString("b_track_genre")
             playerTrackCountry.text = bundle.getString("b_track_country")
 
-
+            val cornerDp = resources.getDimension(R.dimen.track_poster_corner)
+            Log.d("wtf", "cornerDp "+cornerDp.toString())
+            val cornerPx = dimensionsFloatToIntConvert(cornerDp, this)
+            Log.d("wtf", "cornerPx "+cornerPx.toString())
             Glide.with(this)
                 .load(bundle.getString("b_artworkUrl100"))
                 .placeholder(R.drawable.placeholder_large)
-                .centerInside()
+                .transform(RoundedCorners(cornerPx))
                 .into(playerTrackImage)
         }
 
