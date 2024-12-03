@@ -32,15 +32,12 @@ class searchTracksRepositoryImpl(private val networkClient: NetworkClient) : Sea
             }
 
             if (tracks.isNotEmpty()) {//not empty
-                Log.d("wtf","response code: "+response.resultCode.toString())
                 return SearchTracksResult.Success(tracks, response.resultCode)}
             else {//empty
-                Log.d("wtf","response code: "+response.resultCode.toString())
                 return SearchTracksResult.Empty(emptyList(), response.resultCode)}
 
         } else
         {//code!=200
-            Log.d("wtf","response code: "+response.resultCode.toString())
             return SearchTracksResult.Failure(emptyList(), response.resultCode)
         }
 

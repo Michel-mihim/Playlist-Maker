@@ -24,7 +24,7 @@ class RetrofitNetworkClient: NetworkClient {
                 return body.apply { resultCode = retrofitResp.code() }
             }
             catch (e: Exception) {
-                val body = Response().apply { resultCode = 502 }
+                val body = Response().apply { resultCode = 522 } //Connection Timed Out («соединение не отвечает»)
                 return body
             }
         } else
