@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.data.searchTracks.network
 
+import android.util.Log
 import com.practicum.playlistmaker.data.searchTracks.NetworkClient
 import com.practicum.playlistmaker.data.searchTracks.dto.Response
 import com.practicum.playlistmaker.data.searchTracks.dto.TracksSearchRequest
@@ -17,10 +18,16 @@ class RetrofitNetworkClient: NetworkClient {
 
     override fun doRequest(dto: Any): Response {
         if (dto is TracksSearchRequest) {
-            val response = iTunesService.searchTracks(dto.expression).execute()
-            val body = response.body() ?: Response()
-            return body.apply { resultCode = response.code() }
+            try {
+                val retrofitResp = iTunesService.searchTracks(dto.expression).execute()
+                val body = retrofitResp.body() ?: Response()
+                return body.apply { resultCode = retrofitResp.code() }
+            }
+            catch (e: Exception) {
+                val body = Response().apply { resultCode = 502 }
+                return body
+            }
         } else
-            return Response().apply { resultCode = 400 }
+            return Response().apply { resultCode = 400 } //если запрос от нас не корректный; событие маловероятно
     }
 }
