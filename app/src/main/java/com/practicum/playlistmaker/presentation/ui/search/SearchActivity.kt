@@ -163,7 +163,12 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 searchClearButton.visibility = searchClearButtonVisibility(s)
-                searchDebounce()
+                if (!s.isNullOrEmpty()) searchDebounce()
+                if (s.isNullOrEmpty()) {
+                    showHistory(historyTracksInteractor)
+                    searchViewsHide()
+                    historyViewsShow()
+                }
             }
 
             override fun afterTextChanged(s: Editable?) {
