@@ -108,7 +108,6 @@ class PlayerActivity : AppCompatActivity() {
     private fun showProgressState(){
         trackProgress.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
         handler.postDelayed(showProgressRunnable, SHOW_PROGRESS_DELAY)
-        Log.d("wtf", mediaPlayer.currentPosition.toString())
     }
 
     private fun preparePlayer(url: String?){

@@ -20,6 +20,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
@@ -126,7 +127,7 @@ class SearchActivity : AppCompatActivity() {
             startActivity(playerIntent)
 
             writeHistory(historyTracksInteractor, track)
-
+            if (isHistoryOnScreen()) showHistory(historyTracksInteractor)
         }
 
         historyClearButton.setOnClickListener{
@@ -345,6 +346,10 @@ class SearchActivity : AppCompatActivity() {
         youFoundHistoryText.visibility = View.VISIBLE
         historyClearButton.visibility = View.VISIBLE
         historyRecyclerView.visibility = View.VISIBLE
+    }
+
+    private fun isHistoryOnScreen(): Boolean {
+        return youFoundHistoryText.isVisible
     }
 
     private fun searchClearButtonVisibility(s: CharSequence?): Int {
