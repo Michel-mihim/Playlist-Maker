@@ -127,7 +127,6 @@ class SearchActivity : AppCompatActivity() {
             startActivity(playerIntent)
 
             writeHistory(historyTracksInteractor, track)
-            if (isHistoryOnScreen()) showHistory(historyTracksInteractor)
         }
 
         historyClearButton.setOnClickListener{
@@ -369,6 +368,11 @@ class SearchActivity : AppCompatActivity() {
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         searchDef = savedInstanceState.getString(Constants.SEARCH_STRING, Constants.SEARCH_DEF)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (isHistoryOnScreen()) showHistory(historyTracksInteractor)
     }
 
 }

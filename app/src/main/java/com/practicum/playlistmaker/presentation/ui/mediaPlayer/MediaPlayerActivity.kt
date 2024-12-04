@@ -106,7 +106,18 @@ class MediaPlayerActivity : AppCompatActivity() {
     }
 
     private fun preparePlayer(url: String?){
-
+        mediaPlayer.setDataSource(url)
+        mediaPlayer.prepareAsync()
+        mediaPlayer.setOnPreparedListener{
+            trackPlayButton.isEnabled = true
+            playerStatus = PlayerStatus.STATE_PREPARED
+        }
+        mediaPlayer.setOnCompletionListener{//окончание воспроизведения
+            trackPlayButton.setImageResource(R.drawable.track_play)
+            playerStatus = PlayerStatus.STATE_PREPARED
+            handler.removeCallbacks(showProgressRunnable)
+            trackProgress.text = Constants.TRACK_IS_OVER_PROGRESS
+        }
 
     }
 

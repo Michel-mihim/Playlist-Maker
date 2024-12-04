@@ -8,18 +8,7 @@ import com.practicum.playlistmaker.utils.constants.Constants
 
 class MediaPlayerRepositoryImpl(val mediaPlayer: MediaPlayer): MediaPlayerRepository {
     override fun prepare(url: String?) {
-        mediaPlayer.setDataSource(url)
-        mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener{
-            trackPlayButton.isEnabled = true
-            playerStatus = PlayerStatus.STATE_PREPARED
-        }
-        mediaPlayer.setOnCompletionListener{//окончание воспроизведения
-            trackPlayButton.setImageResource(R.drawable.track_play)
-            playerStatus = PlayerStatus.STATE_PREPARED
-            handler.removeCallbacks(showProgressRunnable)
-            trackProgress.text = Constants.TRACK_IS_OVER_PROGRESS
-        }
+
     }
 
     override fun act() {
