@@ -21,4 +21,8 @@ object Constants {
     const val SEARCH_HISTORY_KEY = "history"
 
     const val HISTORY_CAPACITY = 10
+
+    //медиаплеер
+    const val SHOW_PROGRESS_DELAY = 500L
+
 }

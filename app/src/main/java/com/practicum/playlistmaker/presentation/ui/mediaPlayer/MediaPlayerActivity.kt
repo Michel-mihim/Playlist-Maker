@@ -15,15 +15,13 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.domain.searchTracks.models.PlayerStatus
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.utils.constants.Constants
 import com.practicum.playlistmaker.utils.converters.dimensionsFloatToIntConvert
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class PlayerActivity : AppCompatActivity() {
+class MediaPlayerActivity : AppCompatActivity() {
 
-    companion object {
-        private const val SHOW_PROGRESS_DELAY = 500L
-    }
     //VIEWS
     private lateinit var playerBackButton: ImageButton
     private lateinit var playerTrackName: TextView
@@ -67,6 +65,7 @@ class PlayerActivity : AppCompatActivity() {
         playerTrackImage = findViewById(R.id.player_track_image)
         playerBackButton = findViewById(R.id.player_back_button)
         trackPlayButton = findViewById(R.id.button_play_2)
+        trackPlayButton.isEnabled = false //пока плеер не готов на нее нельзя нажимать
         trackProgress = findViewById(R.id.track_player_progress)
 
         //основной листинг
@@ -92,7 +91,6 @@ class PlayerActivity : AppCompatActivity() {
         preparePlayer(bundle?.getString("b_previewUrl"))
 
         //слушатели нажатий
-
         playerBackButton.setOnClickListener{
             finish()
         }
@@ -104,7 +102,7 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun showProgressState(){
         trackProgress.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
-        handler.postDelayed(showProgressRunnable, SHOW_PROGRESS_DELAY)
+        handler.postDelayed(showProgressRunnable, Constants.SHOW_PROGRESS_DELAY)
     }
 
     private fun preparePlayer(url: String?){

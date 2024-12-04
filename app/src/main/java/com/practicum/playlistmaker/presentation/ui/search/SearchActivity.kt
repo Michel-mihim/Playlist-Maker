@@ -31,7 +31,7 @@ import com.practicum.playlistmaker.domain.searchTracks.models.SearchTracksResult
 import com.practicum.playlistmaker.domain.searchTracks.models.Track
 import com.practicum.playlistmaker.domain.searchTracks.api.SearchTracksInteractor
 import com.practicum.playlistmaker.utils.constants.Constants
-import com.practicum.playlistmaker.presentation.ui.mediaPlayer.PlayerActivity
+import com.practicum.playlistmaker.presentation.ui.mediaPlayer.MediaPlayerActivity
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -111,7 +111,7 @@ class SearchActivity : AppCompatActivity() {
         //слушатели=================================================================================
         adapter.onItemClickListener = { track ->
             //запуск плеера
-            val playerIntent = Intent(this, PlayerActivity::class.java)
+            val playerIntent = Intent(this, MediaPlayerActivity::class.java)
 
             val bundle = Bundle()
             bundle.putString("b_track_name", track.trackName)
