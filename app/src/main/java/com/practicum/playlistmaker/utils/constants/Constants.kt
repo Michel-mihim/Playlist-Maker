@@ -24,5 +24,6 @@ object Constants {
 
     //медиаплеер
     const val SHOW_PROGRESS_DELAY = 500L
+    const val TRACK_IS_OVER_PROGRESS = "00:00"
 
 }
