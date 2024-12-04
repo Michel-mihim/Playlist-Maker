@@ -31,7 +31,7 @@ import com.practicum.playlistmaker.domain.searchTracks.models.SearchTracksResult
 import com.practicum.playlistmaker.domain.searchTracks.models.Track
 import com.practicum.playlistmaker.domain.searchTracks.api.SearchTracksInteractor
 import com.practicum.playlistmaker.utils.constants.Constants
-import com.practicum.playlistmaker.presentation.ui.player.PlayerActivity
+import com.practicum.playlistmaker.presentation.ui.mediaPlayer.PlayerActivity
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

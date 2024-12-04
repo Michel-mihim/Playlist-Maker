@@ -1,12 +1,9 @@
-package com.practicum.playlistmaker.presentation.ui.player
+package com.practicum.playlistmaker.presentation.ui.mediaPlayer
 
-import android.content.Context
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
-import android.util.TypedValue
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
