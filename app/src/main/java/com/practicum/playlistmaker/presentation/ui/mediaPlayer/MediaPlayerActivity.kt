@@ -42,7 +42,7 @@ class MediaPlayerActivity : AppCompatActivity() {
 
     //VALS
     private val handler = Handler(Looper.getMainLooper())
-    private val showProgressRunnable = Runnable { showProgressState() }
+    private val showProgressRunnable = Runnable { showProgress() }
 
     //VARS
     private var playerStatus: PlayerStatus = PlayerStatus.STATE_DEFAULT
@@ -101,7 +101,7 @@ class MediaPlayerActivity : AppCompatActivity() {
             onCompletion = { -> //окончание воспроизведения
                 trackPlayButton.setImageResource(R.drawable.track_play)
                 playerStatus = PlayerStatus.STATE_PREPARED
-                //handler.removeCallbacks(showProgressRunnable)
+                handler.removeCallbacks(showProgressRunnable)
                 trackProgress.text = Constants.TRACK_IS_OVER_PROGRESS
             }
         )
@@ -116,23 +116,27 @@ class MediaPlayerActivity : AppCompatActivity() {
         }
     }
 
-    private fun showProgressState(){
-        //trackProgress.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
-        //handler.postDelayed(showProgressRunnable, Constants.SHOW_PROGRESS_DELAY)
+    private fun showProgress(){
+        mediaPlayerInteractor.timerUpdate(
+            onTimerUpdated = { progress ->
+                trackProgress.text = progress
+            }
+        )
+        handler.postDelayed(showProgressRunnable, Constants.SHOW_PROGRESS_DELAY)
     }
 
     private fun startPlayer(){
         mediaPlayerInteractor.start()
         trackPlayButton.setImageResource(R.drawable.track_pause)
         playerStatus = PlayerStatus.STATE_PLAYING
-        //handler.post(showProgressRunnable)
+        handler.post(showProgressRunnable)
     }
 
     private fun pausePlayer(){
         mediaPlayerInteractor.pause()
         trackPlayButton.setImageResource(R.drawable.track_play)
         playerStatus = PlayerStatus.STATE_PAUSED
-        //handler.removeCallbacks(showProgressRunnable)
+        handler.removeCallbacks(showProgressRunnable)
     }
 
     private fun playbackControl() {
@@ -157,7 +161,7 @@ class MediaPlayerActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        //handler.removeCallbacks(showProgressRunnable)
+        handler.removeCallbacks(showProgressRunnable)
         mediaPlayerInteractor.release()
     }
 }

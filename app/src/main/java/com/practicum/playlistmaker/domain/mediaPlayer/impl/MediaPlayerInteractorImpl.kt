@@ -22,6 +22,13 @@ class MediaPlayerInteractorImpl(val mediaPlayerRepository: MediaPlayerRepository
     }
 
     override fun release() {
-        TODO("Not yet implemented")
+        mediaPlayerRepository.release()
     }
+
+    override fun timerUpdate(
+        onTimerUpdated: (String) -> Unit
+    ) {
+        mediaPlayerRepository.timerUpdate(onTimerUpdated)
+    }
+
 }

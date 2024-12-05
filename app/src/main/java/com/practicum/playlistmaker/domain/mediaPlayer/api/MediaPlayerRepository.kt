@@ -11,4 +11,7 @@ interface MediaPlayerRepository {
     fun start()
     fun pause()
     fun release()
+    fun timerUpdate(
+        onTimerUpdated: (String) -> Unit
+    )
 }
