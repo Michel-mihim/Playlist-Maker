@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.domain.history.impl
 
+import com.practicum.playlistmaker.domain.history.OnHistoryUpdatedListener
 import com.practicum.playlistmaker.domain.history.api.HistoryTracksInteractor
 import com.practicum.playlistmaker.domain.history.api.HistoryTracksRepository
 import com.practicum.playlistmaker.domain.searchTracks.models.Track
@@ -18,6 +19,8 @@ class HistoryTracksInteractorImpl(private val repository: HistoryTracksRepositor
         repository.clearTracks()
     }
 
-
+    override fun SetOnHistoryUpdatedListener(onHistoryUpdatedListener: OnHistoryUpdatedListener) {
+        repository.SetOnHistoryUpdatedListener(onHistoryUpdatedListener)
+    }
 
 }

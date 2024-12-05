@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.domain.searchTracks.models.SearchStatus
 import com.practicum.playlistmaker.creator.Creator
+import com.practicum.playlistmaker.domain.history.OnHistoryUpdatedListener
 import com.practicum.playlistmaker.domain.history.api.HistoryTracksInteractor
 import com.practicum.playlistmaker.domain.searchTracks.models.SearchTracksResult
 import com.practicum.playlistmaker.domain.searchTracks.models.Track
@@ -52,6 +53,7 @@ class SearchActivity : AppCompatActivity() {
     //интеракторы===================================================================================
     private lateinit var historyTracksInteractor: HistoryTracksInteractor
     private lateinit var searchTracksInteractor: SearchTracksInteractor
+    private lateinit var onHistoryUpdatedListener: OnHistoryUpdatedListener
 
     //не инициализированные views===================================================================
     private lateinit var trackNotFoundPlaceholderImage: ImageView
@@ -83,8 +85,14 @@ class SearchActivity : AppCompatActivity() {
         searchTracksInteractor = Creator.provideTracksInteractor()
         historyTracksInteractor = Creator.provideHistoryTracksInteractor(this)
 
+        /*
         sharedPrefsListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
             if (key == Constants.SEARCH_HISTORY_KEY) showHistory(historyTracksInteractor)
+        }
+        */
+
+        onHistoryUpdatedListener = OnHistoryUpdatedListener {
+            if (isHistoryOnScreen()) showHistory(historyTracksInteractor)
         }
 
         //инициализация views
@@ -128,6 +136,8 @@ class SearchActivity : AppCompatActivity() {
 
             writeHistory(historyTracksInteractor, track)
         }
+
+        historyTracksInteractor.SetOnHistoryUpdatedListener(onHistoryUpdatedListener)
 
         historyClearButton.setOnClickListener{
             historyViewsHide()
@@ -370,9 +380,10 @@ class SearchActivity : AppCompatActivity() {
         searchDef = savedInstanceState.getString(Constants.SEARCH_STRING, Constants.SEARCH_DEF)
     }
 
+    /*
     override fun onResume() {
         super.onResume()
         if (isHistoryOnScreen()) showHistory(historyTracksInteractor)
     }
-
+    */
 }
