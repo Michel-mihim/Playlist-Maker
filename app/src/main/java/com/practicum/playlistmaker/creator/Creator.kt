@@ -3,13 +3,18 @@ package com.practicum.playlistmaker.creator
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
+import android.media.MediaPlayer
 import com.practicum.playlistmaker.data.history.HistoryTracksRepositoryImpl
+import com.practicum.playlistmaker.data.mediaPlayer.MediaPlayerRepositoryImpl
 import com.practicum.playlistmaker.data.searchTracks.searchTracksRepositoryImpl
 import com.practicum.playlistmaker.data.searchTracks.network.RetrofitNetworkClient
 import com.practicum.playlistmaker.data.settings.SettingsRepositoryImpl
 import com.practicum.playlistmaker.domain.history.api.HistoryTracksInteractor
 import com.practicum.playlistmaker.domain.history.api.HistoryTracksRepository
 import com.practicum.playlistmaker.domain.history.impl.HistoryTracksInteractorImpl
+import com.practicum.playlistmaker.domain.mediaPlayer.api.MediaPlayerInteractor
+import com.practicum.playlistmaker.domain.mediaPlayer.api.MediaPlayerRepository
+import com.practicum.playlistmaker.domain.mediaPlayer.impl.MediaPlayerInteractorImpl
 import com.practicum.playlistmaker.domain.searchTracks.api.SearchTracksInteractor
 import com.practicum.playlistmaker.domain.searchTracks.api.SearchTracksRepository
 import com.practicum.playlistmaker.domain.searchTracks.impl.SearchTracksInteractorImpl
@@ -61,4 +66,18 @@ object Creator {
     private fun provideSettingsRepository(context: Context): SettingsRepository {
         return SettingsRepositoryImpl(provideSharedPreferences(context))
     }
+
+    //mediaPlayer===================================================================================
+    fun provideMediaPlayerInteractor(): MediaPlayerInteractor{
+        return MediaPlayerInteractorImpl(provideMediaPlayerRepository())
+    }
+
+    private fun provideMediaPlayerRepository(): MediaPlayerRepository{
+        return MediaPlayerRepositoryImpl(provideMediaPlayer())
+    }
+
+    private fun provideMediaPlayer(): MediaPlayer{
+        return MediaPlayer()
+    }
+
 }

@@ -48,7 +48,6 @@ class SearchActivity : AppCompatActivity() {
 
     //не инициализированные объекты=================================================================
     private lateinit var adapter: TrackAdapter
-    private lateinit var sharedPrefsListener: SharedPreferences.OnSharedPreferenceChangeListener
 
     //интеракторы===================================================================================
     private lateinit var historyTracksInteractor: HistoryTracksInteractor

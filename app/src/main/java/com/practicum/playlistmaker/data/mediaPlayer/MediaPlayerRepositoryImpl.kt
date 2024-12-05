@@ -7,11 +7,32 @@ import com.practicum.playlistmaker.domain.mediaPlayer.models.PlayerStatus
 import com.practicum.playlistmaker.utils.constants.Constants
 
 class MediaPlayerRepositoryImpl(val mediaPlayer: MediaPlayer): MediaPlayerRepository {
-    override fun prepare(url: String?) {
+    override fun prepare(
+        url: String?,
+        onPrepared: () -> Unit,
+        onCompletion: () -> Unit
+    ) {
+        mediaPlayer.setDataSource(url)
+        mediaPlayer.prepareAsync()
+        mediaPlayer.setOnPreparedListener {
+            onPrepared()
+        }
 
+        mediaPlayer.setOnCompletionListener {
+            onCompletion()
+        }
     }
 
-    override fun act() {
-        TODO("Not yet implemented")
+    override fun start() {
+        mediaPlayer.start()
     }
+
+    override fun pause() {
+        mediaPlayer.pause()
+    }
+
+    override fun release() {
+        mediaPlayer.release()
+    }
+
 }

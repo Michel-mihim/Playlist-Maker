@@ -15,6 +15,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.domain.mediaPlayer.models.PlayerStatus
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.creator.Creator
+import com.practicum.playlistmaker.domain.mediaPlayer.api.MediaPlayerInteractor
 import com.practicum.playlistmaker.utils.constants.Constants
 import com.practicum.playlistmaker.utils.converters.dimensionsFloatToIntConvert
 import java.text.SimpleDateFormat
@@ -35,13 +37,14 @@ class MediaPlayerActivity : AppCompatActivity() {
     private lateinit var trackPlayButton: ImageButton
     private lateinit var trackProgress: TextView
 
+    //LATEINIT VARS
+    private lateinit var mediaPlayerInteractor: MediaPlayerInteractor
+
     //VALS
     private val handler = Handler(Looper.getMainLooper())
     private val showProgressRunnable = Runnable { showProgressState() }
 
     //VARS
-    private var mediaPlayer = MediaPlayer()
-
     private var playerStatus: PlayerStatus = PlayerStatus.STATE_DEFAULT
 
     //основной листинг==============================================================================
@@ -88,7 +91,20 @@ class MediaPlayerActivity : AppCompatActivity() {
                 .into(playerTrackImage)
         }
 
-        preparePlayer(bundle?.getString("b_previewUrl"))
+        mediaPlayerInteractor = Creator.provideMediaPlayerInteractor()
+        mediaPlayerInteractor.prepare(
+            bundle?.getString(("b_previewUrl")),
+            onPrepared = { ->
+                trackPlayButton.isEnabled = true
+                playerStatus = PlayerStatus.STATE_PREPARED
+            },
+            onCompletion = { -> //окончание воспроизведения
+                trackPlayButton.setImageResource(R.drawable.track_play)
+                playerStatus = PlayerStatus.STATE_PREPARED
+                //handler.removeCallbacks(showProgressRunnable)
+                trackProgress.text = Constants.TRACK_IS_OVER_PROGRESS
+            }
+        )
 
         //слушатели нажатий
         playerBackButton.setOnClickListener{
@@ -101,38 +117,22 @@ class MediaPlayerActivity : AppCompatActivity() {
     }
 
     private fun showProgressState(){
-        trackProgress.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
-        handler.postDelayed(showProgressRunnable, Constants.SHOW_PROGRESS_DELAY)
-    }
-
-    private fun preparePlayer(url: String?){
-        mediaPlayer.setDataSource(url)
-        mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener{
-            trackPlayButton.isEnabled = true
-            playerStatus = PlayerStatus.STATE_PREPARED
-        }
-        mediaPlayer.setOnCompletionListener{//окончание воспроизведения
-            trackPlayButton.setImageResource(R.drawable.track_play)
-            playerStatus = PlayerStatus.STATE_PREPARED
-            handler.removeCallbacks(showProgressRunnable)
-            trackProgress.text = Constants.TRACK_IS_OVER_PROGRESS
-        }
-
+        //trackProgress.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
+        //handler.postDelayed(showProgressRunnable, Constants.SHOW_PROGRESS_DELAY)
     }
 
     private fun startPlayer(){
-        mediaPlayer.start()
+        mediaPlayerInteractor.start()
         trackPlayButton.setImageResource(R.drawable.track_pause)
         playerStatus = PlayerStatus.STATE_PLAYING
-        handler.post(showProgressRunnable)
+        //handler.post(showProgressRunnable)
     }
 
     private fun pausePlayer(){
-        mediaPlayer.pause()
+        mediaPlayerInteractor.pause()
         trackPlayButton.setImageResource(R.drawable.track_play)
         playerStatus = PlayerStatus.STATE_PAUSED
-        handler.removeCallbacks(showProgressRunnable)
+        //handler.removeCallbacks(showProgressRunnable)
     }
 
     private fun playbackControl() {
@@ -157,7 +157,7 @@ class MediaPlayerActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        handler.removeCallbacks(showProgressRunnable)
-        mediaPlayer.release()
+        //handler.removeCallbacks(showProgressRunnable)
+        mediaPlayerInteractor.release()
     }
 }
