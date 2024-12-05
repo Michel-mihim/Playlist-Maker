@@ -4,10 +4,13 @@ import android.content.SharedPreferences
 import android.util.Log
 import com.google.gson.Gson
 import com.practicum.playlistmaker.domain.history.api.HistoryTracksRepository
+import com.practicum.playlistmaker.domain.history.listener.OnHistoryUpdatedListener
 import com.practicum.playlistmaker.domain.searchTracks.models.Track
 import com.practicum.playlistmaker.utils.constants.Constants
 
 class HistoryTracksRepositoryImpl(private val sharedPrefs: SharedPreferences) : HistoryTracksRepository {
+
+    private var listener: OnHistoryUpdatedListener? = null
 
     override fun getTracks(): Array<Track> {
         val json = sharedPrefs.getString(Constants.SEARCH_HISTORY_KEY, null) ?: return emptyArray()
@@ -24,6 +27,8 @@ class HistoryTracksRepositoryImpl(private val sharedPrefs: SharedPreferences) : 
         sharedPrefs.edit()
             .putString(Constants.SEARCH_HISTORY_KEY, json)
             .apply()
+
+        this.listener?.onHistoryUpdated()
     }
 
     override fun clearTracks() {
@@ -32,6 +37,9 @@ class HistoryTracksRepositoryImpl(private val sharedPrefs: SharedPreferences) : 
             .apply()
     }
 
+    override fun setOnHistoryUpdatedListener(onHistoryUpdatedListener: OnHistoryUpdatedListener) {
+        this.listener = onHistoryUpdatedListener
+    }
     //==============================================================================================
 
     private fun newHistoryGenerator(trackToAdd: Track, tracks: Array<Track>): ArrayList<Track> {

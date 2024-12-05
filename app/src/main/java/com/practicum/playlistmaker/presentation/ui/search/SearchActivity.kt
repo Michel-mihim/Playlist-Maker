@@ -8,6 +8,7 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -27,6 +28,7 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.domain.searchTracks.models.SearchStatus
 import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.domain.history.api.HistoryTracksInteractor
+import com.practicum.playlistmaker.domain.history.listener.OnHistoryUpdatedListener
 import com.practicum.playlistmaker.domain.searchTracks.models.SearchTracksResult
 import com.practicum.playlistmaker.domain.searchTracks.models.Track
 import com.practicum.playlistmaker.domain.searchTracks.api.SearchTracksInteractor
@@ -47,8 +49,7 @@ class SearchActivity : AppCompatActivity() {
 
     //не инициализированные объекты=================================================================
     private lateinit var adapter: TrackAdapter
-    private lateinit var sharedPrefsListener: SharedPreferences.OnSharedPreferenceChangeListener
-
+    private lateinit var listener: OnHistoryUpdatedListener
     //интеракторы===================================================================================
     private lateinit var historyTracksInteractor: HistoryTracksInteractor
     private lateinit var searchTracksInteractor: SearchTracksInteractor
@@ -83,9 +84,11 @@ class SearchActivity : AppCompatActivity() {
         searchTracksInteractor = Creator.provideTracksInteractor()
         historyTracksInteractor = Creator.provideHistoryTracksInteractor(this)
 
+        /*
         sharedPrefsListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
             if (key == Constants.SEARCH_HISTORY_KEY) showHistory(historyTracksInteractor)
         }
+        */
 
         //инициализация views
         searchBackButton = findViewById(R.id.search_back_button)
@@ -127,6 +130,10 @@ class SearchActivity : AppCompatActivity() {
             startActivity(playerIntent)
 
             writeHistory(historyTracksInteractor, track)
+        }
+
+        historyTracksInteractor.setOnHistoryUpdatedListener{
+            Log.d("wtf", "History updated")
         }
 
         historyClearButton.setOnClickListener{

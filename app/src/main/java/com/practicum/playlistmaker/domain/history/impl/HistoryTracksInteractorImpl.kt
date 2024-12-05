@@ -2,6 +2,7 @@ package com.practicum.playlistmaker.domain.history.impl
 
 import com.practicum.playlistmaker.domain.history.api.HistoryTracksInteractor
 import com.practicum.playlistmaker.domain.history.api.HistoryTracksRepository
+import com.practicum.playlistmaker.domain.history.listener.OnHistoryUpdatedListener
 import com.practicum.playlistmaker.domain.searchTracks.models.Track
 
 class HistoryTracksInteractorImpl(private val repository: HistoryTracksRepository) : HistoryTracksInteractor {
@@ -18,6 +19,8 @@ class HistoryTracksInteractorImpl(private val repository: HistoryTracksRepositor
         repository.clearTracks()
     }
 
-
+    override fun setOnHistoryUpdatedListener(onHistoryUpdatedListener: OnHistoryUpdatedListener) {
+        repository.setOnHistoryUpdatedListener(onHistoryUpdatedListener)
+    }
 
 }
