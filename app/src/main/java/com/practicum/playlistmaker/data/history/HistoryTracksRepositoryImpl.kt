@@ -21,7 +21,6 @@ class HistoryTracksRepositoryImpl(private val sharedPrefs: SharedPreferences) : 
         val newTracks = ArrayList<Track>()
         val lastTracks = getTracks()
         newTracks.clear()
-        Log.d("wtf", "add "+track.trackName)
         newTracks.addAll(newHistoryGenerator(track, lastTracks))
         val json = Gson().toJson(newTracks)
         sharedPrefs.edit()
@@ -69,7 +68,6 @@ class HistoryTracksRepositoryImpl(private val sharedPrefs: SharedPreferences) : 
         val tracksWhereNewFirst = ArrayList<Track>()
         tracksWhereNewFirst.add(trackAdded)
         tracksWhereNewFirst.addAll(tracks)
-        Log.d("wtf", "absent")
         return tracksWhereNewFirst
     }
 
@@ -80,7 +78,6 @@ class HistoryTracksRepositoryImpl(private val sharedPrefs: SharedPreferences) : 
         tracksList.removeAt(getDuplicateTrackPos(trackAdded, tracks))
         tracksWhereDuplicateTrackFirst.add(trackAdded)
         tracksWhereDuplicateTrackFirst.addAll(tracksList)
-
         return tracksWhereDuplicateTrackFirst
     }
 
@@ -102,7 +99,6 @@ class HistoryTracksRepositoryImpl(private val sharedPrefs: SharedPreferences) : 
         for (i in 0..<tracks.size) {
             if (trackAdded.trackId == tracks[i].trackId) pos = i
         }
-        Log.d("wtf", pos.toString())
         return pos
     }
 

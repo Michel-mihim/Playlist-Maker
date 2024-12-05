@@ -1,7 +1,5 @@
 package com.practicum.playlistmaker.domain.mediaPlayer.api
 
-import com.practicum.playlistmaker.domain.mediaPlayer.models.PlayerStatus
-
 interface MediaPlayerRepository {
     fun prepare(
         url: String?,

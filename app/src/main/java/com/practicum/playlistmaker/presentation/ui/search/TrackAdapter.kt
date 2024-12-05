@@ -35,8 +35,6 @@ class TrackAdapter(
                 //передача трека в активити
                 val track: Track = tracks[position]
                 onItemClickListener?.invoke(track)
-
-                Log.d("WTF", "Слушатель нажатия in adapter: "+track.trackName)
             }
         }
     }

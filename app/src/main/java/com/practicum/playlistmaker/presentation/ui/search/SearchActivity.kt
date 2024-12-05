@@ -144,7 +144,6 @@ class SearchActivity : AppCompatActivity() {
         }
 
         searchBackButton.setOnClickListener{
-            //sharedPrefs.unregisterOnSharedPreferenceChangeListener(sharedPrefsListener) надо обрабатывать!!
             finish()
         }
 
@@ -166,9 +165,7 @@ class SearchActivity : AppCompatActivity() {
 
         //переопределение функций слушателя текста==================================================
         val textWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                //
-            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 searchClearButton.visibility = searchClearButtonVisibility(s)
@@ -195,8 +192,6 @@ class SearchActivity : AppCompatActivity() {
 
     private fun searchRequest(){
         if (searchEdittext.text.isNotEmpty()) {
-            //sharedPrefs.unregisterOnSharedPreferenceChangeListener(sharedPrefsListener) надо обрабатывать!!
-
             historyViewsHide()
             searchViewsHide()
             hidePlaceholder()
@@ -249,8 +244,6 @@ class SearchActivity : AppCompatActivity() {
             tracks.addAll(lastTracks)
             historyRecyclerView.adapter = adapter
             adapter.notifyDataSetChanged()
-
-            //sharedPrefs.registerOnSharedPreferenceChangeListener(sharedPrefsListener) надо обрабатывать!!
         }
         return true
     }

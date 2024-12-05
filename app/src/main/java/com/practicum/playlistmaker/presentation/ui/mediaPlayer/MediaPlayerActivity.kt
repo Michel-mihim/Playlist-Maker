@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker.presentation.ui.mediaPlayer
 
-import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -19,8 +18,7 @@ import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.domain.mediaPlayer.api.MediaPlayerInteractor
 import com.practicum.playlistmaker.utils.constants.Constants
 import com.practicum.playlistmaker.utils.converters.dimensionsFloatToIntConvert
-import java.text.SimpleDateFormat
-import java.util.Locale
+
 
 class MediaPlayerActivity : AppCompatActivity() {
 

@@ -2,7 +2,6 @@ package com.practicum.playlistmaker.domain.mediaPlayer.impl
 
 import com.practicum.playlistmaker.domain.mediaPlayer.api.MediaPlayerInteractor
 import com.practicum.playlistmaker.domain.mediaPlayer.api.MediaPlayerRepository
-import com.practicum.playlistmaker.domain.mediaPlayer.models.PlayerStatus
 
 class MediaPlayerInteractorImpl(val mediaPlayerRepository: MediaPlayerRepository): MediaPlayerInteractor {
     override fun prepare(

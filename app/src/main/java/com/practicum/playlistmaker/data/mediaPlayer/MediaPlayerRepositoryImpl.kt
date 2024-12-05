@@ -1,11 +1,7 @@
 package com.practicum.playlistmaker.data.mediaPlayer
 
 import android.media.MediaPlayer
-import android.util.Log
-import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.domain.mediaPlayer.api.MediaPlayerRepository
-import com.practicum.playlistmaker.domain.mediaPlayer.models.PlayerStatus
-import com.practicum.playlistmaker.utils.constants.Constants
 import java.text.SimpleDateFormat
 import java.util.Locale
 
