@@ -49,7 +49,7 @@ class SearchActivity : AppCompatActivity() {
 
     //не инициализированные объекты=================================================================
     private lateinit var adapter: TrackAdapter
-    private lateinit var listener: OnHistoryUpdatedListener
+    private lateinit var historyUpdatedListener: OnHistoryUpdatedListener
     //интеракторы===================================================================================
     private lateinit var historyTracksInteractor: HistoryTracksInteractor
     private lateinit var searchTracksInteractor: SearchTracksInteractor
@@ -89,6 +89,11 @@ class SearchActivity : AppCompatActivity() {
             if (key == Constants.SEARCH_HISTORY_KEY) showHistory(historyTracksInteractor)
         }
         */
+
+        historyUpdatedListener = OnHistoryUpdatedListener { ->
+            if (isHistoryOnScreen()) showHistory(historyTracksInteractor)
+            Log.d("wtf", "History updated")
+        }
 
         //инициализация views
         searchBackButton = findViewById(R.id.search_back_button)
@@ -132,9 +137,7 @@ class SearchActivity : AppCompatActivity() {
             writeHistory(historyTracksInteractor, track)
         }
 
-        historyTracksInteractor.setOnHistoryUpdatedListener{
-            Log.d("wtf", "History updated")
-        }
+        historyTracksInteractor.setOnHistoryUpdatedListener(historyUpdatedListener)
 
         historyClearButton.setOnClickListener{
             historyViewsHide()
@@ -379,7 +382,7 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (isHistoryOnScreen()) showHistory(historyTracksInteractor)
+        //if (isHistoryOnScreen()) showHistory(historyTracksInteractor)
     }
 
 }

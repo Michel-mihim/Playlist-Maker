@@ -1,5 +1,5 @@
 package com.practicum.playlistmaker.domain.history.listener
 
-interface OnHistoryUpdatedListener {
+fun interface OnHistoryUpdatedListener {
     fun onHistoryUpdated()
 }
