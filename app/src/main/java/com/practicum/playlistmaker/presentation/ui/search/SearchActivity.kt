@@ -220,7 +220,6 @@ class SearchActivity : AppCompatActivity() {
                                 showStatus(SearchStatus.ERROR_OCCURRED,"Код ошибки: ${result.code}")
                             }
                         }
-
                         hideSearchProgressbar()
                         searchRecyclerView.adapter = adapter
                         adapter.notifyDataSetChanged()
