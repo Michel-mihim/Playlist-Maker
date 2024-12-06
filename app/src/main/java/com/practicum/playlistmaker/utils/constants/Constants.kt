@@ -13,6 +13,7 @@ object Constants {
     const val HISTORY_CLEARED ="История поиска была удалена"
 
     const val SEARCH_DEBOUNCE_DELAY = 2000L
+    const val CLICK_DEBOUNCE_DELAY = 1000L
 
     //настройки
     const val PREFERENCES = "shared_preferences"

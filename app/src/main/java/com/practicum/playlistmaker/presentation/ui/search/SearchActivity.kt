@@ -46,6 +46,8 @@ class SearchActivity : AppCompatActivity() {
     private val handler = Handler(Looper.getMainLooper())
     private var searchDef: String = Constants.SEARCH_DEF
 
+    private var isClickAllowed = true
+
     //не инициализированные объекты=================================================================
     private lateinit var adapter: TrackAdapter
 
@@ -117,23 +119,25 @@ class SearchActivity : AppCompatActivity() {
 
         //слушатели=================================================================================
         adapter.onItemClickListener = { track ->
-            //запуск плеера
-            val playerIntent = Intent(this, MediaPlayerActivity::class.java)
+            if (clickDebounce()) {
+                //запуск плеера
+                val playerIntent = Intent(this, MediaPlayerActivity::class.java)
 
-            val bundle = Bundle()
-            bundle.putString("b_track_name", track.trackName)
-            bundle.putString("b_artist_name", track.artistName)
-            bundle.putString("b_track_time", SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis))
-            bundle.putString("b_artworkUrl100", getCoverArtwork(track.artworkUrl100))
-            bundle.putString("b_track_album", track.collectionName)
-            bundle.putString("b_track_year", isoDateToYearConvert(track.releaseDate))
-            bundle.putString("b_track_genre", track.primaryGenreName)
-            bundle.putString("b_track_country", track.country)
-            bundle.putString("b_previewUrl", track.previewUrl)
-            playerIntent.putExtras(bundle)
-            startActivity(playerIntent)
+                val bundle = Bundle()
+                bundle.putString("b_track_name", track.trackName)
+                bundle.putString("b_artist_name", track.artistName)
+                bundle.putString("b_track_time", SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis))
+                bundle.putString("b_artworkUrl100", getCoverArtwork(track.artworkUrl100))
+                bundle.putString("b_track_album", track.collectionName)
+                bundle.putString("b_track_year", isoDateToYearConvert(track.releaseDate))
+                bundle.putString("b_track_genre", track.primaryGenreName)
+                bundle.putString("b_track_country", track.country)
+                bundle.putString("b_previewUrl", track.previewUrl)
+                playerIntent.putExtras(bundle)
+                startActivity(playerIntent)
 
-            writeHistory(historyTracksInteractor, track)
+                writeHistory(historyTracksInteractor, track)
+            }
         }
 
         historyTracksInteractor.SetOnHistoryUpdatedListener(onHistoryUpdatedListener)
@@ -279,6 +283,15 @@ class SearchActivity : AppCompatActivity() {
                 Toast.makeText(this@SearchActivity, text, Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun clickDebounce() : Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({isClickAllowed = true}, Constants.CLICK_DEBOUNCE_DELAY)
+        }
+        return current
     }
 
     //технические функции===========================================================================
