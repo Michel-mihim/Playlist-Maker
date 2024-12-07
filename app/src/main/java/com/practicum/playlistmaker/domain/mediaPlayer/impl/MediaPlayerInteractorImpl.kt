@@ -3,7 +3,7 @@ package com.practicum.playlistmaker.domain.mediaPlayer.impl
 import com.practicum.playlistmaker.domain.mediaPlayer.api.MediaPlayerInteractor
 import com.practicum.playlistmaker.domain.mediaPlayer.api.MediaPlayerRepository
 
-class MediaPlayerInteractorImpl(val mediaPlayerRepository: MediaPlayerRepository): MediaPlayerInteractor {
+class MediaPlayerInteractorImpl(private val mediaPlayerRepository: MediaPlayerRepository): MediaPlayerInteractor {
     override fun prepare(
         url: String?,
         onPrepared: () -> Unit,
