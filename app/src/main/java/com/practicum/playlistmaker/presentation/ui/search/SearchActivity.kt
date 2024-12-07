@@ -2,7 +2,6 @@ package com.practicum.playlistmaker.presentation.ui.search
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -34,8 +33,8 @@ import com.practicum.playlistmaker.domain.searchTracks.api.SearchTracksInteracto
 import com.practicum.playlistmaker.utils.constants.Constants
 import com.practicum.playlistmaker.presentation.ui.mediaPlayer.MediaPlayerActivity
 import java.text.SimpleDateFormat
-import java.util.Date
 import java.util.Locale
+import com.practicum.playlistmaker.utils.converters.isoDateToYearConvert
 
 
 class SearchActivity : AppCompatActivity() {
@@ -85,12 +84,6 @@ class SearchActivity : AppCompatActivity() {
 
         searchTracksInteractor = Creator.provideTracksInteractor()
         historyTracksInteractor = Creator.provideHistoryTracksInteractor(this)
-
-        /*
-        sharedPrefsListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
-            if (key == Constants.SEARCH_HISTORY_KEY) showHistory(historyTracksInteractor)
-        }
-        */
 
         onHistoryUpdatedListener = OnHistoryUpdatedListener {
             if (isHistoryOnScreen()) showHistory(historyTracksInteractor)
@@ -188,12 +181,22 @@ class SearchActivity : AppCompatActivity() {
         searchEdittext.addTextChangedListener(textWatcher)
     }
 
-    //расчетные функции=============================================================================
+    //успокоители===================================================================================
     private fun searchDebounce(){
         handler.removeCallbacks(searchRunnable) // runnable - fun searchRequest()
         handler.postDelayed(searchRunnable, Constants.SEARCH_DEBOUNCE_DELAY)
     }
 
+    private fun clickDebounce() : Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({isClickAllowed = true}, Constants.CLICK_DEBOUNCE_DELAY)
+        }
+        return current
+    }
+
+    //основные операции=============================================================================
     private fun searchRequest(){
         if (searchEdittext.text.isNotEmpty()) {
             historyViewsHide()
@@ -240,6 +243,9 @@ class SearchActivity : AppCompatActivity() {
         Toast.makeText(this@SearchActivity, Constants.HISTORY_CLEARED, Toast.LENGTH_SHORT).show()
     }
 
+    //управление видимостью=========================================================================
+    //private fun viewsVisibilityControl()
+
     private fun showHistory(historyTracksInteractor: HistoryTracksInteractor): Boolean {
         val lastTracks = historyTracksInteractor.getTracks()
         if (lastTracks.isEmpty()) return false else { //отображается "Вы искали"
@@ -284,31 +290,9 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun clickDebounce() : Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            handler.postDelayed({isClickAllowed = true}, Constants.CLICK_DEBOUNCE_DELAY)
-        }
-        return current
-    }
-
     //технические функции===========================================================================
     private fun getCoverArtwork(artworkUrl100: String): String {
         return artworkUrl100.replaceAfterLast('/',"512x512bb.jpg")
-    }
-
-    private fun isoDateToYearConvert(isoDate: String): String {
-        var year: String
-        val isoDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
-        val targetDateFormat = SimpleDateFormat("yyyy")
-        try {
-            val date: Date = isoDateFormat.parse(isoDate)
-            year = targetDateFormat.format(date)
-        } catch (e: Exception) {
-            year = ""
-        }
-        return year
     }
 
     private fun searchFieldMakeEmpty() {
@@ -384,10 +368,4 @@ class SearchActivity : AppCompatActivity() {
         searchDef = savedInstanceState.getString(Constants.SEARCH_STRING, Constants.SEARCH_DEF)
     }
 
-    /*
-    override fun onResume() {
-        super.onResume()
-        if (isHistoryOnScreen()) showHistory(historyTracksInteractor)
-    }
-    */
 }
