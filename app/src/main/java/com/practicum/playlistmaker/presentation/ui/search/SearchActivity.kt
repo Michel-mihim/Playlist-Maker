@@ -283,7 +283,7 @@ class SearchActivity : AppCompatActivity() {
                 hideSearchProgressbar()
                 searchViewsShow()
                 showPlaceholder(Constants.TRACKS_NOT_FOUND, R.drawable.not_found)
-                searchRenewButton.visibility = View.VISIBLE
+                searchRenewButton.visibility = View.INVISIBLE
             }
             SearchStatus.TRACKS_FOUND -> {
                 hideSearchProgressbar()
@@ -378,7 +378,6 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun historyViewsHide() {
-        Log.d("wtf", "hide")
         youFoundHistoryText.visibility = View.INVISIBLE
         historyClearButton.visibility = View.INVISIBLE
         historyRecyclerView.visibility = View.INVISIBLE
