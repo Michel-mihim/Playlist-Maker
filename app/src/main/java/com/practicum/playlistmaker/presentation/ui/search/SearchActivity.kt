@@ -6,6 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -44,11 +45,12 @@ class SearchActivity : AppCompatActivity() {
     private val searchRunnable = Runnable { searchRequest() }
     private val handler = Handler(Looper.getMainLooper())
     private var searchDef: String = Constants.SEARCH_DEF
-
     private var isClickAllowed = true
 
     //не инициализированные объекты=================================================================
     private lateinit var adapter: TrackAdapter
+    private lateinit var searchStatus: SearchStatus
+    private lateinit var inputManager: InputMethodManager
 
     //интеракторы===================================================================================
     private lateinit var historyTracksInteractor: HistoryTracksInteractor
@@ -77,18 +79,6 @@ class SearchActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        //инициализация объектов
-        val inputManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        adapter = TrackAdapter(tracks)
-
-        searchTracksInteractor = Creator.provideTracksInteractor()
-        historyTracksInteractor = Creator.provideHistoryTracksInteractor(this)
-
-        onHistoryUpdatedListener = OnHistoryUpdatedListener {
-            if (isHistoryOnScreen()) showHistory(historyTracksInteractor)
-        }
-
         //инициализация views
         searchBackButton = findViewById(R.id.search_back_button)
         searchClearButton = findViewById(R.id.search_clear_button)
@@ -102,13 +92,29 @@ class SearchActivity : AppCompatActivity() {
         youFoundHistoryText = findViewById(R.id.you_found_text)
         searchProgressBar = findViewById(R.id.search_progress_bar)
 
-        //основной листинг==========================================================================
-        searchFieldMakeEmpty()
-        openSoftKeyBoard(inputManager, searchEdittext)
+        //инициализация объектов
+        adapter = TrackAdapter(tracks)
+
+        searchTracksInteractor = Creator.provideTracksInteractor()
+        historyTracksInteractor = Creator.provideHistoryTracksInteractor(this)
+
+        onHistoryUpdatedListener = OnHistoryUpdatedListener {
+            if (searchStatus != SearchStatus.TRACKS_FOUND)
+                downloadHistory(historyTracksInteractor)
+        }
+
         searchRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
         historyRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
 
-        if (showHistory(historyTracksInteractor)) historyViewsShow() //отображается "Вы искали"
+        inputManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+
+        if (isHistoryPresents(historyTracksInteractor)) {
+            searchStatus = SearchStatus.HISTORY_PLACEHOLDER
+            downloadHistory(historyTracksInteractor)
+        } else {
+            searchStatus = SearchStatus.DEFAULT
+        }
+        viewsVisibilityControl()
 
         //слушатели=================================================================================
         adapter.onItemClickListener = { track ->
@@ -130,13 +136,15 @@ class SearchActivity : AppCompatActivity() {
                 startActivity(playerIntent)
 
                 writeHistory(historyTracksInteractor, track)
+                viewsVisibilityControl()
             }
         }
 
         historyTracksInteractor.SetOnHistoryUpdatedListener(onHistoryUpdatedListener)
 
         historyClearButton.setOnClickListener{
-            historyViewsHide()
+            searchStatus = SearchStatus.DEFAULT
+            viewsVisibilityControl()
             clearHistory(historyTracksInteractor)
         }
 
@@ -145,16 +153,18 @@ class SearchActivity : AppCompatActivity() {
         }
 
         searchClearButton.setOnClickListener {
-            searchEdittext.setText(getString(R.string.empty_string))
-            inputManager.showSoftInput(searchEdittext, InputMethodManager.SHOW_IMPLICIT)
-            showHistory(historyTracksInteractor)
-            searchViewsHide()
-            historyViewsShow()
+            searchEdittext.setText(Constants.SEARCH_DEF)
+            if (isHistoryPresents(historyTracksInteractor))
+            {
+                downloadHistory(historyTracksInteractor)
+                searchStatus = SearchStatus.HISTORY_PLACEHOLDER
+            } else searchStatus = SearchStatus.DEFAULT
+            viewsVisibilityControl()
         }
 
         searchRenewButton.setOnClickListener {
             if (searchEdittext.text.isNotEmpty()) {
-                searchDebounce()
+                if (clickDebounce()) renewRequest()
             }
         }
 
@@ -166,20 +176,26 @@ class SearchActivity : AppCompatActivity() {
                 searchClearButton.visibility = searchClearButtonVisibility(s)
                 if (!s.isNullOrEmpty()) searchDebounce()
                 if (s.isNullOrEmpty()) {
-                    showHistory(historyTracksInteractor)
-                    searchViewsHide()
-                    historyViewsShow()
+                    if (isHistoryPresents(historyTracksInteractor)) {
+                        downloadHistory(historyTracksInteractor)
+                        searchStatus = SearchStatus.HISTORY_PLACEHOLDER
+                    } else searchStatus = SearchStatus.DEFAULT
+                    viewsVisibilityControl()
                 }
             }
 
             override fun afterTextChanged(s: Editable?) {
-                searchDef = s.toString()
             }
         }
         searchEdittext.addTextChangedListener(textWatcher)
     }
 
     //успокоители===================================================================================
+    private fun renewRequest(){
+        handler.removeCallbacks(searchRunnable)
+        handler.post(searchRunnable)
+    }
+
     private fun searchDebounce(){
         handler.removeCallbacks(searchRunnable) // runnable - fun searchRequest()
         handler.postDelayed(searchRunnable, Constants.SEARCH_DEBOUNCE_DELAY)
@@ -197,36 +213,33 @@ class SearchActivity : AppCompatActivity() {
     //основные операции=============================================================================
     private fun searchRequest(){
         if (searchEdittext.text.isNotEmpty()) {
-            historyViewsHide()
-            searchViewsHide()
-            hidePlaceholder()
-            showSearchProgressbar()
+            searchStatus = SearchStatus.SEARCH_RESULT_WAITING
+            viewsVisibilityControl()
             tracks.clear()
-
             searchTracksInteractor.searchTracks(searchEdittext.text.toString(), object : SearchTracksInteractor.TracksConsumer {
                 override fun consume(result: SearchTracksResult) {
-
                     handler.post{
                         when (result) {
                             is SearchTracksResult.Success -> {
                                 tracks.addAll(result.tracks)
-                                showStatus(SearchStatus.TRACKS_FOUND, Constants.SEARCH_SUCCESS)
+                                searchStatus = SearchStatus.TRACKS_FOUND
+                                showStatus(searchStatus, Constants.SEARCH_SUCCESS)
                             }
                             is SearchTracksResult.Empty -> {
                                 tracks.addAll(result.tracks)
-                                showStatus(SearchStatus.TRACKS_NOT_FOUND, Constants.TRACKS_NOT_FOUND_2)
+                                searchStatus = SearchStatus.TRACKS_NOT_FOUND
+                                showStatus(searchStatus, Constants.TRACKS_NOT_FOUND_2)
                             }
                             is SearchTracksResult.Failure -> {
                                 tracks.addAll(result.tracks)
-                                showStatus(SearchStatus.ERROR_OCCURRED,"Код ошибки: ${result.code}")
+                                searchStatus = SearchStatus.ERROR_OCCURRED
+                                showStatus(searchStatus,"Код ошибки: ${result.code}")
                             }
                         }
-                        hideSearchProgressbar()
                         searchRecyclerView.adapter = adapter
                         adapter.notifyDataSetChanged()
-                        searchViewsShow()
+                        viewsVisibilityControl()
                     }
-
                 }
             })
         }
@@ -242,39 +255,83 @@ class SearchActivity : AppCompatActivity() {
     }
 
     //управление видимостью=========================================================================
-    //private fun viewsVisibilityControl()
-
-    private fun showHistory(historyTracksInteractor: HistoryTracksInteractor): Boolean {
-        val lastTracks = historyTracksInteractor.getTracks()
-        if (lastTracks.isEmpty()) return false else { //отображается "Вы искали"
-            tracks.clear()
-            tracks.addAll(lastTracks)
-            historyRecyclerView.adapter = adapter
-            adapter.notifyDataSetChanged()
+    private fun viewsVisibilityControl() {
+        when (searchStatus) {
+            SearchStatus.DEFAULT -> {
+                historyViewsHide()
+                hidePlaceholder()
+                searchClearButton.visibility = View.INVISIBLE
+                openSoftKeyBoard(inputManager, searchEdittext)
+                searchRenewButton.visibility = View.INVISIBLE
+            }
+            SearchStatus.SEARCH_RESULT_WAITING -> {
+                historyViewsHide()
+                searchViewsHide()
+                hidePlaceholder()
+                showSearchProgressbar()
+                searchRenewButton.visibility = View.INVISIBLE
+            }
+            SearchStatus.HISTORY_PLACEHOLDER -> {
+                inputManager.showSoftInput(searchEdittext, InputMethodManager.SHOW_IMPLICIT)
+                searchViewsHide()
+                hidePlaceholder()
+                searchClearButton.visibility = View.INVISIBLE
+                searchRenewButton.visibility = View.INVISIBLE
+                historyViewsShow()
+            }
+            SearchStatus.TRACKS_NOT_FOUND -> {
+                hideSearchProgressbar()
+                searchViewsShow()
+                showPlaceholder(Constants.TRACKS_NOT_FOUND, R.drawable.not_found)
+                searchRenewButton.visibility = View.VISIBLE
+            }
+            SearchStatus.TRACKS_FOUND -> {
+                hideSearchProgressbar()
+                hidePlaceholder()
+                searchRenewButton.visibility = View.INVISIBLE
+                searchViewsShow()
+            }
+            SearchStatus.ERROR_OCCURRED -> {
+                hideSearchProgressbar()
+                searchViewsShow()
+                showPlaceholder(Constants.NETWORK_PROBLEM, R.drawable.net_trouble)
+                searchRenewButton.visibility = View.VISIBLE
+            }
+            SearchStatus.SOMETHING_WRONG -> {
+                hideSearchProgressbar()
+                searchViewsShow()
+                showPlaceholder(Constants.NETWORK_PROBLEM, R.drawable.net_trouble)
+                searchRenewButton.visibility = View.VISIBLE
+            }
         }
-        return true
     }
 
-    private fun showStatus(indicator: SearchStatus, text: String) {
-        when (indicator) {
+    private fun isHistoryPresents(historyTracksInteractor: HistoryTracksInteractor): Boolean {
+        val lastTracks = historyTracksInteractor.getTracks()
+        return lastTracks.isNotEmpty()
+    }
+
+    private fun downloadHistory(historyTracksInteractor: HistoryTracksInteractor) {
+        val lastTracks = historyTracksInteractor.getTracks()
+        tracks.clear()
+        tracks.addAll(lastTracks)
+        historyRecyclerView.adapter = adapter
+        adapter.notifyDataSetChanged()
+    }
+
+    private fun showStatus(searchStatus: SearchStatus, text: String) {
+        when (searchStatus) {
+            SearchStatus.DEFAULT -> {}
+            SearchStatus.SEARCH_RESULT_WAITING -> {}
+            SearchStatus.HISTORY_PLACEHOLDER -> {}
             SearchStatus.TRACKS_NOT_FOUND -> {
-                showPlaceholder(Constants.TRACKS_NOT_FOUND, R.drawable.not_found)
-                searchRenewButton.visibility = renewButtonVisibility(SearchStatus.TRACKS_NOT_FOUND)
                 Toast.makeText(this@SearchActivity, text, Toast.LENGTH_SHORT).show()
             }
             SearchStatus.SOMETHING_WRONG -> {
-                showPlaceholder(Constants.NETWORK_PROBLEM, R.drawable.net_trouble)
-                searchRenewButton.visibility = renewButtonVisibility(SearchStatus.SOMETHING_WRONG)
                 Toast.makeText(this@SearchActivity, text, Toast.LENGTH_SHORT).show()
             }
-            SearchStatus.TRACKS_FOUND -> {
-                hidePlaceholder()
-                searchRenewButton.visibility = renewButtonVisibility(SearchStatus.TRACKS_FOUND)
-
-            }
+            SearchStatus.TRACKS_FOUND -> {}
             SearchStatus.ERROR_OCCURRED -> {
-                showPlaceholder(Constants.NETWORK_PROBLEM, R.drawable.net_trouble)
-                searchRenewButton.visibility = renewButtonVisibility(SearchStatus.ERROR_OCCURRED)
                 Toast.makeText(this@SearchActivity, text, Toast.LENGTH_SHORT).show()
             }
         }
@@ -286,11 +343,6 @@ class SearchActivity : AppCompatActivity() {
 
     private fun hideSearchProgressbar(){
         searchProgressBar.visibility = View.INVISIBLE
-    }
-
-    private fun searchFieldMakeEmpty() {
-        searchClearButton.visibility = View.INVISIBLE
-        searchEdittext.setText(searchDef)
     }
 
     private fun openSoftKeyBoard(inputManager: InputMethodManager, view: EditText) {
@@ -313,14 +365,8 @@ class SearchActivity : AppCompatActivity() {
     private fun hidePlaceholder() {
         trackNotFoundPlaceholderText.visibility = View.INVISIBLE
         trackNotFoundPlaceholderImage.visibility = View.INVISIBLE
-    }
-
-    private fun renewButtonVisibility(indicator: SearchStatus): Int {
-        return when (indicator) {
-            SearchStatus.TRACKS_FOUND -> View.INVISIBLE
-            SearchStatus.TRACKS_NOT_FOUND -> View.INVISIBLE
-            else -> View.VISIBLE
-        }
+        trackNotFoundPlaceholderText.visibility = View.INVISIBLE
+        trackNotFoundPlaceholderImage.visibility = View.INVISIBLE
     }
 
     private fun searchViewsHide() {
@@ -332,6 +378,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun historyViewsHide() {
+        Log.d("wtf", "hide")
         youFoundHistoryText.visibility = View.INVISIBLE
         historyClearButton.visibility = View.INVISIBLE
         historyRecyclerView.visibility = View.INVISIBLE
@@ -341,10 +388,6 @@ class SearchActivity : AppCompatActivity() {
         youFoundHistoryText.visibility = View.VISIBLE
         historyClearButton.visibility = View.VISIBLE
         historyRecyclerView.visibility = View.VISIBLE
-    }
-
-    private fun isHistoryOnScreen(): Boolean {
-        return youFoundHistoryText.isVisible
     }
 
     private fun searchClearButtonVisibility(s: CharSequence?): Int {
