@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/menuColor"
-    tools:context=".SearchActivity"
+    tools:context=".presentation.ui.search.SearchActivity"
     android:orientation="vertical">
 
     <LinearLayout
@@ -17,7 +17,7 @@
         <ImageButton
             style="@style/arrow_back_button_style"
             android:id="@+id/search_back_button"/>
-        
+
         <TextView
             style="@style/menu_head_text_style"
             android:text="@string/button_search"/>

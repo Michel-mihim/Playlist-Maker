@@ -3,28 +3,30 @@ package com.practicum.playlistmaker
 import android.app.Application
 import android.content.SharedPreferences
 import android.content.res.Configuration
-import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
-
-
-const val THEME_KEY = "night_theme"
-const val PREFERENCES = "shared_preferences"
+import com.practicum.playlistmaker.creator.Creator
+import com.practicum.playlistmaker.domain.settings.api.SettingsInteractor
+import com.practicum.playlistmaker.utils.constants.Constants
 
 class App: Application() {
 
-    var darkTheme = false
+    var isThemeDarkForChecker = false
 
     override fun onCreate() {
         super.onCreate()
 
-        val sharedPrefs = getSharedPreferences(PREFERENCES, MODE_PRIVATE)
-        darkTheme = readThemePrefsDark(sharedPrefs)
-        switchTheme(sharedPrefs, darkTheme)
+        val settingsInteractor = Creator.provideSettingsInteractor(this)
 
+        isThemeDarkForChecker = readThemePrefsDark(settingsInteractor)
+
+        switchTheme(settingsInteractor, isThemeDarkForChecker)
     }
 
-    fun switchTheme(sharedPrefs: SharedPreferences, darkThemeEnabled: Boolean) {
-        darkTheme = darkThemeEnabled
+    fun readThemePrefsDark(settingsInteractor: SettingsInteractor): Boolean {
+        return settingsInteractor.isThemeDark(this)
+    }
+
+    fun switchTheme(settingsInteractor: SettingsInteractor, darkThemeEnabled: Boolean) {
         AppCompatDelegate.setDefaultNightMode(
             if (darkThemeEnabled) {
                 AppCompatDelegate.MODE_NIGHT_YES
@@ -32,21 +34,8 @@ class App: Application() {
                 AppCompatDelegate.MODE_NIGHT_NO
             }
         )
-        writeThemePrefsDark(sharedPrefs, darkThemeEnabled)
+        isThemeDarkForChecker = darkThemeEnabled            //актуализируем значение на какую тему переключились
+        settingsInteractor.writeThemeDark(darkThemeEnabled) //заодно запишем/перепишем тему в файл настроек
     }
 
-    fun isSysThemeDark(): Boolean {
-        val nightModeFlags = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-        return nightModeFlags == Configuration.UI_MODE_NIGHT_YES
-    }
-
-    fun readThemePrefsDark(sharedPrefs: SharedPreferences): Boolean {
-        return (sharedPrefs.getBoolean(THEME_KEY, isSysThemeDark()))
-    }
-
-    fun writeThemePrefsDark(sharedPrefs: SharedPreferences, darkThemeEnabled: Boolean) {
-        sharedPrefs.edit()
-            .putBoolean(THEME_KEY, darkThemeEnabled)
-            .apply()
-    }
 }

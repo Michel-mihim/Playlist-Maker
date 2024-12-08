@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.presentation.ui.settings
 
 import android.content.Intent
 import android.net.Uri
@@ -7,6 +7,9 @@ import android.widget.Button
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.switchmaterial.SwitchMaterial
+import com.practicum.playlistmaker.App
+import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.creator.Creator
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -23,14 +26,17 @@ class SettingsActivity : AppCompatActivity() {
         val settingsBackButton = findViewById<ImageButton>(R.id.settings_back_button)
 
         //основной листинг
-        if ((applicationContext as App).darkTheme) {
+        if ((applicationContext as App).isThemeDarkForChecker) {
             themeSwitcher.isChecked = true
         }
 
+        val settingsInteractor = Creator.provideSettingsInteractor(this)
         //слушатели нажатий=========================================================================
         themeSwitcher.setOnCheckedChangeListener{ switcher, checked ->
-            (applicationContext as App).switchTheme((applicationContext as App)
-                .getSharedPreferences(PREFERENCES, MODE_PRIVATE), checked)
+            (applicationContext as App).switchTheme(
+                settingsInteractor,
+                checked
+            )
         }
 
         buttonShare.setOnClickListener{

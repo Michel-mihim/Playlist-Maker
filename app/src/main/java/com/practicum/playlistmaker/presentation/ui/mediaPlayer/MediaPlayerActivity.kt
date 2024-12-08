@@ -1,11 +1,8 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.presentation.ui.mediaPlayer
 
-import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -14,14 +11,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
-import java.text.SimpleDateFormat
-import java.util.Locale
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.practicum.playlistmaker.domain.mediaPlayer.models.PlayerStatus
+import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.creator.Creator
+import com.practicum.playlistmaker.domain.mediaPlayer.api.MediaPlayerInteractor
+import com.practicum.playlistmaker.utils.constants.Constants
+import com.practicum.playlistmaker.utils.converters.dimensionsFloatToIntConvert
 
-class PlayerActivity : AppCompatActivity() {
 
-    companion object {
-        private const val SHOW_PROGRESS_DELAY = 500L
-    }
+class MediaPlayerActivity : AppCompatActivity() {
+
     //VIEWS
     private lateinit var playerBackButton: ImageButton
     private lateinit var playerTrackName: TextView
@@ -35,13 +35,14 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var trackPlayButton: ImageButton
     private lateinit var trackProgress: TextView
 
+    //LATEINIT VARS
+    private lateinit var mediaPlayerInteractor: MediaPlayerInteractor
+
     //VALS
     private val handler = Handler(Looper.getMainLooper())
-    private val showProgressRunnable = Runnable { showProgressState() }
+    private val showProgressRunnable = Runnable { showProgress() }
 
     //VARS
-    private var mediaPlayer = MediaPlayer()
-
     private var playerStatus: PlayerStatus = PlayerStatus.STATE_DEFAULT
 
     //основной листинг==============================================================================
@@ -65,6 +66,7 @@ class PlayerActivity : AppCompatActivity() {
         playerTrackImage = findViewById(R.id.player_track_image)
         playerBackButton = findViewById(R.id.player_back_button)
         trackPlayButton = findViewById(R.id.button_play_2)
+        trackPlayButton.isEnabled = false //пока плеер не готов на нее нельзя нажимать
         trackProgress = findViewById(R.id.track_player_progress)
 
         //основной листинг
@@ -78,18 +80,31 @@ class PlayerActivity : AppCompatActivity() {
             playerTrackGenre.text = bundle.getString("b_track_genre")
             playerTrackCountry.text = bundle.getString("b_track_country")
 
-
+            val cornerDp = resources.getDimension(R.dimen.track_poster_corner)
+            val cornerPx = dimensionsFloatToIntConvert(cornerDp, this)
             Glide.with(this)
                 .load(bundle.getString("b_artworkUrl100"))
                 .placeholder(R.drawable.placeholder_large)
-                .centerInside()
+                .transform(RoundedCorners(cornerPx))
                 .into(playerTrackImage)
         }
 
-        preparePlayer(bundle?.getString("b_previewUrl"))
+        mediaPlayerInteractor = Creator.provideMediaPlayerInteractor()
+        mediaPlayerInteractor.prepare(
+            bundle?.getString(("b_previewUrl")),
+            onPrepared = { ->
+                trackPlayButton.isEnabled = true
+                playerStatus = PlayerStatus.STATE_PREPARED
+            },
+            onCompletion = { -> //окончание воспроизведения
+                trackPlayButton.setImageResource(R.drawable.track_play)
+                playerStatus = PlayerStatus.STATE_PREPARED
+                handler.removeCallbacks(showProgressRunnable)
+                trackProgress.text = Constants.TRACK_IS_OVER_PROGRESS
+            }
+        )
 
         //слушатели нажатий
-
         playerBackButton.setOnClickListener{
             finish()
         }
@@ -99,37 +114,24 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
 
-    private fun showProgressState(){
-        trackProgress.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
-        handler.postDelayed(showProgressRunnable, SHOW_PROGRESS_DELAY)
-        Log.d("wtf", mediaPlayer.currentPosition.toString())
-    }
-
-    private fun preparePlayer(url: String?){
-        mediaPlayer.setDataSource(url)
-        mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener{
-            trackPlayButton.isEnabled = true
-            playerStatus = PlayerStatus.STATE_PREPARED
-        }
-        mediaPlayer.setOnCompletionListener{
-            trackPlayButton.setImageResource(R.drawable.track_play)
-            playerStatus = PlayerStatus.STATE_PREPARED
-            handler.removeCallbacks(showProgressRunnable)
-            trackProgress.text = "00:00"
-        }
-
+    private fun showProgress(){
+        mediaPlayerInteractor.timerUpdate(
+            onTimerUpdated = { progress ->
+                trackProgress.text = progress
+            }
+        )
+        handler.postDelayed(showProgressRunnable, Constants.SHOW_PROGRESS_DELAY)
     }
 
     private fun startPlayer(){
-        mediaPlayer.start()
+        mediaPlayerInteractor.start()
         trackPlayButton.setImageResource(R.drawable.track_pause)
         playerStatus = PlayerStatus.STATE_PLAYING
         handler.post(showProgressRunnable)
     }
 
     private fun pausePlayer(){
-        mediaPlayer.pause()
+        mediaPlayerInteractor.pause()
         trackPlayButton.setImageResource(R.drawable.track_play)
         playerStatus = PlayerStatus.STATE_PAUSED
         handler.removeCallbacks(showProgressRunnable)
@@ -158,6 +160,6 @@ class PlayerActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         handler.removeCallbacks(showProgressRunnable)
-        mediaPlayer.release()
+        mediaPlayerInteractor.release()
     }
 }

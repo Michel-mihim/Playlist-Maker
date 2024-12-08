@@ -18,7 +18,9 @@
 
         <TextView
             style="@style/menu_head_text_style"
-            android:text="@string/button_settings"/>
+            android:text="@string/button_settings"
+            android:paddingTop="@dimen/settings_name_padding_top"
+            android:paddingBottom="@dimen/settings_name_padding_bottom"/>
 
     </LinearLayout>
 
@@ -28,9 +30,12 @@
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/theme_switcher"
             style="@style/SettingsActivityMenuItemThemeTextStyle"
+            android:theme="@style/SCBSwitch"
             android:layout_width="match_parent"
             android:text="@string/dark_theme"
-            android:textSize="@dimen/tiny_text_size"/>
+            android:textSize="@dimen/tiny_text_size"
+            android:layout_marginTop="@dimen/theme_margin_top"
+            android:paddingVertical="@dimen/settings_item_padding_vertical"/>
 
     </LinearLayout>
 
@@ -41,7 +46,7 @@
         style="@style/SettingsActivityMenuItemTextStyle"
         android:text="@string/share_app"
         android:drawableEnd="@drawable/share"
-
+        android:paddingVertical="@dimen/settings_item_padding_vertical"
         />
 
     <!--style="?attr/borderlessButtonStyle"-->
@@ -50,13 +55,15 @@
         android:id="@+id/button_support"
         style="@style/SettingsActivityMenuItemTextStyle"
         android:text="@string/support"
-        android:drawableEnd="@drawable/support"/>
+        android:drawableEnd="@drawable/support"
+        android:paddingVertical="@dimen/settings_item_padding_vertical"/>
 
     <Button
         android:id="@+id/button_license"
         style="@style/SettingsActivityMenuItemTextStyle"
+        android:drawableEnd="@drawable/arrow_next"
         android:text="@string/license"
-        android:drawableEnd="@drawable/arrow_next"/>
+        android:paddingVertical="@dimen/settings_item_padding_vertical"/>
 
 
 </LinearLayout>
