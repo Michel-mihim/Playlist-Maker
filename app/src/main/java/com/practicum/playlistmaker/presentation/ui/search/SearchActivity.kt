@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker.presentation.ui.search
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -35,6 +34,7 @@ import com.practicum.playlistmaker.presentation.ui.mediaPlayer.MediaPlayerActivi
 import java.text.SimpleDateFormat
 import java.util.Locale
 import com.practicum.playlistmaker.utils.converters.isoDateToYearConvert
+import com.practicum.playlistmaker.utils.converters.getCoverArtwork
 
 
 class SearchActivity : AppCompatActivity() {
@@ -104,7 +104,7 @@ class SearchActivity : AppCompatActivity() {
 
         //основной листинг==========================================================================
         searchFieldMakeEmpty()
-        openSoftKeyBoard(this@SearchActivity, inputManager, searchEdittext)
+        openSoftKeyBoard(inputManager, searchEdittext)
         searchRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
         historyRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
 
@@ -150,8 +150,6 @@ class SearchActivity : AppCompatActivity() {
             showHistory(historyTracksInteractor)
             searchViewsHide()
             historyViewsShow()
-            //imm.hideSoftInputFromWindow(currentFocus!!.windowToken,0) - так прячется клавиатура
-            //search_editText.clearFocus()
         }
 
         searchRenewButton.setOnClickListener {
@@ -257,14 +255,6 @@ class SearchActivity : AppCompatActivity() {
         return true
     }
 
-    private fun showSearchProgressbar(){
-        searchProgressBar.visibility = View.VISIBLE
-    }
-
-    private fun hideSearchProgressbar(){
-        searchProgressBar.visibility = View.INVISIBLE
-    }
-
     private fun showStatus(indicator: SearchStatus, text: String) {
         when (indicator) {
             SearchStatus.TRACKS_NOT_FOUND -> {
@@ -290,9 +280,12 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    //технические функции===========================================================================
-    private fun getCoverArtwork(artworkUrl100: String): String {
-        return artworkUrl100.replaceAfterLast('/',"512x512bb.jpg")
+    private fun showSearchProgressbar(){
+        searchProgressBar.visibility = View.VISIBLE
+    }
+
+    private fun hideSearchProgressbar(){
+        searchProgressBar.visibility = View.INVISIBLE
     }
 
     private fun searchFieldMakeEmpty() {
@@ -300,9 +293,14 @@ class SearchActivity : AppCompatActivity() {
         searchEdittext.setText(searchDef)
     }
 
-    private fun openSoftKeyBoard(context: Context, imm: InputMethodManager, view: EditText) {
+    private fun openSoftKeyBoard(inputManager: InputMethodManager, view: EditText) {
         view.requestFocus()
-        imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
+        inputManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
+    }
+
+    private fun closeSoftKeyBoard(inputManager: InputMethodManager) {
+        inputManager.hideSoftInputFromWindow(currentFocus!!.windowToken,0)
+        searchEdittext.clearFocus()
     }
 
     private fun showPlaceholder(text: String, image: Int) {
@@ -357,7 +355,7 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    //переопределение функций памяти состояния======================================================
+    //переопределение методов активити==============================================================
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(Constants.SEARCH_STRING, searchDef)
