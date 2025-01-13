@@ -17,7 +17,7 @@ import com.practicum.playlistmaker.domain.player.impl.MediaPlayerInteractorImpl
 import com.practicum.playlistmaker.domain.search.api.SearchTracksInteractor
 import com.practicum.playlistmaker.data.search.SearchTracksRepository
 import com.practicum.playlistmaker.domain.search.impl.SearchTracksInteractorImpl
-import com.practicum.playlistmaker.domain.settings.api.SettingsInteractor
+import com.practicum.playlistmaker.domain.settings.SettingsInteractor
 import com.practicum.playlistmaker.data.settings.SettingsRepository
 import com.practicum.playlistmaker.domain.settings.impl.SettingsInteractorImpl
 import com.practicum.playlistmaker.utils.constants.Constants
