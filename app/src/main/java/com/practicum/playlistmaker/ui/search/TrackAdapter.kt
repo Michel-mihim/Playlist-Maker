@@ -1,14 +1,12 @@
-package com.practicum.playlistmaker.presentation.ui.search
+package com.practicum.playlistmaker.ui.search
 
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.domain.searchTracks.models.Track
-import com.practicum.playlistmaker.utils.constants.Constants
 
 class TrackAdapter(
     private val tracks: List<Track>

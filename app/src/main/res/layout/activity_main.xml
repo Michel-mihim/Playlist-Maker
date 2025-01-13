@@ -9,7 +9,7 @@
     android:background="@color/backgroundColor"
 
     android:orientation="vertical"
-    tools:context=".presentation.ui.main.MainActivity">
+    tools:context=".ui.main.MainActivity">
 
     <TextView
         android:layout_width="match_parent"

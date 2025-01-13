@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.presentation.ui.lib
+package com.practicum.playlistmaker.ui.lib
 
 import android.os.Bundle
 import android.widget.ImageButton

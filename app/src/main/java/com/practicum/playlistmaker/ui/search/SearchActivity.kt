@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.presentation.ui.search
+package com.practicum.playlistmaker.ui.search
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,7 +6,6 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -19,7 +18,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
@@ -31,7 +29,7 @@ import com.practicum.playlistmaker.domain.searchTracks.models.SearchTracksResult
 import com.practicum.playlistmaker.domain.searchTracks.models.Track
 import com.practicum.playlistmaker.domain.searchTracks.api.SearchTracksInteractor
 import com.practicum.playlistmaker.utils.constants.Constants
-import com.practicum.playlistmaker.presentation.ui.mediaPlayer.MediaPlayerActivity
+import com.practicum.playlistmaker.ui.mediaPlayer.MediaPlayerActivity
 import java.text.SimpleDateFormat
 import java.util.Locale
 import com.practicum.playlistmaker.utils.converters.isoDateToYearConvert

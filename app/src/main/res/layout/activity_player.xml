@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/player_background"
-    tools:context=".presentation.ui.mediaPlayer.MediaPlayerActivity">
+    tools:context=".ui.mediaPlayer.MediaPlayerActivity">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/leftBorder"

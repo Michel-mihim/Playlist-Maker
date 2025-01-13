@@ -2,7 +2,6 @@ package com.practicum.playlistmaker.creator
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.media.MediaPlayer
 import com.practicum.playlistmaker.data.history.HistoryTracksRepositoryImpl
 import com.practicum.playlistmaker.data.mediaPlayer.MediaPlayerRepositoryImpl
@@ -21,7 +20,6 @@ import com.practicum.playlistmaker.domain.searchTracks.impl.SearchTracksInteract
 import com.practicum.playlistmaker.domain.settings.api.SettingsInteractor
 import com.practicum.playlistmaker.domain.settings.api.SettingsRepository
 import com.practicum.playlistmaker.domain.settings.impl.SettingsInteractorImpl
-import com.practicum.playlistmaker.presentation.ui.search.SearchActivity
 import com.practicum.playlistmaker.utils.constants.Constants
 
 object Creator {
