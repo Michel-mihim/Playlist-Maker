@@ -1,7 +1,7 @@
 package com.practicum.playlistmaker.domain.history.api
 
 import com.practicum.playlistmaker.domain.history.OnHistoryUpdatedListener
-import com.practicum.playlistmaker.domain.searchTracks.models.Track
+import com.practicum.playlistmaker.domain.search.models.Track
 
 interface HistoryTracksRepository {
     fun getTracks(): Array<Track>

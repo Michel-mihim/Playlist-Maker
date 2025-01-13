@@ -12,10 +12,10 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.practicum.playlistmaker.domain.mediaPlayer.models.PlayerStatus
+import com.practicum.playlistmaker.domain.player.models.PlayerStatus
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.creator.Creator
-import com.practicum.playlistmaker.domain.mediaPlayer.api.MediaPlayerInteractor
+import com.practicum.playlistmaker.domain.player.api.MediaPlayerInteractor
 import com.practicum.playlistmaker.utils.constants.Constants
 import com.practicum.playlistmaker.utils.converters.dimensionsFloatToIntConvert
 

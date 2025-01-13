@@ -1,11 +1,10 @@
 package com.practicum.playlistmaker.data.history
 
 import android.content.SharedPreferences
-import android.util.Log
 import com.google.gson.Gson
 import com.practicum.playlistmaker.domain.history.OnHistoryUpdatedListener
 import com.practicum.playlistmaker.domain.history.api.HistoryTracksRepository
-import com.practicum.playlistmaker.domain.searchTracks.models.Track
+import com.practicum.playlistmaker.domain.search.models.Track
 import com.practicum.playlistmaker.utils.constants.Constants
 
 class HistoryTracksRepositoryImpl(private val sharedPrefs: SharedPreferences) : HistoryTracksRepository {

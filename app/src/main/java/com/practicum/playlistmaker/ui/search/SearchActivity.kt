@@ -21,13 +21,13 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.domain.searchTracks.models.SearchStatus
+import com.practicum.playlistmaker.domain.search.models.SearchStatus
 import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.domain.history.OnHistoryUpdatedListener
 import com.practicum.playlistmaker.domain.history.api.HistoryTracksInteractor
-import com.practicum.playlistmaker.domain.searchTracks.models.SearchTracksResult
-import com.practicum.playlistmaker.domain.searchTracks.models.Track
-import com.practicum.playlistmaker.domain.searchTracks.api.SearchTracksInteractor
+import com.practicum.playlistmaker.domain.search.models.SearchTracksResult
+import com.practicum.playlistmaker.domain.search.models.Track
+import com.practicum.playlistmaker.domain.search.api.SearchTracksInteractor
 import com.practicum.playlistmaker.utils.constants.Constants
 import com.practicum.playlistmaker.ui.mediaPlayer.MediaPlayerActivity
 import java.text.SimpleDateFormat

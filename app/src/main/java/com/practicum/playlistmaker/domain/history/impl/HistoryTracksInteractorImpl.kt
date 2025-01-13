@@ -3,7 +3,7 @@ package com.practicum.playlistmaker.domain.history.impl
 import com.practicum.playlistmaker.domain.history.OnHistoryUpdatedListener
 import com.practicum.playlistmaker.domain.history.api.HistoryTracksInteractor
 import com.practicum.playlistmaker.domain.history.api.HistoryTracksRepository
-import com.practicum.playlistmaker.domain.searchTracks.models.Track
+import com.practicum.playlistmaker.domain.search.models.Track
 
 class HistoryTracksInteractorImpl(private val repository: HistoryTracksRepository) : HistoryTracksInteractor {
 
