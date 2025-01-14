@@ -1,11 +1,11 @@
 package com.practicum.playlistmaker.search.domain.models
 
 enum class SearchStatus {
-    DEFAULT,
-    SEARCH_RESULT_WAITING,
-    HISTORY_PLACEHOLDER,
-    TRACKS_FOUND,
-    TRACKS_NOT_FOUND,
-    SOMETHING_WRONG,
-    ERROR_OCCURRED
+    DEFAULT,//default
+    SEARCH_RESULT_WAITING,//loading
+    HISTORY_PLACEHOLDER,//history
+    TRACKS_FOUND,//content
+    TRACKS_NOT_FOUND,//empty
+    SOMETHING_WRONG,//error
+    ERROR_OCCURRED//error
 }
