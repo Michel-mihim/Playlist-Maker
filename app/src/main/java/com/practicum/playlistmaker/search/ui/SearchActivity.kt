@@ -44,7 +44,7 @@ class SearchActivity : ComponentActivity() {
 
 
     private var searchDef: String = Constants.SEARCH_DEF
-    private var isClickAllowed = true
+
 
     //не инициализированные объекты=================================================================
     private lateinit var adapter: TrackAdapter
@@ -94,25 +94,29 @@ class SearchActivity : ComponentActivity() {
         //инициализация объектов
         adapter = TrackAdapter(tracks)
 
+        /*
         onHistoryUpdatedListener = OnHistoryUpdatedListener {
             if (searchStatus != SearchStatus.TRACKS_FOUND)
                 downloadHistory(historyTracksInteractor)
         }
-
+        */
         searchRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
         historyRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
 
         inputManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
 
+        /*
         if (isHistoryPresents(historyTracksInteractor)) {
             searchStatus = SearchStatus.HISTORY_PLACEHOLDER
             downloadHistory(historyTracksInteractor)
         } else {
             searchStatus = SearchStatus.DEFAULT
         }
+         */
         viewsVisibilityControl()
 
         //слушатели=================================================================================
+        /*
         adapter.onItemClickListener = { track ->
             if (clickDebounce()) {
                 //запуск плеера
@@ -131,11 +135,12 @@ class SearchActivity : ComponentActivity() {
                 playerIntent.putExtras(bundle)
                 startActivity(playerIntent)
 
-                writeHistory(historyTracksInteractor, track)
+                //writeHistory(historyTracksInteractor, track)
                 viewsVisibilityControl()
             }
         }
-
+        */
+        /*
         historyTracksInteractor.SetOnHistoryUpdatedListener(onHistoryUpdatedListener)
 
         historyClearButton.setOnClickListener{
@@ -143,26 +148,30 @@ class SearchActivity : ComponentActivity() {
             viewsVisibilityControl()
             clearHistory(historyTracksInteractor)
         }
-
+         */
         searchBackButton.setOnClickListener{
             finish()
         }
 
         searchClearButton.setOnClickListener {
             searchEdittext.setText(Constants.SEARCH_DEF)
+            /*
             if (isHistoryPresents(historyTracksInteractor))
             {
                 downloadHistory(historyTracksInteractor)
                 searchStatus = SearchStatus.HISTORY_PLACEHOLDER
             } else searchStatus = SearchStatus.DEFAULT
+             */
             viewsVisibilityControl()
         }
 
+        /*
         searchRenewButton.setOnClickListener {
             if (searchEdittext.text.isNotEmpty()) {
                 if (clickDebounce()) renewRequest()
             }
         }
+         */
 
         //переопределение функций слушателя текста==================================================
         val textWatcher = object : TextWatcher {
@@ -170,9 +179,10 @@ class SearchActivity : ComponentActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 searchClearButton.visibility = searchClearButtonVisibility(s)
-                searchViewModel.searchDebounce(
+                searchViewModel.searchDelayed(
                     changedText = s?.toString() ?: ""
                 )
+                /*
                 if (s.isNullOrEmpty()) {
                     if (isHistoryPresents(historyTracksInteractor)) {
                         downloadHistory(historyTracksInteractor)
@@ -180,6 +190,7 @@ class SearchActivity : ComponentActivity() {
                     } else searchStatus = SearchStatus.DEFAULT
                     viewsVisibilityControl()
                 }
+                 */
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -189,20 +200,12 @@ class SearchActivity : ComponentActivity() {
     }
 
     //успокоители===================================================================================
+    /*
     private fun renewRequest(){
         handler.removeCallbacks(searchRunnable)
         handler.post(searchRunnable)
     }
-
-
-    private fun clickDebounce() : Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            handler.postDelayed({isClickAllowed = true}, Constants.CLICK_DEBOUNCE_DELAY)
-        }
-        return current
-    }
+     */
 
 
     private fun writeHistory(historyTracksInteractor: HistoryTracksInteractor, trackClicked: Track) {

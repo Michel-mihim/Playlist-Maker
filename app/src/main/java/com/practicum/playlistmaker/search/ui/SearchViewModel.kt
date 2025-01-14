@@ -22,6 +22,7 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
             }
         }
     }
+    private var isClickAllowed = true
 
     private val searchTracksInteractor = Creator.provideSearchTracksInteractor()
     private val historyTracksInteractor = Creator.provideHistoryTracksInteractor(getApplication<Application>())
@@ -40,7 +41,7 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
         handler.removeCallbacks(searchRunnable)
     }
 
-    fun searchDebounce(changedText: String){
+    fun searchDelayed(changedText: String){
         if (latestSearchText == changedText) {
             return
         }
@@ -49,6 +50,15 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
 
         handler.removeCallbacks(searchRunnable) // runnable - fun searchRequest()
         handler.postDelayed(searchRunnable, Constants.SEARCH_DEBOUNCE_DELAY)
+    }
+
+    private fun clickDebouncer() : Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({isClickAllowed = true}, Constants.CLICK_DEBOUNCE_DELAY)
+        }
+        return current
     }
 
     private fun searchRequest(newSearchText: String){
