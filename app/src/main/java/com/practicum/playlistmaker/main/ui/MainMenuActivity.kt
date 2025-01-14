@@ -12,7 +12,7 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.search.ui.SearchActivity
 import com.practicum.playlistmaker.settings.ui.SettingsActivity
 
-class MainActivity : AppCompatActivity() {
+class MainMenuActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

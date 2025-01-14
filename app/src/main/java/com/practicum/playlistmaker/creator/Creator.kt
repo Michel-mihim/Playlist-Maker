@@ -26,11 +26,11 @@ object Creator {
     var onProvideSharedPreferenceChangeListener: ((key: String) -> Unit)? = null
 
     //searchTracks==================================================================================
-    fun provideTracksInteractor(): SearchTracksInteractor {
-        return SearchTracksInteractorImpl(provideTracksRepository())
+    fun provideSearchTracksInteractor(): SearchTracksInteractor {
+        return SearchTracksInteractorImpl(provideSearchTracksRepository())
     }
 
-    private fun provideTracksRepository(): SearchTracksRepository {
+    private fun provideSearchTracksRepository(): SearchTracksRepository {
         return searchTracksRepositoryImpl(RetrofitNetworkClient())
     }
 
@@ -46,15 +46,6 @@ object Creator {
     private fun provideSharedPreferences(context: Context): SharedPreferences {
         return context.getSharedPreferences(Constants.PREFERENCES, Context.MODE_PRIVATE)
     }
-
-    /*
-    fun provideSharedPreferencesChangeListener(): SharedPreferences.OnSharedPreferenceChangeListener {
-        return SharedPreferences.OnSharedPreferenceChangeListener{ _, key ->
-            if (key == Constants.SEARCH_HISTORY_KEY) onProvideSharedPreferenceChangeListener?.invoke(key)
-        }
-    }
-
-     */
 
     //settings======================================================================================
     fun provideSettingsInteractor(context: Context): SettingsInteractor {

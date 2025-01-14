@@ -9,7 +9,7 @@
     android:background="@color/backgroundColor"
 
     android:orientation="vertical"
-    tools:context=".main.ui.MainActivity">
+    tools:context=".main.ui.MainMenuActivity">
 
     <TextView
         android:layout_width="match_parent"

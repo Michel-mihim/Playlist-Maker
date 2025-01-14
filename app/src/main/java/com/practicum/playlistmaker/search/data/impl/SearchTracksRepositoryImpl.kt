@@ -32,10 +32,11 @@ class searchTracksRepositoryImpl(private val networkClient: NetworkClient) :
                 )
             }
 
-            if (tracks.isNotEmpty()) {//not empty
-                return SearchTracksResult.Success(tracks, response.resultCode)}
-            else {//empty
-                return SearchTracksResult.Empty(emptyList(), response.resultCode)}
+            return if (tracks.isNotEmpty()) {//not empty
+                SearchTracksResult.Success(tracks, response.resultCode)
+            } else {//empty
+                SearchTracksResult.Empty(emptyList(), response.resultCode)
+            }
 
         } else
         {//code!=200

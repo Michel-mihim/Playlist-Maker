@@ -29,7 +29,7 @@ import com.practicum.playlistmaker.search.domain.models.SearchTracksResult
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.search.domain.api.SearchTracksInteractor
 import com.practicum.playlistmaker.utils.constants.Constants
-import com.practicum.playlistmaker.player.ui.MediaPlayerActivity
+import com.practicum.playlistmaker.player.ui.PlayerActivity
 import java.text.SimpleDateFormat
 import java.util.Locale
 import com.practicum.playlistmaker.utils.converters.isoDateToYearConvert
@@ -93,7 +93,7 @@ class SearchActivity : AppCompatActivity() {
         //инициализация объектов
         adapter = TrackAdapter(tracks)
 
-        searchTracksInteractor = Creator.provideTracksInteractor()
+        searchTracksInteractor = Creator.provideSearchTracksInteractor()
         historyTracksInteractor = Creator.provideHistoryTracksInteractor(this)
 
         onHistoryUpdatedListener = OnHistoryUpdatedListener {
@@ -118,7 +118,7 @@ class SearchActivity : AppCompatActivity() {
         adapter.onItemClickListener = { track ->
             if (clickDebounce()) {
                 //запуск плеера
-                val playerIntent = Intent(this, MediaPlayerActivity::class.java)
+                val playerIntent = Intent(this, PlayerActivity::class.java)
 
                 val bundle = Bundle()
                 bundle.putString("b_track_name", track.trackName)

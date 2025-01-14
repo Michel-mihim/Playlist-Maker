@@ -16,7 +16,7 @@
         android:theme="@style/Base.Theme.PlaylistMaker"
         tools:targetApi="31">
         <activity
-            android:name=".player.ui.MediaPlayerActivity"
+            android:name=".player.ui.PlayerActivity"
             android:exported="false" />
         <activity
             android:name=".search.ui.SearchActivity"
@@ -28,7 +28,7 @@
             android:name=".settings.ui.SettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".main.ui.MainActivity"
+            android:name=".main.ui.MainMenuActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
