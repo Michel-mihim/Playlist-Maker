@@ -15,6 +15,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -36,7 +37,7 @@ import com.practicum.playlistmaker.utils.converters.isoDateToYearConvert
 import com.practicum.playlistmaker.utils.converters.getCoverArtwork
 
 
-class SearchActivity : AppCompatActivity() {
+class SearchActivity : ComponentActivity() {
 
     //инициализированные объекты====================================================================
     private val tracks = ArrayList<Track>()
@@ -50,6 +51,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var searchStatus: SearchStatus
     private lateinit var inputManager: InputMethodManager
 
+    private lateinit var searchViewModel: SearchViewModel
     //интеракторы===================================================================================
 
     private lateinit var onHistoryUpdatedListener: OnHistoryUpdatedListener
@@ -168,7 +170,9 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 searchClearButton.visibility = searchClearButtonVisibility(s)
-                if (!s.isNullOrEmpty()) searchDebounce()
+                searchViewModel.searchDebounce(
+                    changedText = s?.toString() ?: ""
+                )
                 if (s.isNullOrEmpty()) {
                     if (isHistoryPresents(historyTracksInteractor)) {
                         downloadHistory(historyTracksInteractor)
@@ -190,10 +194,6 @@ class SearchActivity : AppCompatActivity() {
         handler.post(searchRunnable)
     }
 
-    private fun searchDebounce(){
-        handler.removeCallbacks(searchRunnable) // runnable - fun searchRequest()
-        handler.postDelayed(searchRunnable, Constants.SEARCH_DEBOUNCE_DELAY)
-    }
 
     private fun clickDebounce() : Boolean {
         val current = isClickAllowed
