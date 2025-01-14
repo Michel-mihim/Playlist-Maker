@@ -4,6 +4,8 @@ import android.app.Application
 import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
@@ -13,6 +15,8 @@ import com.practicum.playlistmaker.search.domain.models.SearchStatus
 import com.practicum.playlistmaker.search.domain.models.SearchTracksResult
 import com.practicum.playlistmaker.utils.constants.Constants
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import com.practicum.playlistmaker.search.domain.models.SearchActivityState
+import com.practicum.playlistmaker.search.domain.models.Track
 
 class SearchViewModel(application: Application): AndroidViewModel(application) {
 
@@ -31,10 +35,15 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
 
     private var latestSearchText: String? = null
 
+    private val tracks = ArrayList<Track>()
+
     private val searchRunnable = Runnable {
         val newSearchText = latestSearchText ?: ""
         searchRequest(newSearchText)
     }
+
+    private val searchActivityStateLiveData = MutableLiveData<SearchActivityState>()
+    fun observeState(): LiveData<SearchActivityState> = searchActivityStateLiveData
 
     override fun onCleared() {
         super.onCleared()
@@ -63,16 +72,15 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
 
     private fun searchRequest(newSearchText: String){
         if (newSearchText.isNotEmpty()) {
-            searchStatus = SearchStatus.SEARCH_RESULT_WAITING
-            viewsVisibilityControl()
+            renderState(SearchActivityState.Loading)
             tracks.clear()
-            searchTracksInteractor.searchTracks(searchEdittext.text.toString(), object : SearchTracksInteractor.TracksConsumer {
+            searchTracksInteractor.searchTracks(newSearchText, object : SearchTracksInteractor.TracksConsumer {
                 override fun consume(result: SearchTracksResult) {
                     handler.post{
                         when (result) {
                             is SearchTracksResult.Success -> {
                                 tracks.addAll(result.tracks)
-                                searchStatus = SearchStatus.TRACKS_FOUND
+                                renderState(SearchActivityState.Content(tracks))
                                 showStatus(searchStatus, Constants.SEARCH_SUCCESS)
                             }
                             is SearchTracksResult.Empty -> {
@@ -93,5 +101,9 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
                 }
             })
         }
+    }
+
+    private fun renderState(state: SearchActivityState) {
+        searchActivityStateLiveData.postValue(state)
     }
 }

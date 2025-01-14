@@ -19,6 +19,7 @@ import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
@@ -31,6 +32,7 @@ import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.search.domain.api.SearchTracksInteractor
 import com.practicum.playlistmaker.utils.constants.Constants
 import com.practicum.playlistmaker.player.ui.PlayerActivity
+import com.practicum.playlistmaker.search.domain.models.SearchActivityState
 import java.text.SimpleDateFormat
 import java.util.Locale
 import com.practicum.playlistmaker.utils.converters.isoDateToYearConvert
@@ -40,7 +42,7 @@ import com.practicum.playlistmaker.utils.converters.getCoverArtwork
 class SearchActivity : ComponentActivity() {
 
     //инициализированные объекты====================================================================
-    private val tracks = ArrayList<Track>()
+
 
 
     private var searchDef: String = Constants.SEARCH_DEF
@@ -73,10 +75,11 @@ class SearchActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+
+        searchViewModel = ViewModelProvider(this, SearchViewModel.getSearchViewModelFactory())[SearchViewModel::class.java]
+
+        searchViewModel.observeState().observe(this) {
+            render(it)
         }
         //инициализация views
         searchBackButton = findViewById(R.id.search_back_button)
@@ -113,7 +116,7 @@ class SearchActivity : ComponentActivity() {
             searchStatus = SearchStatus.DEFAULT
         }
          */
-        viewsVisibilityControl()
+        //viewsVisibilityControl()
 
         //слушатели=================================================================================
         /*
@@ -162,7 +165,7 @@ class SearchActivity : ComponentActivity() {
                 searchStatus = SearchStatus.HISTORY_PLACEHOLDER
             } else searchStatus = SearchStatus.DEFAULT
              */
-            viewsVisibilityControl()
+            //viewsVisibilityControl()
         }
 
         /*
@@ -218,55 +221,51 @@ class SearchActivity : ComponentActivity() {
     }
 
     //управление видимостью=========================================================================
-    private fun viewsVisibilityControl() {
-        when (searchStatus) {
-            SearchStatus.DEFAULT -> {
-                historyViewsHide()
-                hidePlaceholder()
-                searchClearButton.visibility = View.INVISIBLE
-                openSoftKeyBoard(inputManager, searchEdittext)
-                searchRenewButton.visibility = View.INVISIBLE
-            }
-            SearchStatus.SEARCH_RESULT_WAITING -> {
-                historyViewsHide()
-                searchViewsHide()
-                hidePlaceholder()
-                showSearchProgressbar()
-                searchRenewButton.visibility = View.INVISIBLE
-            }
-            SearchStatus.HISTORY_PLACEHOLDER -> {
-                inputManager.showSoftInput(searchEdittext, InputMethodManager.SHOW_IMPLICIT)
-                searchViewsHide()
-                hidePlaceholder()
-                searchClearButton.visibility = View.INVISIBLE
-                searchRenewButton.visibility = View.INVISIBLE
-                historyViewsShow()
-            }
-            SearchStatus.TRACKS_NOT_FOUND -> {
-                hideSearchProgressbar()
-                searchViewsShow()
-                showPlaceholder(Constants.TRACKS_NOT_FOUND, R.drawable.not_found)
-                searchRenewButton.visibility = View.INVISIBLE
-            }
-            SearchStatus.TRACKS_FOUND -> {
-                hideSearchProgressbar()
-                hidePlaceholder()
-                searchRenewButton.visibility = View.INVISIBLE
-                searchViewsShow()
-            }
-            SearchStatus.ERROR_OCCURRED -> {
-                hideSearchProgressbar()
-                searchViewsShow()
-                showPlaceholder(Constants.NETWORK_PROBLEM, R.drawable.net_trouble)
-                searchRenewButton.visibility = View.VISIBLE
-            }
-            SearchStatus.SOMETHING_WRONG -> {
-                hideSearchProgressbar()
-                searchViewsShow()
-                showPlaceholder(Constants.NETWORK_PROBLEM, R.drawable.net_trouble)
-                searchRenewButton.visibility = View.VISIBLE
-            }
+    private fun render(state: SearchActivityState) {
+        when (state) {
+            is SearchActivityState.Loading -> showLoading()
+            is SearchActivityState.Default -> showDefault()
+            is SearchActivityState.Empty -> showEmpty()
+            is SearchActivityState.Content -> showContent(state.tracks)
+            is SearchActivityState.Error -> showError(state.errorCode)
         }
+    }
+
+    private fun showLoading() {
+        historyViewsHide()
+        searchViewsHide()
+        hidePlaceholder()
+        showSearchProgressbar()
+        searchRenewButton.visibility = View.INVISIBLE
+    }
+
+    private fun showDefault() {
+        historyViewsHide()
+        hidePlaceholder()
+        searchClearButton.visibility = View.INVISIBLE
+        openSoftKeyBoard(inputManager, searchEdittext)
+        searchRenewButton.visibility = View.INVISIBLE
+    }
+
+    private fun showContent(tracks: List<Track>) {
+        hideSearchProgressbar()
+        hidePlaceholder()
+        searchRenewButton.visibility = View.INVISIBLE
+        searchViewsShow()
+    }
+
+    private fun showEmpty() {
+        hideSearchProgressbar()
+        searchViewsShow()
+        showPlaceholder(Constants.TRACKS_NOT_FOUND, R.drawable.not_found)
+        searchRenewButton.visibility = View.INVISIBLE
+    }
+
+    private fun showError(errorCode: String) {
+        hideSearchProgressbar()
+        searchViewsShow()
+        showPlaceholder(Constants.NETWORK_PROBLEM, R.drawable.net_trouble)
+        searchRenewButton.visibility = View.VISIBLE
     }
 
     private fun isHistoryPresents(historyTracksInteractor: HistoryTracksInteractor): Boolean {
