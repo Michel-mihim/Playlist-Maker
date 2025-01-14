@@ -40,8 +40,8 @@ class SearchActivity : AppCompatActivity() {
 
     //инициализированные объекты====================================================================
     private val tracks = ArrayList<Track>()
-    private val searchRunnable = Runnable { searchRequest() }
-    private val handler = Handler(Looper.getMainLooper())
+
+
     private var searchDef: String = Constants.SEARCH_DEF
     private var isClickAllowed = true
 
@@ -51,8 +51,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var inputManager: InputMethodManager
 
     //интеракторы===================================================================================
-    private lateinit var historyTracksInteractor: HistoryTracksInteractor
-    private lateinit var searchTracksInteractor: SearchTracksInteractor
+
     private lateinit var onHistoryUpdatedListener: OnHistoryUpdatedListener
 
     //не инициализированные views===================================================================
@@ -92,9 +91,6 @@ class SearchActivity : AppCompatActivity() {
 
         //инициализация объектов
         adapter = TrackAdapter(tracks)
-
-        searchTracksInteractor = Creator.provideSearchTracksInteractor()
-        historyTracksInteractor = Creator.provideHistoryTracksInteractor(this)
 
         onHistoryUpdatedListener = OnHistoryUpdatedListener {
             if (searchStatus != SearchStatus.TRACKS_FOUND)
@@ -208,40 +204,6 @@ class SearchActivity : AppCompatActivity() {
         return current
     }
 
-    //основные операции=============================================================================
-    private fun searchRequest(){
-        if (searchEdittext.text.isNotEmpty()) {
-            searchStatus = SearchStatus.SEARCH_RESULT_WAITING
-            viewsVisibilityControl()
-            tracks.clear()
-            searchTracksInteractor.searchTracks(searchEdittext.text.toString(), object : SearchTracksInteractor.TracksConsumer {
-                override fun consume(result: SearchTracksResult) {
-                    handler.post{
-                        when (result) {
-                            is SearchTracksResult.Success -> {
-                                tracks.addAll(result.tracks)
-                                searchStatus = SearchStatus.TRACKS_FOUND
-                                showStatus(searchStatus, Constants.SEARCH_SUCCESS)
-                            }
-                            is SearchTracksResult.Empty -> {
-                                tracks.addAll(result.tracks)
-                                searchStatus = SearchStatus.TRACKS_NOT_FOUND
-                                showStatus(searchStatus, Constants.TRACKS_NOT_FOUND_2)
-                            }
-                            is SearchTracksResult.Failure -> {
-                                tracks.addAll(result.tracks)
-                                searchStatus = SearchStatus.ERROR_OCCURRED
-                                showStatus(searchStatus,"Код ошибки: ${result.code}")
-                            }
-                        }
-                        searchRecyclerView.adapter = adapter
-                        adapter.notifyDataSetChanged()
-                        viewsVisibilityControl()
-                    }
-                }
-            })
-        }
-    }
 
     private fun writeHistory(historyTracksInteractor: HistoryTracksInteractor, trackClicked: Track) {
         historyTracksInteractor.addTrack(trackClicked)
