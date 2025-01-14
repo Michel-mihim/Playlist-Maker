@@ -3,7 +3,7 @@ package com.practicum.playlistmaker
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import com.practicum.playlistmaker.creator.Creator
-import com.practicum.playlistmaker.domain.settings.SettingsInteractor
+import com.practicum.playlistmaker.settings.domain.SettingsInteractor
 
 class App: Application() {
 
