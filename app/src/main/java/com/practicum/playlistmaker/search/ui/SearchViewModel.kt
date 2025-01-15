@@ -81,22 +81,19 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
                             is SearchTracksResult.Success -> {
                                 tracks.addAll(result.tracks)
                                 renderState(SearchActivityState.Content(tracks))
-                                showStatus(searchStatus, Constants.SEARCH_SUCCESS)
+                                //showStatus(searchStatus, Constants.SEARCH_SUCCESS)
                             }
                             is SearchTracksResult.Empty -> {
                                 tracks.addAll(result.tracks)
-                                searchStatus = SearchStatus.TRACKS_NOT_FOUND
-                                showStatus(searchStatus, Constants.TRACKS_NOT_FOUND_2)
+                                renderState(SearchActivityState.Empty)
+                                //showStatus(searchStatus, Constants.TRACKS_NOT_FOUND_2)
                             }
                             is SearchTracksResult.Failure -> {
                                 tracks.addAll(result.tracks)
-                                searchStatus = SearchStatus.ERROR_OCCURRED
-                                showStatus(searchStatus,"Код ошибки: ${result.code}")
+                                renderState(SearchActivityState.Error(result.code.toString()))
+                                //showStatus(searchStatus,"Код ошибки: ${result.code}")
                             }
                         }
-                        searchRecyclerView.adapter = adapter
-                        adapter.notifyDataSetChanged()
-                        viewsVisibilityControl()
                     }
                 }
             })

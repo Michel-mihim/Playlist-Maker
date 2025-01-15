@@ -6,6 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -49,11 +50,11 @@ class SearchActivity : ComponentActivity() {
 
 
     //не инициализированные объекты=================================================================
-    private lateinit var adapter: TrackAdapter
-    private lateinit var searchStatus: SearchStatus
     private lateinit var inputManager: InputMethodManager
 
     private lateinit var searchViewModel: SearchViewModel
+
+    private lateinit var adapter: TrackAdapter
     //интеракторы===================================================================================
 
     private lateinit var onHistoryUpdatedListener: OnHistoryUpdatedListener
@@ -93,9 +94,6 @@ class SearchActivity : ComponentActivity() {
         historyClearButton = findViewById(R.id.history_clear_button)
         youFoundHistoryText = findViewById(R.id.you_found_text)
         searchProgressBar = findViewById(R.id.search_progress_bar)
-
-        //инициализация объектов
-        adapter = TrackAdapter(tracks)
 
         /*
         onHistoryUpdatedListener = OnHistoryUpdatedListener {
@@ -228,6 +226,7 @@ class SearchActivity : ComponentActivity() {
             is SearchActivityState.Empty -> showEmpty()
             is SearchActivityState.Content -> showContent(state.tracks)
             is SearchActivityState.Error -> showError(state.errorCode)
+            is SearchActivityState.History -> {}
         }
     }
 
@@ -252,6 +251,10 @@ class SearchActivity : ComponentActivity() {
         hidePlaceholder()
         searchRenewButton.visibility = View.INVISIBLE
         searchViewsShow()
+
+        Log.d("wtf", tracks.toString())
+        adapter = TrackAdapter(tracks)
+        adapter.notifyDataSetChanged()
     }
 
     private fun showEmpty() {
@@ -273,6 +276,7 @@ class SearchActivity : ComponentActivity() {
         return lastTracks.isNotEmpty()
     }
 
+    /*
     private fun downloadHistory(historyTracksInteractor: HistoryTracksInteractor) {
         val lastTracks = historyTracksInteractor.getTracks()
         tracks.clear()
@@ -280,6 +284,8 @@ class SearchActivity : ComponentActivity() {
         historyRecyclerView.adapter = adapter
         adapter.notifyDataSetChanged()
     }
+
+     */
 
     private fun showStatus(searchStatus: SearchStatus, text: String) {
         when (searchStatus) {
