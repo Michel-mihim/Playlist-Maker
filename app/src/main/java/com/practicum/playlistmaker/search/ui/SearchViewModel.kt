@@ -17,6 +17,7 @@ import com.practicum.playlistmaker.utils.constants.Constants
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import com.practicum.playlistmaker.search.domain.models.SearchActivityState
 import com.practicum.playlistmaker.search.domain.models.Track
+import com.practicum.playlistmaker.utils.classes.SingleLiveEvent
 
 class SearchViewModel(application: Application): AndroidViewModel(application) {
 
@@ -42,7 +43,10 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
     }
 
     private val searchActivityStateLiveData = MutableLiveData<SearchActivityState>()
-    fun observeState(): LiveData<SearchActivityState> = searchActivityStateLiveData
+    fun observeSearchActivityState(): LiveData<SearchActivityState> = searchActivityStateLiveData
+
+    private val searchActivityToastStateLiveData = SingleLiveEvent<String>()
+    fun observeSearchActivityToastState(): LiveData<String> = searchActivityToastStateLiveData
 
     override fun onCleared() {
         super.onCleared()
@@ -80,7 +84,7 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
                         }
                         is SearchTracksResult.Failure -> {
                             tracks.addAll(result.tracks)
-                            renderState(SearchActivityState.Error(result.code.toString()))
+                            renderState(SearchActivityState.Error)
                             //showStatus(searchStatus,"Код ошибки: ${result.code}")
                         }
                     }

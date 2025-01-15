@@ -82,7 +82,7 @@ class SearchActivity : ComponentActivity() {
 
         searchViewModel = ViewModelProvider(this, SearchViewModel.getSearchViewModelFactory())[SearchViewModel::class.java]
 
-        searchViewModel.observeState().observe(this) {
+        searchViewModel.observeSearchActivityState().observe(this) {
             render(it)
         }
         //инициализация views
@@ -237,7 +237,7 @@ class SearchActivity : ComponentActivity() {
             is SearchActivityState.Default -> showDefault()
             is SearchActivityState.Empty -> showEmpty()
             is SearchActivityState.Content -> showContent(state.tracks)
-            is SearchActivityState.Error -> showError(state.errorCode)
+            is SearchActivityState.Error -> showError()
             is SearchActivityState.History -> {}
         }
     }
@@ -276,7 +276,7 @@ class SearchActivity : ComponentActivity() {
         searchRenewButton.visibility = View.INVISIBLE
     }
 
-    private fun showError(errorCode: String) {
+    private fun showError() {
         hideSearchProgressbar()
         searchViewsShow()
         showPlaceholder(Constants.NETWORK_PROBLEM, R.drawable.net_trouble)
