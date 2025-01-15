@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker.search.ui
 
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -17,34 +16,24 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.search.domain.models.SearchStatus
-import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.search.domain.OnHistoryUpdatedListener
 import com.practicum.playlistmaker.search.domain.api.HistoryTracksInteractor
-import com.practicum.playlistmaker.search.domain.models.SearchTracksResult
 import com.practicum.playlistmaker.search.domain.models.Track
-import com.practicum.playlistmaker.search.domain.api.SearchTracksInteractor
 import com.practicum.playlistmaker.utils.constants.Constants
-import com.practicum.playlistmaker.player.ui.PlayerActivity
 import com.practicum.playlistmaker.search.domain.models.SearchActivityState
-import java.text.SimpleDateFormat
-import java.util.Locale
-import com.practicum.playlistmaker.utils.converters.isoDateToYearConvert
-import com.practicum.playlistmaker.utils.converters.getCoverArtwork
 
 
 class SearchActivity : ComponentActivity() {
 
     //инициализированные объекты====================================================================
+    private val handler = Handler(Looper.getMainLooper())
 
-
+    private var isClickAllowed = true
 
     private var searchDef: String = Constants.SEARCH_DEF
 
@@ -54,7 +43,21 @@ class SearchActivity : ComponentActivity() {
 
     private lateinit var searchViewModel: SearchViewModel
 
-    private lateinit var adapter: TrackAdapter
+    private val adapter = TracksAdapter (
+        object : TracksAdapter.TrackClickListener {
+            override fun onTrackClick(track: Track) {
+                if (clickDebouncer()) {
+
+                }
+            }
+
+            override fun onLikeClick(track: Track) {
+
+            }
+        }
+    )
+
+
     //интеракторы===================================================================================
 
     private lateinit var onHistoryUpdatedListener: OnHistoryUpdatedListener
@@ -95,6 +98,7 @@ class SearchActivity : ComponentActivity() {
         youFoundHistoryText = findViewById(R.id.you_found_text)
         searchProgressBar = findViewById(R.id.search_progress_bar)
 
+        searchRecyclerView.adapter = adapter
         /*
         onHistoryUpdatedListener = OnHistoryUpdatedListener {
             if (searchStatus != SearchStatus.TRACKS_FOUND)
@@ -208,6 +212,14 @@ class SearchActivity : ComponentActivity() {
     }
      */
 
+    private fun clickDebouncer() : Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({isClickAllowed = true}, Constants.CLICK_DEBOUNCE_DELAY)
+        }
+        return current
+    }
 
     private fun writeHistory(historyTracksInteractor: HistoryTracksInteractor, trackClicked: Track) {
         historyTracksInteractor.addTrack(trackClicked)
@@ -252,8 +264,8 @@ class SearchActivity : ComponentActivity() {
         searchRenewButton.visibility = View.INVISIBLE
         searchViewsShow()
 
-        Log.d("wtf", tracks.toString())
-        adapter = TrackAdapter(tracks)
+        adapter.tracks.clear()
+        adapter.tracks.addAll(tracks)
         adapter.notifyDataSetChanged()
     }
 

@@ -26,7 +26,6 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
             }
         }
     }
-    private var isClickAllowed = true
 
     private val searchTracksInteractor = Creator.provideSearchTracksInteractor()
     private val historyTracksInteractor = Creator.provideHistoryTracksInteractor(getApplication<Application>())
@@ -61,14 +60,6 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
         handler.postDelayed(searchRunnable, Constants.SEARCH_DEBOUNCE_DELAY)
     }
 
-    private fun clickDebouncer() : Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            handler.postDelayed({isClickAllowed = true}, Constants.CLICK_DEBOUNCE_DELAY)
-        }
-        return current
-    }
 
     private fun searchRequest(newSearchText: String){
         if (newSearchText.isNotEmpty()) {
@@ -76,23 +67,21 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
             tracks.clear()
             searchTracksInteractor.searchTracks(newSearchText, object : SearchTracksInteractor.TracksConsumer {
                 override fun consume(result: SearchTracksResult) {
-                    handler.post{
-                        when (result) {
-                            is SearchTracksResult.Success -> {
-                                tracks.addAll(result.tracks)
-                                renderState(SearchActivityState.Content(tracks))
-                                //showStatus(searchStatus, Constants.SEARCH_SUCCESS)
-                            }
-                            is SearchTracksResult.Empty -> {
-                                tracks.addAll(result.tracks)
-                                renderState(SearchActivityState.Empty)
-                                //showStatus(searchStatus, Constants.TRACKS_NOT_FOUND_2)
-                            }
-                            is SearchTracksResult.Failure -> {
-                                tracks.addAll(result.tracks)
-                                renderState(SearchActivityState.Error(result.code.toString()))
-                                //showStatus(searchStatus,"Код ошибки: ${result.code}")
-                            }
+                    when (result) {
+                        is SearchTracksResult.Success -> {
+                            tracks.addAll(result.tracks)
+                            renderState(SearchActivityState.Content(tracks))
+                            //showStatus(searchStatus, Constants.SEARCH_SUCCESS)
+                        }
+                        is SearchTracksResult.Empty -> {
+                            tracks.addAll(result.tracks)
+                            renderState(SearchActivityState.Empty)
+                            //showStatus(searchStatus, Constants.TRACKS_NOT_FOUND_2)
+                        }
+                        is SearchTracksResult.Failure -> {
+                            tracks.addAll(result.tracks)
+                            renderState(SearchActivityState.Error(result.code.toString()))
+                            //showStatus(searchStatus,"Код ошибки: ${result.code}")
                         }
                     }
                 }
