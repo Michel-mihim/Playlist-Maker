@@ -34,7 +34,7 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
 
     private var latestSearchText: String? = null
 
-    private val tracks = ArrayList<Track>()
+    private val tracksRecyclerList = ArrayList<Track>()
 
     private val searchRunnable = Runnable {
         val newSearchText = latestSearchText ?: ""
@@ -67,24 +67,23 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
     private fun searchRequest(newSearchText: String){
         if (newSearchText.isNotEmpty()) {
             renderState(SearchActivityState.Loading)
-            tracks.clear()
+            tracksRecyclerList.clear()
             searchTracksInteractor.searchTracks(newSearchText, object : SearchTracksInteractor.TracksConsumer {
                 override fun consume(result: SearchTracksResult<List<Track>>) {
                     when (result) {
                         is SearchTracksResult.Success -> {
-                            tracks.addAll(result.tracks)
-                            renderState(SearchActivityState.Content(tracks))
-                            //showStatus(searchStatus, Constants.SEARCH_SUCCESS)
+                            tracksRecyclerList.addAll(result.tracks)
+                            renderState(SearchActivityState.Content(tracksRecyclerList))
                         }
                         is SearchTracksResult.Empty -> {
-                            tracks.addAll(result.tracks)
+                            tracksRecyclerList.addAll(result.tracks)
                             renderState(SearchActivityState.Empty)
-                            //showStatus(searchStatus, Constants.TRACKS_NOT_FOUND_2)
+                            showToastState(Constants.TRACKS_NOT_FOUND_2)
                         }
                         is SearchTracksResult.Failure -> {
-                            tracks.addAll(result.tracks)
+                            tracksRecyclerList.addAll(result.tracks)
                             renderState(SearchActivityState.Error)
-                            //showStatus(searchStatus,"Код ошибки: ${result.code}")
+                            showToastState("Код ошибки: ${result.code}")
                         }
                     }
                 }
@@ -94,5 +93,9 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
 
     private fun renderState(state: SearchActivityState) {
         searchActivityStateLiveData.postValue(state)
+    }
+
+    private fun showToastState(message: String) {
+        searchActivityToastStateLiveData.postValue(message)
     }
 }
