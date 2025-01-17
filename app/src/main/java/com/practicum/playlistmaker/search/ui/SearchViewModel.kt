@@ -3,6 +3,7 @@ package com.practicum.playlistmaker.search.ui
 import android.app.Application
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -14,6 +15,7 @@ import com.practicum.playlistmaker.search.domain.api.SearchTracksInteractor
 import com.practicum.playlistmaker.search.domain.models.SearchTracksResult
 import com.practicum.playlistmaker.utils.constants.Constants
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import com.practicum.playlistmaker.search.domain.api.HistoryTracksInteractor
 import com.practicum.playlistmaker.search.domain.models.SearchActivityState
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.utils.classes.SingleLiveEvent
@@ -27,8 +29,17 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
+    /*надо вот это куда то втолкать
+    historyTracks.addAll(historyTracksInteractor.getTracks())
+        if (historyTracks.isNotEmpty()) {
+            renderState(SearchActivityState.History(historyTracks))
+        } else renderState(SearchActivityState.Default)
+     */
+
     private val searchTracksInteractor = Creator.provideSearchTracksInteractor()
     private val historyTracksInteractor = Creator.provideHistoryTracksInteractor(getApplication<Application>())
+
+    private lateinit var historyTracks: ArrayList<Track>
 
     private val handler = Handler(Looper.getMainLooper())
 
@@ -98,4 +109,7 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
     private fun showToastState(message: String) {
         searchActivityToastStateLiveData.postValue(message)
     }
+
+
+
 }

@@ -46,7 +46,6 @@ class SearchActivity : ComponentActivity() {
         object : TracksAdapter.TrackClickListener {
             override fun onTrackClick(track: Track) {
                 if (clickDebouncer()) {
-
                 }
             }
 
@@ -88,6 +87,7 @@ class SearchActivity : ComponentActivity() {
         searchViewModel.observeSearchActivityToastState().observe(this) { message ->
             showToast(message)
         }
+
         //инициализация views
         searchBackButton = findViewById(R.id.search_back_button)
         searchClearButton = findViewById(R.id.search_clear_button)
@@ -163,14 +163,7 @@ class SearchActivity : ComponentActivity() {
 
         searchClearButton.setOnClickListener {
             searchEdittext.setText(Constants.SEARCH_DEF)
-            /*
-            if (isHistoryPresents(historyTracksInteractor))
-            {
-                downloadHistory(historyTracksInteractor)
-                searchStatus = SearchStatus.HISTORY_PLACEHOLDER
-            } else searchStatus = SearchStatus.DEFAULT
-             */
-            //viewsVisibilityControl()
+
         }
 
         /*
@@ -241,7 +234,7 @@ class SearchActivity : ComponentActivity() {
             is SearchActivityState.Empty -> showEmpty()
             is SearchActivityState.Content -> showContent(state.tracks)
             is SearchActivityState.Error -> showError()
-            is SearchActivityState.History -> {}
+            is SearchActivityState.History -> showHistory(state.tracks)
         }
     }
 
@@ -259,6 +252,17 @@ class SearchActivity : ComponentActivity() {
         searchClearButton.visibility = View.INVISIBLE
         openSoftKeyBoard(inputManager, searchEdittext)
         searchRenewButton.visibility = View.INVISIBLE
+    }
+
+    private fun showHistory(tracks: List<Track>) {
+        hideSearchProgressbar()
+        hidePlaceholder()
+        searchRenewButton.visibility = View.INVISIBLE
+        historyViewsShow()
+
+        //adapter.tracks.clear()
+        //adapter.tracks.addAll(tracks)
+        //adapter.notifyDataSetChanged()
     }
 
     private fun showContent(tracks: List<Track>) {
@@ -290,21 +294,6 @@ class SearchActivity : ComponentActivity() {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    private fun isHistoryPresents(historyTracksInteractor: HistoryTracksInteractor): Boolean {
-        val lastTracks = historyTracksInteractor.getTracks()
-        return lastTracks.isNotEmpty()
-    }
-
-    /*
-    private fun downloadHistory(historyTracksInteractor: HistoryTracksInteractor) {
-        val lastTracks = historyTracksInteractor.getTracks()
-        tracks.clear()
-        tracks.addAll(lastTracks)
-        historyRecyclerView.adapter = adapter
-        adapter.notifyDataSetChanged()
-    }
-
-     */
     /*
     private fun showStatus(searchStatus: SearchStatus, text: String) {
         when (searchStatus) {
