@@ -1,7 +1,7 @@
 package com.practicum.playlistmaker.search.domain.models
 
-sealed class SearchTracksResult(val tracks: List<Track>, val code: Int) {
-    class Success(tracks: List<Track>, code: Int): SearchTracksResult(tracks, code){}
-    class Empty(tracks: List<Track>, code: Int): SearchTracksResult(tracks, code){}
-    class Failure(tracks: List<Track>, code: Int): SearchTracksResult(tracks, code){}
+sealed class SearchTracksResult<T>(val tracks: T, val code: Int) {
+    class Success<T>(tracks: T, code: Int): SearchTracksResult<T>(tracks, code){}
+    class Empty<T>(tracks: T, code: Int): SearchTracksResult<T>(tracks, code){}
+    class Failure<T>(tracks: T, code: Int): SearchTracksResult<T>(tracks, code){}
 }

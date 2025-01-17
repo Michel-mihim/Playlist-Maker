@@ -11,7 +11,6 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.search.domain.api.SearchTracksInteractor
-import com.practicum.playlistmaker.search.domain.models.SearchStatus
 import com.practicum.playlistmaker.search.domain.models.SearchTracksResult
 import com.practicum.playlistmaker.utils.constants.Constants
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
@@ -70,7 +69,7 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
             renderState(SearchActivityState.Loading)
             tracks.clear()
             searchTracksInteractor.searchTracks(newSearchText, object : SearchTracksInteractor.TracksConsumer {
-                override fun consume(result: SearchTracksResult) {
+                override fun consume(result: SearchTracksResult<List<Track>>) {
                     when (result) {
                         is SearchTracksResult.Success -> {
                             tracks.addAll(result.tracks)

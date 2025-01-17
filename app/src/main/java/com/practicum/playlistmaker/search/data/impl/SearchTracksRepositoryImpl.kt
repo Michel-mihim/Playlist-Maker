@@ -12,7 +12,7 @@ class searchTracksRepositoryImpl(private val networkClient: NetworkClient) :
 
     override fun searchTracks(
         expression: String
-    ): SearchTracksResult {
+    ): SearchTracksResult<List<Track>> {
         val response = networkClient.doRequest(TracksSearchRequest(expression))
 
         if (response.resultCode == 200) {

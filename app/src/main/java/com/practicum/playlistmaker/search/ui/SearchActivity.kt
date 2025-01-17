@@ -20,7 +20,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.search.domain.models.SearchStatus
 import com.practicum.playlistmaker.search.domain.OnHistoryUpdatedListener
 import com.practicum.playlistmaker.search.domain.api.HistoryTracksInteractor
 import com.practicum.playlistmaker.search.domain.models.Track
@@ -298,7 +297,7 @@ class SearchActivity : ComponentActivity() {
     }
 
      */
-
+    /*
     private fun showStatus(searchStatus: SearchStatus, text: String) {
         when (searchStatus) {
             SearchStatus.DEFAULT -> {}
@@ -316,6 +315,8 @@ class SearchActivity : ComponentActivity() {
             }
         }
     }
+
+     */
 
     private fun showSearchProgressbar(){
         searchProgressBar.visibility = View.VISIBLE
