@@ -84,6 +84,10 @@ class SearchActivity : ComponentActivity() {
         searchViewModel.observeSearchActivityState().observe(this) {
             render(it)
         }
+
+        searchViewModel.observeSearchActivityToastState().observe(this) { message ->
+            showToast(message)
+        }
         //инициализация views
         searchBackButton = findViewById(R.id.search_back_button)
         searchClearButton = findViewById(R.id.search_clear_button)
@@ -270,16 +274,20 @@ class SearchActivity : ComponentActivity() {
 
     private fun showEmpty() {
         hideSearchProgressbar()
-        searchViewsShow()
+        searchViewsHide()
         showPlaceholder(Constants.TRACKS_NOT_FOUND, R.drawable.not_found)
         searchRenewButton.visibility = View.INVISIBLE
     }
 
     private fun showError() {
         hideSearchProgressbar()
-        searchViewsShow()
+        searchViewsHide()
         showPlaceholder(Constants.NETWORK_PROBLEM, R.drawable.net_trouble)
         searchRenewButton.visibility = View.VISIBLE
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
     private fun isHistoryPresents(historyTracksInteractor: HistoryTracksInteractor): Boolean {
