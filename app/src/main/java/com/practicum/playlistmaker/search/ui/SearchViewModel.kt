@@ -39,13 +39,12 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
     private val searchTracksInteractor = Creator.provideSearchTracksInteractor()
     private val historyTracksInteractor = Creator.provideHistoryTracksInteractor(getApplication<Application>())
 
-    private lateinit var historyTracks: ArrayList<Track>
-
     private val handler = Handler(Looper.getMainLooper())
 
     private var latestSearchText: String? = null
 
     private val tracksRecyclerList = ArrayList<Track>()
+    private var historyTracks = ArrayList<Track>()
 
     private val searchRunnable = Runnable {
         val newSearchText = latestSearchText ?: ""
@@ -110,6 +109,12 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
         searchActivityToastStateLiveData.postValue(message)
     }
 
-
+    fun showHistory() {
+        historyTracks.clear()
+        historyTracks.addAll(historyTracksInteractor.getTracks())
+        if (historyTracks.isNotEmpty()) {
+            renderState(SearchActivityState.History(historyTracks))
+        } else renderState(SearchActivityState.Default)
+    }
 
 }

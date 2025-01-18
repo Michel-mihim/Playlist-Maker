@@ -101,7 +101,6 @@ class SearchActivity : ComponentActivity() {
         youFoundHistoryText = findViewById(R.id.you_found_text)
         searchProgressBar = findViewById(R.id.search_progress_bar)
 
-        searchRecyclerView.adapter = adapter
         /*
         onHistoryUpdatedListener = OnHistoryUpdatedListener {
             if (searchStatus != SearchStatus.TRACKS_FOUND)
@@ -113,15 +112,7 @@ class SearchActivity : ComponentActivity() {
 
         inputManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
 
-        /*
-        if (isHistoryPresents(historyTracksInteractor)) {
-            searchStatus = SearchStatus.HISTORY_PLACEHOLDER
-            downloadHistory(historyTracksInteractor)
-        } else {
-            searchStatus = SearchStatus.DEFAULT
-        }
-         */
-        //viewsVisibilityControl()
+        searchViewModel.showHistory()
 
         //слушатели=================================================================================
         /*
@@ -258,19 +249,23 @@ class SearchActivity : ComponentActivity() {
         hideSearchProgressbar()
         hidePlaceholder()
         searchRenewButton.visibility = View.INVISIBLE
+        searchViewsHide()
         historyViewsShow()
 
-        //adapter.tracks.clear()
-        //adapter.tracks.addAll(tracks)
-        //adapter.notifyDataSetChanged()
+        historyRecyclerView.adapter = adapter
+        adapter.tracks.clear()
+        adapter.tracks.addAll(tracks)
+        adapter.notifyDataSetChanged()
     }
 
     private fun showContent(tracks: List<Track>) {
         hideSearchProgressbar()
         hidePlaceholder()
         searchRenewButton.visibility = View.INVISIBLE
+        historyViewsHide()
         searchViewsShow()
 
+        searchRecyclerView.adapter = adapter
         adapter.tracks.clear()
         adapter.tracks.addAll(tracks)
         adapter.notifyDataSetChanged()
