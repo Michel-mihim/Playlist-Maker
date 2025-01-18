@@ -174,15 +174,11 @@ class SearchActivity : ComponentActivity() {
                 searchViewModel.searchDelayed(
                     changedText = s?.toString() ?: ""
                 )
-                /*
+
                 if (s.isNullOrEmpty()) {
-                    if (isHistoryPresents(historyTracksInteractor)) {
-                        downloadHistory(historyTracksInteractor)
-                        searchStatus = SearchStatus.HISTORY_PLACEHOLDER
-                    } else searchStatus = SearchStatus.DEFAULT
-                    viewsVisibilityControl()
+                    searchViewModel.showHistory()
                 }
-                 */
+
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -191,7 +187,6 @@ class SearchActivity : ComponentActivity() {
         searchEdittext.addTextChangedListener(textWatcher)
     }
 
-    //успокоители===================================================================================
     /*
     private fun renewRequest(){
         handler.removeCallbacks(searchRunnable)
@@ -230,26 +225,15 @@ class SearchActivity : ComponentActivity() {
     }
 
     private fun showLoading() {
-        historyViewsHide()
-        searchViewsHide()
-        hidePlaceholder()
+        defaultViewsShow()
         showSearchProgressbar()
-        searchRenewButton.visibility = View.INVISIBLE
     }
 
     private fun showDefault() {
-        historyViewsHide()
-        hidePlaceholder()
-        searchClearButton.visibility = View.INVISIBLE
-        openSoftKeyBoard(inputManager, searchEdittext)
-        searchRenewButton.visibility = View.INVISIBLE
+        defaultViewsShow()
     }
 
     private fun showHistory(tracks: List<Track>) {
-        hideSearchProgressbar()
-        hidePlaceholder()
-        searchRenewButton.visibility = View.INVISIBLE
-        searchViewsHide()
         historyViewsShow()
 
         historyRecyclerView.adapter = adapter
@@ -259,11 +243,7 @@ class SearchActivity : ComponentActivity() {
     }
 
     private fun showContent(tracks: List<Track>) {
-        hideSearchProgressbar()
-        hidePlaceholder()
-        searchRenewButton.visibility = View.INVISIBLE
-        historyViewsHide()
-        searchViewsShow()
+        contentViewsShow()
 
         searchRecyclerView.adapter = adapter
         adapter.tracks.clear()
@@ -272,43 +252,16 @@ class SearchActivity : ComponentActivity() {
     }
 
     private fun showEmpty() {
-        hideSearchProgressbar()
-        searchViewsHide()
-        showPlaceholder(Constants.TRACKS_NOT_FOUND, R.drawable.not_found)
-        searchRenewButton.visibility = View.INVISIBLE
+        emptyViewsShow(Constants.TRACKS_NOT_FOUND, R.drawable.not_found)
     }
 
     private fun showError() {
-        hideSearchProgressbar()
-        searchViewsHide()
-        showPlaceholder(Constants.NETWORK_PROBLEM, R.drawable.net_trouble)
-        searchRenewButton.visibility = View.VISIBLE
+        errorViewsShow(Constants.NETWORK_PROBLEM, R.drawable.net_trouble)
     }
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
-
-    /*
-    private fun showStatus(searchStatus: SearchStatus, text: String) {
-        when (searchStatus) {
-            SearchStatus.DEFAULT -> {}
-            SearchStatus.SEARCH_RESULT_WAITING -> {}
-            SearchStatus.HISTORY_PLACEHOLDER -> {}
-            SearchStatus.TRACKS_NOT_FOUND -> {
-                Toast.makeText(this@SearchActivity, text, Toast.LENGTH_SHORT).show()
-            }
-            SearchStatus.SOMETHING_WRONG -> {
-                Toast.makeText(this@SearchActivity, text, Toast.LENGTH_SHORT).show()
-            }
-            SearchStatus.TRACKS_FOUND -> {}
-            SearchStatus.ERROR_OCCURRED -> {
-                Toast.makeText(this@SearchActivity, text, Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-     */
 
     private fun showSearchProgressbar(){
         searchProgressBar.visibility = View.VISIBLE
@@ -342,24 +295,54 @@ class SearchActivity : ComponentActivity() {
         trackNotFoundPlaceholderImage.visibility = View.INVISIBLE
     }
 
-    private fun searchViewsHide() {
+    private fun defaultViewsShow() {
+        hideSearchProgressbar()
         searchRecyclerView.visibility = View.INVISIBLE
-    }
-
-    private fun searchViewsShow() {
-        searchRecyclerView.visibility = View.VISIBLE
-    }
-
-    private fun historyViewsHide() {
-        youFoundHistoryText.visibility = View.INVISIBLE
-        historyClearButton.visibility = View.INVISIBLE
         historyRecyclerView.visibility = View.INVISIBLE
+        searchRenewButton.visibility = View.INVISIBLE
+        historyClearButton.visibility = View.INVISIBLE
+        hidePlaceholder()
+        youFoundHistoryText.visibility = View.INVISIBLE
     }
 
     private fun historyViewsShow() {
-        youFoundHistoryText.visibility = View.VISIBLE
-        historyClearButton.visibility = View.VISIBLE
+        hideSearchProgressbar()
+        searchRecyclerView.visibility = View.INVISIBLE
         historyRecyclerView.visibility = View.VISIBLE
+        searchRenewButton.visibility = View.INVISIBLE
+        historyClearButton.visibility = View.VISIBLE
+        hidePlaceholder()
+        youFoundHistoryText.visibility = View.VISIBLE
+    }
+
+    private fun emptyViewsShow(text: String, image: Int) {
+        hideSearchProgressbar()
+        searchRecyclerView.visibility = View.INVISIBLE
+        historyRecyclerView.visibility = View.INVISIBLE
+        searchRenewButton.visibility = View.INVISIBLE
+        historyClearButton.visibility = View.INVISIBLE
+        showPlaceholder(text, image)
+        youFoundHistoryText.visibility = View.INVISIBLE
+    }
+
+    private fun contentViewsShow() {
+        hideSearchProgressbar()
+        searchRecyclerView.visibility = View.VISIBLE
+        historyRecyclerView.visibility = View.INVISIBLE
+        searchRenewButton.visibility = View.INVISIBLE
+        historyClearButton.visibility = View.INVISIBLE
+        hidePlaceholder()
+        youFoundHistoryText.visibility = View.INVISIBLE
+    }
+
+    private fun errorViewsShow(text: String, image: Int) {
+        hideSearchProgressbar()
+        searchRecyclerView.visibility = View.INVISIBLE
+        historyRecyclerView.visibility = View.INVISIBLE
+        searchRenewButton.visibility = View.VISIBLE
+        historyClearButton.visibility = View.INVISIBLE
+        showPlaceholder(text, image)
+        youFoundHistoryText.visibility = View.INVISIBLE
     }
 
     private fun searchClearButtonVisibility(s: CharSequence?): Int {
