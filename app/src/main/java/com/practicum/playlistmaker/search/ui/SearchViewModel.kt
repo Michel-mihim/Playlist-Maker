@@ -117,4 +117,7 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
         } else renderState(SearchActivityState.Default)
     }
 
+    fun writeHistory(trackClicked: Track) {
+        historyTracksInteractor.addTrack(trackClicked)
+    }
 }

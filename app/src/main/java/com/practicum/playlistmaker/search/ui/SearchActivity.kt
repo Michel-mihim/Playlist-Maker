@@ -115,10 +115,11 @@ class SearchActivity : ComponentActivity() {
         searchViewModel.showHistory()
 
         //слушатели=================================================================================
-        /*
+
         adapter.onItemClickListener = { track ->
-            if (clickDebounce()) {
+            if (clickDebouncer()) {
                 //запуск плеера
+                /*
                 val playerIntent = Intent(this, PlayerActivity::class.java)
 
                 val bundle = Bundle()
@@ -133,12 +134,10 @@ class SearchActivity : ComponentActivity() {
                 bundle.putString("b_previewUrl", track.previewUrl)
                 playerIntent.putExtras(bundle)
                 startActivity(playerIntent)
-
-                //writeHistory(historyTracksInteractor, track)
-                viewsVisibilityControl()
+                 */
+                searchViewModel.writeHistory(track)
             }
         }
-        */
         /*
         historyTracksInteractor.SetOnHistoryUpdatedListener(onHistoryUpdatedListener)
 
@@ -201,10 +200,6 @@ class SearchActivity : ComponentActivity() {
             handler.postDelayed({isClickAllowed = true}, Constants.CLICK_DEBOUNCE_DELAY)
         }
         return current
-    }
-
-    private fun writeHistory(historyTracksInteractor: HistoryTracksInteractor, trackClicked: Track) {
-        historyTracksInteractor.addTrack(trackClicked)
     }
 
     private fun clearHistory(historyTracksInteractor: HistoryTracksInteractor) {
