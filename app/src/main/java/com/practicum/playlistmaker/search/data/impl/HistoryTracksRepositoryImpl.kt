@@ -38,7 +38,7 @@ class HistoryTracksRepositoryImpl(private val sharedPrefs: SharedPreferences) :
         this.listener?.onHistoryUpdated()
     }
 
-    override fun SetOnHistoryUpdatedListener(onHistoryUpdatedListener: OnHistoryUpdatedListener) {
+    override fun setOnHistoryUpdatedListener(onHistoryUpdatedListener: OnHistoryUpdatedListener) {
         this.listener = onHistoryUpdatedListener
     }
     //==============================================================================================

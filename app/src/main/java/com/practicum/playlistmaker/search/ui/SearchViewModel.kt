@@ -15,6 +15,7 @@ import com.practicum.playlistmaker.search.domain.api.SearchTracksInteractor
 import com.practicum.playlistmaker.search.domain.models.SearchTracksResult
 import com.practicum.playlistmaker.utils.constants.Constants
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import com.practicum.playlistmaker.search.domain.OnHistoryUpdatedListener
 import com.practicum.playlistmaker.search.domain.api.HistoryTracksInteractor
 import com.practicum.playlistmaker.search.domain.models.SearchActivityState
 import com.practicum.playlistmaker.search.domain.models.Track
@@ -24,17 +25,15 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
 
     companion object {
         fun getSearchViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer { SearchViewModel(this[APPLICATION_KEY] as Application)
+            initializer {
+                SearchViewModel(this[APPLICATION_KEY] as Application)
             }
         }
     }
 
-    /*надо вот это куда то втолкать
-    historyTracks.addAll(historyTracksInteractor.getTracks())
-        if (historyTracks.isNotEmpty()) {
-            renderState(SearchActivityState.History(historyTracks))
-        } else renderState(SearchActivityState.Default)
-     */
+    private val onHistoryUpdatedListener = OnHistoryUpdatedListener {
+        showHistory()
+    }
 
     private val searchTracksInteractor = Creator.provideSearchTracksInteractor()
     private val historyTracksInteractor = Creator.provideHistoryTracksInteractor(getApplication<Application>())
@@ -51,11 +50,14 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
         searchRequest(newSearchText)
     }
 
+
+
     private val searchActivityStateLiveData = MutableLiveData<SearchActivityState>()
     fun observeSearchActivityState(): LiveData<SearchActivityState> = searchActivityStateLiveData
 
     private val searchActivityToastStateLiveData = SingleLiveEvent<String>()
     fun observeSearchActivityToastState(): LiveData<String> = searchActivityToastStateLiveData
+
 
     override fun onCleared() {
         super.onCleared()
@@ -101,14 +103,6 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
-    private fun renderState(state: SearchActivityState) {
-        searchActivityStateLiveData.postValue(state)
-    }
-
-    private fun showToastState(message: String) {
-        searchActivityToastStateLiveData.postValue(message)
-    }
-
     fun showHistory() {
         historyTracks.clear()
         historyTracks.addAll(historyTracksInteractor.getTracks())
@@ -120,4 +114,13 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
     fun writeHistory(trackClicked: Track) {
         historyTracksInteractor.addTrack(trackClicked)
     }
+
+    private fun renderState(state: SearchActivityState) {
+        searchActivityStateLiveData.postValue(state)
+    }
+
+    private fun showToastState(message: String) {
+        searchActivityToastStateLiveData.postValue(message)
+    }
+
 }

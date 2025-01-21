@@ -20,8 +20,8 @@ class HistoryTracksInteractorImpl(private val repository: HistoryTracksRepositor
         repository.clearTracks()
     }
 
-    override fun SetOnHistoryUpdatedListener(onHistoryUpdatedListener: OnHistoryUpdatedListener) {
-        repository.SetOnHistoryUpdatedListener(onHistoryUpdatedListener)
+    override fun setOnHistoryUpdatedListener(onHistoryUpdatedListener: OnHistoryUpdatedListener) {
+        repository.setOnHistoryUpdatedListener(onHistoryUpdatedListener)
     }
 
 }

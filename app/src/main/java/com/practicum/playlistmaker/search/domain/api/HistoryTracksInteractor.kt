@@ -7,5 +7,5 @@ interface HistoryTracksInteractor {
     fun getTracks(): Array<Track>
     fun addTrack(track: Track)
     fun clearTracks()
-    fun SetOnHistoryUpdatedListener(onHistoryUpdatedListener: OnHistoryUpdatedListener)
+    fun setOnHistoryUpdatedListener(onHistoryUpdatedListener: OnHistoryUpdatedListener)
 }

@@ -55,11 +55,6 @@ class SearchActivity : ComponentActivity() {
         }
     )
 
-
-    //интеракторы===================================================================================
-
-    private lateinit var onHistoryUpdatedListener: OnHistoryUpdatedListener
-
     //не инициализированные views===================================================================
     private lateinit var trackNotFoundPlaceholderImage: ImageView
     private lateinit var trackNotFoundPlaceholderText: TextView
@@ -101,12 +96,6 @@ class SearchActivity : ComponentActivity() {
         youFoundHistoryText = findViewById(R.id.you_found_text)
         searchProgressBar = findViewById(R.id.search_progress_bar)
 
-        /*
-        onHistoryUpdatedListener = OnHistoryUpdatedListener {
-            if (searchStatus != SearchStatus.TRACKS_FOUND)
-                downloadHistory(historyTracksInteractor)
-        }
-        */
         searchRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
         historyRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
 
@@ -138,9 +127,8 @@ class SearchActivity : ComponentActivity() {
                 searchViewModel.writeHistory(track)
             }
         }
-        /*
-        historyTracksInteractor.SetOnHistoryUpdatedListener(onHistoryUpdatedListener)
 
+        /*
         historyClearButton.setOnClickListener{
             searchStatus = SearchStatus.DEFAULT
             viewsVisibilityControl()
