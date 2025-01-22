@@ -128,13 +128,11 @@ class SearchActivity : ComponentActivity() {
             }
         }
 
-        /*
+
         historyClearButton.setOnClickListener{
-            searchStatus = SearchStatus.DEFAULT
-            viewsVisibilityControl()
-            clearHistory(historyTracksInteractor)
+            Log.d("wtf", "clear pressed")
         }
-         */
+
         searchBackButton.setOnClickListener{
             finish()
         }
@@ -144,13 +142,10 @@ class SearchActivity : ComponentActivity() {
 
         }
 
-        /*
         searchRenewButton.setOnClickListener {
-            if (searchEdittext.text.isNotEmpty()) {
-                if (clickDebounce()) renewRequest()
-            }
+            Log.d("wtf", "renew pressed")
         }
-         */
+
 
         //переопределение функций слушателя текста==================================================
         val textWatcher = object : TextWatcher {
