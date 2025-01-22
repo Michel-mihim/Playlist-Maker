@@ -38,6 +38,10 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
     private val searchTracksInteractor = Creator.provideSearchTracksInteractor()
     private val historyTracksInteractor = Creator.provideHistoryTracksInteractor(getApplication<Application>())
 
+    init {
+        historyTracksInteractor.setOnHistoryUpdatedListener(onHistoryUpdatedListener)
+    }
+
     private val handler = Handler(Looper.getMainLooper())
 
     private var latestSearchText: String? = null
