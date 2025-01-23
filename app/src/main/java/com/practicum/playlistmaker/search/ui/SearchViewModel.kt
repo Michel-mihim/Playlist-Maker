@@ -75,7 +75,7 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
     private fun searchActivityNavigate() {
         when (this.searchActivityNavigationState) {
             SearchActivityNavigationState.HISTORY -> showHistory()
-            SearchActivityNavigationState.TRACKS_FOUND -> {}
+            SearchActivityNavigationState.SEARCH_RESULT -> {}
         }
     }
 
@@ -105,6 +105,8 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
             tracksRecyclerList.clear()
             searchTracksInteractor.searchTracks(newSearchText, object : SearchTracksInteractor.TracksConsumer {
                 override fun consume(result: SearchTracksResult<List<Track>>) {
+                    searchActivityNavigationState = SearchActivityNavigationState.SEARCH_RESULT
+
                     when (result) {
                         is SearchTracksResult.Success -> {
                             tracksRecyclerList.addAll(result.tracks)
@@ -128,6 +130,8 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
 
     //HISTORY=======================================================================================
     fun showHistory() {
+        searchActivityNavigationState = SearchActivityNavigationState.HISTORY
+
         historyTracks.clear()
         historyTracks.addAll(historyTracksInteractor.getTracks())
         if (historyTracks.isNotEmpty()) {
