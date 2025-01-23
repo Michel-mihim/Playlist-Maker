@@ -17,6 +17,7 @@ import com.practicum.playlistmaker.utils.constants.Constants
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import com.practicum.playlistmaker.search.domain.OnHistoryUpdatedListener
 import com.practicum.playlistmaker.search.domain.api.HistoryTracksInteractor
+import com.practicum.playlistmaker.search.domain.models.SearchActivityNavigationState
 import com.practicum.playlistmaker.search.domain.models.SearchActivityState
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.utils.classes.SingleLiveEvent
@@ -32,7 +33,7 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
     }
 
     private val onHistoryUpdatedListener = OnHistoryUpdatedListener {
-        showHistory()
+        searchActivityNavigate()
     }
 
     private val searchTracksInteractor = Creator.provideSearchTracksInteractor()
@@ -45,6 +46,8 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
     private val handler = Handler(Looper.getMainLooper())
 
     private var latestSearchText: String? = null
+
+    private var searchActivityNavigationState: SearchActivityNavigationState = SearchActivityNavigationState.HISTORY
 
     private val tracksRecyclerList = ArrayList<Track>()
     private var historyTracks = ArrayList<Track>()
@@ -62,12 +65,21 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
     private val searchActivityToastStateLiveData = SingleLiveEvent<String>()
     fun observeSearchActivityToastState(): LiveData<String> = searchActivityToastStateLiveData
 
-
+    //LIFE_CYCLE====================================================================================
     override fun onCleared() {
         super.onCleared()
         handler.removeCallbacks(searchRunnable)
     }
 
+    //NAVIGATION====================================================================================
+    private fun searchActivityNavigate() {
+        when (this.searchActivityNavigationState) {
+            SearchActivityNavigationState.HISTORY -> showHistory()
+            SearchActivityNavigationState.TRACKS_FOUND -> {}
+        }
+    }
+
+    //SEARCH========================================================================================
     fun searchDelayed(changedText: String) {
         if (latestSearchText == changedText) {
             return
@@ -114,6 +126,7 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
+    //HISTORY=======================================================================================
     fun showHistory() {
         historyTracks.clear()
         historyTracks.addAll(historyTracksInteractor.getTracks())
@@ -130,6 +143,7 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
         historyTracksInteractor.clearTracks()
     }
 
+    //POSTING=======================================================================================
     private fun renderState(state: SearchActivityState) {
         searchActivityStateLiveData.postValue(state)
     }
