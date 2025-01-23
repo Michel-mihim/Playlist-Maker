@@ -268,8 +268,6 @@ class SearchActivity : ComponentActivity() {
         historyClearButton.visibility = View.INVISIBLE
         hidePlaceholder()
         youFoundHistoryText.visibility = View.INVISIBLE
-
-        Log.d("wtf", "default")
     }
 
     private fun historyViewsShow() {
@@ -280,8 +278,6 @@ class SearchActivity : ComponentActivity() {
         historyClearButton.visibility = View.VISIBLE
         hidePlaceholder()
         youFoundHistoryText.visibility = View.VISIBLE
-
-        Log.d("wtf", "history")
     }
 
     private fun emptyViewsShow(text: String, image: Int) {

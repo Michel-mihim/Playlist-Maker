@@ -45,6 +45,7 @@ class PlayerViewModel(application: Application): AndroidViewModel(application) {
     //LIFE_CYCLE====================================================================================
     override fun onCleared() {
         super.onCleared()
+        handler.removeCallbacks(showProgressRunnable)
         mediaPlayerInteractor.release()
     }
 

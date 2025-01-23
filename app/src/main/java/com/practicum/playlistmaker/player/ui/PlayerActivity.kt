@@ -110,11 +110,6 @@ class PlayerActivity : ComponentActivity() {
         playerViewModel.pausePlayer()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        playerViewModel.pausePlayer()
-    }
-
     private fun trackPlayButtonActivate(ready: Boolean) {
         trackPlayButton.isEnabled = ready
     }
