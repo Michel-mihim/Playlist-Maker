@@ -147,7 +147,7 @@ class SearchActivity : ComponentActivity() {
         }
 
         searchRenewButton.setOnClickListener {
-            renewRequest()
+            if (clickDebouncer()) renewRequest()
         }
 
 
