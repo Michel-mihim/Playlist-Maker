@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.search.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -20,11 +21,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.search.domain.OnHistoryUpdatedListener
+import com.practicum.playlistmaker.player.ui.PlayerActivity
 import com.practicum.playlistmaker.search.domain.api.HistoryTracksInteractor
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.utils.constants.Constants
 import com.practicum.playlistmaker.search.domain.models.SearchActivityState
+import java.text.SimpleDateFormat
+import java.util.Locale
+import com.practicum.playlistmaker.utils.converters.getCoverArtwork
+import com.practicum.playlistmaker.utils.converters.isoDateToYearConvert
 
 
 class SearchActivity : ComponentActivity() {
@@ -108,7 +113,6 @@ class SearchActivity : ComponentActivity() {
         adapter.onItemClickListener = { track ->
             if (clickDebouncer()) {
                 //запуск плеера
-                /*
                 val playerIntent = Intent(this, PlayerActivity::class.java)
 
                 val bundle = Bundle()
@@ -123,7 +127,7 @@ class SearchActivity : ComponentActivity() {
                 bundle.putString("b_previewUrl", track.previewUrl)
                 playerIntent.putExtras(bundle)
                 startActivity(playerIntent)
-                 */
+
                 searchViewModel.writeHistory(track)
             }
         }
