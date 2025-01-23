@@ -6,10 +6,12 @@ import android.os.Looper
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.player.domain.models.PlayerStatus
@@ -20,7 +22,7 @@ import com.practicum.playlistmaker.utils.constants.Constants
 import com.practicum.playlistmaker.utils.converters.dimensionsFloatToIntConvert
 
 
-class PlayerActivity : AppCompatActivity() {
+class PlayerActivity : ComponentActivity() {
 
     //VIEWS
     private lateinit var playerBackButton: ImageButton
@@ -36,7 +38,7 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var trackProgress: TextView
 
     //LATEINIT VARS
-    private lateinit var mediaPlayerInteractor: MediaPlayerInteractor
+    private lateinit var playerViewModel: PlayerViewModel
 
     //VALS
     private val handler = Handler(Looper.getMainLooper())
@@ -48,14 +50,15 @@ class PlayerActivity : AppCompatActivity() {
     //основной листинг==============================================================================
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_player)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+
+        playerViewModel = ViewModelProvider(this, PlayerViewModel.getPlayerViewModelFactory())[PlayerViewModel::class.java]
+
+        playerViewModel.observePlayerActivityTrackPlayButtonReadiness().observe(this) { ready ->
+            trackPlayButtonActivate(ready)
         }
 
+        //инициализация views
         playerTrackName = findViewById(R.id.track_player_name)
         playerArtistName = findViewById(R.id.track_artist_name)
         playerTrackTime = findViewById(R.id.attr1_2_time)
@@ -89,20 +92,7 @@ class PlayerActivity : AppCompatActivity() {
                 .into(playerTrackImage)
         }
 
-        mediaPlayerInteractor = Creator.provideMediaPlayerInteractor()
-        mediaPlayerInteractor.prepare(
-            bundle?.getString(("b_previewUrl")),
-            onPrepared = { ->
-                trackPlayButton.isEnabled = true
-                playerStatus = PlayerStatus.STATE_PREPARED
-            },
-            onCompletion = { -> //окончание воспроизведения
-                trackPlayButton.setImageResource(R.drawable.track_play)
-                playerStatus = PlayerStatus.STATE_PREPARED
-                handler.removeCallbacks(showProgressRunnable)
-                trackProgress.text = Constants.TRACK_IS_OVER_PROGRESS
-            }
-        )
+        playerViewModel.mediaPlayerPrepare(bundle?.getString(("b_previewUrl")))
 
         //слушатели нажатий
         playerBackButton.setOnClickListener{
@@ -161,5 +151,9 @@ class PlayerActivity : AppCompatActivity() {
         super.onDestroy()
         handler.removeCallbacks(showProgressRunnable)
         mediaPlayerInteractor.release()
+    }
+
+    private fun trackPlayButtonActivate(ready: Boolean) {
+        trackPlayButton.isEnabled = ready
     }
 }

@@ -3,7 +3,6 @@ package com.practicum.playlistmaker.search.ui
 import android.app.Application
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
