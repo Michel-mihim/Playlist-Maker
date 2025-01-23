@@ -50,7 +50,7 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
     private var historyTracks = ArrayList<Track>()
 
     private val searchRunnable = Runnable {
-        val newSearchText = latestSearchText ?: ""
+        val newSearchText = this.latestSearchText ?: ""
         searchRequest(newSearchText)
     }
 
@@ -68,7 +68,7 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
         handler.removeCallbacks(searchRunnable)
     }
 
-    fun searchDelayed(changedText: String){
+    fun searchDelayed(changedText: String) {
         if (latestSearchText == changedText) {
             return
         }
@@ -77,6 +77,13 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
 
         handler.removeCallbacks(searchRunnable) // runnable - fun searchRequest()
         handler.postDelayed(searchRunnable, Constants.SEARCH_DEBOUNCE_DELAY)
+    }
+
+    fun searchForce(text: String) {
+        this.latestSearchText = text
+
+        handler.removeCallbacks(searchRunnable)
+        handler.post(searchRunnable)
     }
 
 
@@ -117,6 +124,10 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
 
     fun writeHistory(trackClicked: Track) {
         historyTracksInteractor.addTrack(trackClicked)
+    }
+
+    fun clearHistory() {
+        historyTracksInteractor.clearTracks()
     }
 
     private fun renderState(state: SearchActivityState) {

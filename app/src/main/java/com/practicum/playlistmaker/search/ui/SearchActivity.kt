@@ -56,8 +56,8 @@ class SearchActivity : ComponentActivity() {
     )
 
     //не инициализированные views===================================================================
-    private lateinit var trackNotFoundPlaceholderImage: ImageView
-    private lateinit var trackNotFoundPlaceholderText: TextView
+    private lateinit var placeholderImage: ImageView
+    private lateinit var placeholderText: TextView
     private lateinit var searchRenewButton: Button
     private lateinit var historyClearButton: Button
     private lateinit var youFoundHistoryText: TextView
@@ -89,8 +89,8 @@ class SearchActivity : ComponentActivity() {
         searchEdittext = findViewById(R.id.search_edit_text)
         searchRecyclerView = findViewById(R.id.search_results_recycler)
         historyRecyclerView = findViewById(R.id.history_recycler)
-        trackNotFoundPlaceholderImage = findViewById(R.id.placeholder_pic_not_found)
-        trackNotFoundPlaceholderText = findViewById(R.id.placeholder_text_not_found)
+        placeholderImage = findViewById(R.id.placeholder_pic)
+        placeholderText = findViewById(R.id.placeholder_text)
         searchRenewButton = findViewById(R.id.search_renew_button)
         historyClearButton = findViewById(R.id.history_clear_button)
         youFoundHistoryText = findViewById(R.id.you_found_text)
@@ -130,7 +130,7 @@ class SearchActivity : ComponentActivity() {
 
 
         historyClearButton.setOnClickListener{
-            Log.d("wtf", "clear pressed")
+            searchViewModel.clearHistory()
         }
 
         searchBackButton.setOnClickListener{
@@ -143,7 +143,7 @@ class SearchActivity : ComponentActivity() {
         }
 
         searchRenewButton.setOnClickListener {
-            Log.d("wtf", "renew pressed")
+            renewRequest()
         }
 
 
@@ -169,12 +169,9 @@ class SearchActivity : ComponentActivity() {
         searchEdittext.addTextChangedListener(textWatcher)
     }
 
-    /*
     private fun renewRequest(){
-        handler.removeCallbacks(searchRunnable)
-        handler.post(searchRunnable)
+        searchViewModel.searchForce(searchEdittext.text.toString())
     }
-     */
 
     private fun clickDebouncer() : Boolean {
         val current = isClickAllowed
@@ -259,20 +256,6 @@ class SearchActivity : ComponentActivity() {
         searchEdittext.clearFocus()
     }
 
-    private fun showPlaceholder(text: String, image: Int) {
-        trackNotFoundPlaceholderText.text = text
-        trackNotFoundPlaceholderImage.setImageResource(image)
-        trackNotFoundPlaceholderText.visibility = View.VISIBLE
-        trackNotFoundPlaceholderImage.visibility = View.VISIBLE
-    }
-
-    private fun hidePlaceholder() {
-        trackNotFoundPlaceholderText.visibility = View.INVISIBLE
-        trackNotFoundPlaceholderImage.visibility = View.INVISIBLE
-        trackNotFoundPlaceholderText.visibility = View.INVISIBLE
-        trackNotFoundPlaceholderImage.visibility = View.INVISIBLE
-    }
-
     private fun defaultViewsShow() {
         hideSearchProgressbar()
         searchRecyclerView.visibility = View.INVISIBLE
@@ -281,6 +264,8 @@ class SearchActivity : ComponentActivity() {
         historyClearButton.visibility = View.INVISIBLE
         hidePlaceholder()
         youFoundHistoryText.visibility = View.INVISIBLE
+
+        Log.d("wtf", "default")
     }
 
     private fun historyViewsShow() {
@@ -291,6 +276,8 @@ class SearchActivity : ComponentActivity() {
         historyClearButton.visibility = View.VISIBLE
         hidePlaceholder()
         youFoundHistoryText.visibility = View.VISIBLE
+
+        Log.d("wtf", "history")
     }
 
     private fun emptyViewsShow(text: String, image: Int) {
@@ -321,6 +308,18 @@ class SearchActivity : ComponentActivity() {
         historyClearButton.visibility = View.INVISIBLE
         showPlaceholder(text, image)
         youFoundHistoryText.visibility = View.INVISIBLE
+    }
+
+    private fun showPlaceholder(text: String, image: Int) {
+        placeholderText.text = text
+        placeholderImage.setImageResource(image)
+        placeholderText.visibility = View.VISIBLE
+        placeholderImage.visibility = View.VISIBLE
+    }
+
+    private fun hidePlaceholder() {
+        placeholderText.visibility = View.INVISIBLE
+        placeholderImage.visibility = View.INVISIBLE
     }
 
     private fun searchClearButtonVisibility(s: CharSequence?): Int {
