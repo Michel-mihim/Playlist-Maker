@@ -1,6 +1,8 @@
 package com.practicum.playlistmaker.player.ui
 
 import android.app.Application
+import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -26,9 +28,27 @@ class PlayerViewModel(application: Application): AndroidViewModel(application) {
 
     private val mediaPlayerInteractor = Creator.provideMediaPlayerInteractor()
 
-    private val playerActivityTrackPlayButtonReadinessLiveData = MutableLiveData<Boolean>()
-    fun observePlayerActivityTrackPlayButtonReadiness(): LiveData<Boolean> = playerActivityTrackPlayButtonReadinessLiveData
+    private var playerStatus: PlayerStatus = PlayerStatus.STATE_DEFAULT
 
+    private val playerActivityPlayerReadinessLiveData = MutableLiveData<Boolean>()
+    fun observePlayerActivityPlayerReadiness(): LiveData<Boolean> = playerActivityPlayerReadinessLiveData
+
+    private val playerActivityPlayerStatusLiveData = MutableLiveData<PlayerStatus>()
+    fun observePlayerActivityPlayerStatus(): LiveData<PlayerStatus> = playerActivityPlayerStatusLiveData
+
+    private val playerActivityTrackProgressLiveData = MutableLiveData<String>()
+    fun observePlayerActivityTrackProgress(): LiveData<String> = playerActivityTrackProgressLiveData
+
+    private val handler = Handler(Looper.getMainLooper())
+    private val showProgressRunnable = Runnable { showProgress() }
+
+    //LIFE_CYCLE====================================================================================
+    override fun onCleared() {
+        super.onCleared()
+        mediaPlayerInteractor.release()
+    }
+
+    //PLAYBACK======================================================================================
     fun mediaPlayerPrepare(previewUrl: String?) {
         mediaPlayerInteractor.prepare(
             previewUrl,
@@ -37,16 +57,62 @@ class PlayerViewModel(application: Application): AndroidViewModel(application) {
                 playerStatus = PlayerStatus.STATE_PREPARED
             },
             onCompletion = { -> //окончание воспроизведения
-                trackPlayButton.setImageResource(R.drawable.track_play)
                 playerStatus = PlayerStatus.STATE_PREPARED
+                trackPlayButtonRenderStatus(PlayerStatus.STATE_PREPARED)
                 handler.removeCallbacks(showProgressRunnable)
-                trackProgress.text = Constants.TRACK_IS_OVER_PROGRESS
+                trackRenderProgress(Constants.TRACK_IS_OVER_PROGRESS)
             }
         )
     }
 
+    fun playbackControl() {
+        when (playerStatus) {
+            PlayerStatus.STATE_PLAYING -> {
+                pausePlayer()
+            }
+            PlayerStatus.STATE_PREPARED -> {
+                startPlayer()
+            }
+            PlayerStatus.STATE_PAUSED -> {
+                startPlayer()
+            }
+            PlayerStatus.STATE_DEFAULT -> TODO()
+        }
+    }
+
+    private fun startPlayer(){
+        mediaPlayerInteractor.start()
+        playerStatus = PlayerStatus.STATE_PLAYING
+        trackPlayButtonRenderStatus(PlayerStatus.STATE_PLAYING)
+        handler.post(showProgressRunnable)
+    }
+
+    fun pausePlayer(){
+        mediaPlayerInteractor.pause()
+        playerStatus = PlayerStatus.STATE_PAUSED
+        trackPlayButtonRenderStatus(PlayerStatus.STATE_PAUSED)
+        handler.removeCallbacks(showProgressRunnable)
+    }
+
+    private fun showProgress(){
+        mediaPlayerInteractor.timerUpdate(
+            onTimerUpdated = { progress ->
+                trackRenderProgress(progress)
+            }
+        )
+        handler.postDelayed(showProgressRunnable, Constants.SHOW_PROGRESS_DELAY)
+    }
+
     //POSTING=======================================================================================
     private fun trackPlayButtonActivate() {
-        playerActivityTrackPlayButtonReadinessLiveData.postValue(true)
+        playerActivityPlayerReadinessLiveData.postValue(true)
+    }
+
+    private fun trackPlayButtonRenderStatus(status: PlayerStatus) {
+        playerActivityPlayerStatusLiveData.postValue(status)
+    }
+
+    private fun trackRenderProgress(progress: String) {
+        playerActivityTrackProgressLiveData.postValue(progress)
     }
 }

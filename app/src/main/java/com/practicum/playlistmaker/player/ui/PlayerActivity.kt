@@ -40,13 +40,6 @@ class PlayerActivity : ComponentActivity() {
     //LATEINIT VARS
     private lateinit var playerViewModel: PlayerViewModel
 
-    //VALS
-    private val handler = Handler(Looper.getMainLooper())
-    private val showProgressRunnable = Runnable { showProgress() }
-
-    //VARS
-    private var playerStatus: PlayerStatus = PlayerStatus.STATE_DEFAULT
-
     //основной листинг==============================================================================
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,8 +47,16 @@ class PlayerActivity : ComponentActivity() {
 
         playerViewModel = ViewModelProvider(this, PlayerViewModel.getPlayerViewModelFactory())[PlayerViewModel::class.java]
 
-        playerViewModel.observePlayerActivityTrackPlayButtonReadiness().observe(this) { ready ->
+        playerViewModel.observePlayerActivityPlayerReadiness().observe(this) { ready ->
             trackPlayButtonActivate(ready)
+        }
+
+        playerViewModel.observePlayerActivityPlayerStatus().observe(this) {
+            renderTrackPlayButton(it)
+        }
+
+        playerViewModel.observePlayerActivityTrackProgress().observe(this) { progress ->
+            setTrackProgress(progress)
         }
 
         //инициализация views
@@ -100,60 +101,42 @@ class PlayerActivity : ComponentActivity() {
         }
 
         trackPlayButton.setOnClickListener {
-            playbackControl()
-        }
-    }
-
-    private fun showProgress(){
-        mediaPlayerInteractor.timerUpdate(
-            onTimerUpdated = { progress ->
-                trackProgress.text = progress
-            }
-        )
-        handler.postDelayed(showProgressRunnable, Constants.SHOW_PROGRESS_DELAY)
-    }
-
-    private fun startPlayer(){
-        mediaPlayerInteractor.start()
-        trackPlayButton.setImageResource(R.drawable.track_pause)
-        playerStatus = PlayerStatus.STATE_PLAYING
-        handler.post(showProgressRunnable)
-    }
-
-    private fun pausePlayer(){
-        mediaPlayerInteractor.pause()
-        trackPlayButton.setImageResource(R.drawable.track_play)
-        playerStatus = PlayerStatus.STATE_PAUSED
-        handler.removeCallbacks(showProgressRunnable)
-    }
-
-    private fun playbackControl() {
-        when (playerStatus) {
-            PlayerStatus.STATE_PLAYING -> {
-                pausePlayer()
-            }
-            PlayerStatus.STATE_PREPARED -> {
-                startPlayer()
-            }
-            PlayerStatus.STATE_PAUSED -> {
-                startPlayer()
-            }
-            PlayerStatus.STATE_DEFAULT -> TODO()
+            playerViewModel.playbackControl()
         }
     }
 
     override fun onPause() {
         super.onPause()
-        pausePlayer()
+        playerViewModel.pausePlayer()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        handler.removeCallbacks(showProgressRunnable)
-        mediaPlayerInteractor.release()
+        playerViewModel.pausePlayer()
     }
 
     private fun trackPlayButtonActivate(ready: Boolean) {
         trackPlayButton.isEnabled = ready
+    }
+
+    private fun renderTrackPlayButton(status: PlayerStatus) {
+        when (status) {
+            PlayerStatus.STATE_DEFAULT -> {}
+            PlayerStatus.STATE_PREPARED -> setTrackPlayButtonPlay()
+            PlayerStatus.STATE_PAUSED -> setTrackPlayButtonPlay()
+            PlayerStatus.STATE_PLAYING -> setTrackPlayButtonPause()
+        }
+    }
+
+    private fun setTrackPlayButtonPlay() {
+        trackPlayButton.setImageResource(R.drawable.track_play)
+    }
+
+    private fun setTrackPlayButtonPause() {
+        trackPlayButton.setImageResource(R.drawable.track_pause)
+    }
+
+    private fun setTrackProgress(progress: String) {
+        trackProgress.text = progress
     }
 }
