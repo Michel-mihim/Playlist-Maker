@@ -17,6 +17,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -32,7 +33,7 @@ import com.practicum.playlistmaker.utils.converters.getCoverArtwork
 import com.practicum.playlistmaker.utils.converters.isoDateToYearConvert
 
 
-class SearchActivity : ComponentActivity() {
+class SearchActivity : AppCompatActivity() {
 
     //инициализированные объекты====================================================================
     private val handler = Handler(Looper.getMainLooper())
