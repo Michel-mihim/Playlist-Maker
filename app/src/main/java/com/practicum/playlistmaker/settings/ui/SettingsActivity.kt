@@ -38,11 +38,8 @@ class SettingsActivity : AppCompatActivity() {
             darkThemeSwitcherActivated(isDark)
         }
 
-        settingsViewModel.initialThemeIsDarkSet()
-
         //слушатели нажатий=========================================================================
         themeSwitcher.setOnCheckedChangeListener { _, checked ->
-            Log.d("wtf", "Activity switcher "+checked.toString())
             settingsViewModel.switchTheme(checked)
         }
 

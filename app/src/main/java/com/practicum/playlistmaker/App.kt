@@ -8,34 +8,29 @@ import com.practicum.playlistmaker.settings.domain.SettingsInteractor
 
 class App: Application() {
 
-    var isThemeDarkForChecker = false
+    var isThemeDarkFlag = false
 
     override fun onCreate() {
         super.onCreate()
 
         val settingsInteractor = Creator.provideSettingsInteractor(this)
 
-        isThemeDarkForChecker = readThemePrefsDark(settingsInteractor)
+        isThemeDarkFlag = settingsInteractor.isThemeDark(this) //тема либо из настроек, либо системная
 
-        switchTheme(settingsInteractor, isThemeDarkForChecker)
+        switchTheme(isThemeDarkFlag) //установим для всего приложения полученный результат
+
+        settingsInteractor.writeThemeDark(isThemeDarkFlag) //заодно запишем/перепишем тему в файл настроек
     }
 
-    fun readThemePrefsDark(settingsInteractor: SettingsInteractor): Boolean {
-        return settingsInteractor.isThemeDark(this)
-    }
-
-    fun switchTheme(settingsInteractor: SettingsInteractor, darkThemeEnabled: Boolean) {
-        Log.d("wtf", "App switchTheme "+darkThemeEnabled.toString())
+    fun switchTheme(setDarkTheme: Boolean) {
         AppCompatDelegate.setDefaultNightMode(
-            if (darkThemeEnabled) {
+            if (setDarkTheme) {
                 AppCompatDelegate.MODE_NIGHT_YES
             } else {
                 AppCompatDelegate.MODE_NIGHT_NO
             }
         )
-        isThemeDarkForChecker = darkThemeEnabled            //актуализируем значение на какую тему переключились
-        Log.d("wtf", "App isThemeDarkForChecker, writeThemeDark = "+darkThemeEnabled.toString())
-        settingsInteractor.writeThemeDark(darkThemeEnabled) //заодно запишем/перепишем тему в файл настроек
+
     }
 
 }

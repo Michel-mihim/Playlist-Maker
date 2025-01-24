@@ -22,32 +22,28 @@ class SettingsViewModel(application: Application): AndroidViewModel(application)
         }
     }
 
-    var initialThemeIsDark = false
-    val app_context = application as App
-
-    init {
-        initialThemeIsDark = app_context.isThemeDarkForChecker
-    }
-
-    private val settingsInteractor = Creator.provideSettingsInteractor(getApplication<Application>())
-
     private val settingsActivityDarkThemeLiveData = MutableLiveData<Boolean>()
     fun observeSettingsActivityTheme(): LiveData<Boolean> = settingsActivityDarkThemeLiveData
 
-    fun initialThemeIsDarkSet() {
-        themeSwitcherIsDarkSetter(initialThemeIsDark)
-    }
+    private val app_link = application
 
-    fun switchTheme(checked: Boolean) {
-        Log.d("wtf", "ViewModel switchTheme "+checked.toString())
-        app_context.switchTheme(
-            settingsInteractor,
-            checked
-        )
-    }
+    private val settingsInteractor = Creator.provideSettingsInteractor(getApplication<Application>())
 
     //POSTING=======================================================================================
     private fun themeSwitcherIsDarkSetter(isDark: Boolean) {
         settingsActivityDarkThemeLiveData.postValue(isDark)
     }
+
+    init {
+        themeSwitcherIsDarkSetter(settingsInteractor.isThemeDark(application))
+    }
+
+
+    fun switchTheme(checked: Boolean) {
+        (app_link as App).switchTheme(checked)
+
+        settingsInteractor.writeThemeDark(checked)
+        themeSwitcherIsDarkSetter(checked)
+    }
+
 }
