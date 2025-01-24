@@ -3,40 +3,47 @@ package com.practicum.playlistmaker.settings.ui
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.switchmaterial.SwitchMaterial
-import com.practicum.playlistmaker.App
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.creator.Creator
 
 class SettingsActivity : AppCompatActivity() {
 
+    private lateinit var themeSwitcher: SwitchMaterial
+    private lateinit var buttonShare: Button
+    private lateinit var buttonSupport: Button
+    private lateinit var buttonLicense: Button
+    private lateinit var settingsBackButton: ImageButton
+
+    private lateinit var settingsViewModel: SettingsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
         //переменные VIEW===========================================================================
-        val themeSwitcher = findViewById<SwitchMaterial>(R.id.theme_switcher)
-        val buttonShare = findViewById<Button>(R.id.button_share)
-        val buttonSupport = findViewById<Button>(R.id.button_support)
-        val buttonLicense = findViewById<Button>(R.id.button_license)
-        val settingsBackButton = findViewById<ImageButton>(R.id.settings_back_button)
+        themeSwitcher = findViewById(R.id.theme_switcher)
+        buttonShare = findViewById(R.id.button_share)
+        buttonSupport = findViewById(R.id.button_support)
+        buttonLicense = findViewById(R.id.button_license)
+        settingsBackButton = findViewById(R.id.settings_back_button)
 
-        //основной листинг
-        if ((applicationContext as App).isThemeDarkForChecker) {
-            themeSwitcher.isChecked = true
+        settingsViewModel = ViewModelProvider(this, SettingsViewModel.getSettingsViewModelFactory())[SettingsViewModel::class.java]
+
+        settingsViewModel.observeSettingsActivityTheme().observe(this) { isDark ->
+            darkThemeSwitcherActivated(isDark)
         }
 
-        val settingsInteractor = Creator.provideSettingsInteractor(this)
+        settingsViewModel.initialThemeIsDarkSet()
+
         //слушатели нажатий=========================================================================
-        themeSwitcher.setOnCheckedChangeListener{ switcher, checked ->
-            (applicationContext as App).switchTheme(
-                settingsInteractor,
-                checked
-            )
+        themeSwitcher.setOnCheckedChangeListener { _, checked ->
+            Log.d("wtf", "Activity switcher "+checked.toString())
+            settingsViewModel.switchTheme(checked)
         }
 
         buttonShare.setOnClickListener{
@@ -66,6 +73,10 @@ class SettingsActivity : AppCompatActivity() {
         settingsBackButton.setOnClickListener{
             finish()
         }
+    }
+
+    private fun darkThemeSwitcherActivated(isDark: Boolean) {
+        themeSwitcher.isChecked = isDark
     }
 
 }

@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker
 
 import android.app.Application
+import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.settings.domain.SettingsInteractor
@@ -24,6 +25,7 @@ class App: Application() {
     }
 
     fun switchTheme(settingsInteractor: SettingsInteractor, darkThemeEnabled: Boolean) {
+        Log.d("wtf", "App switchTheme "+darkThemeEnabled.toString())
         AppCompatDelegate.setDefaultNightMode(
             if (darkThemeEnabled) {
                 AppCompatDelegate.MODE_NIGHT_YES
@@ -32,6 +34,7 @@ class App: Application() {
             }
         )
         isThemeDarkForChecker = darkThemeEnabled            //актуализируем значение на какую тему переключились
+        Log.d("wtf", "App isThemeDarkForChecker, writeThemeDark = "+darkThemeEnabled.toString())
         settingsInteractor.writeThemeDark(darkThemeEnabled) //заодно запишем/перепишем тему в файл настроек
     }
 

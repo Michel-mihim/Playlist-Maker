@@ -7,10 +7,12 @@ import com.practicum.playlistmaker.settings.data.SettingsRepository
 import com.practicum.playlistmaker.utils.constants.Constants
 
 class SettingsRepositoryImpl(private val sharedPreferences: SharedPreferences): SettingsRepository {
+
     override fun isThemeInSettingsDark(context: Context): Boolean {
         val nightModeFlags = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         return sharedPreferences.getBoolean(Constants.THEME_KEY, nightModeFlags == Configuration.UI_MODE_NIGHT_YES)
-        //второй параметр - данные по умолчанию если файла настроек нет
+        //первый параметр - тема, прописанная в настройках,
+        //второй параметр - данные по умолчанию если файла настроек нет, то текущая тема системы будет передана в настройки
     }
 
     override fun writeThemeInSettingsDark(setDark: Boolean) {
