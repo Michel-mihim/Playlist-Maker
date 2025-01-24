@@ -60,7 +60,8 @@
             android:src="@drawable/clear_button"
             app:tint="@color/clear_button_color"
             android:backgroundTint="@color/edit_color"
-            android:foreground="?attr/selectableItemBackground"/>
+            android:foreground="?attr/selectableItemBackground"
+            android:visibility="invisible"/>
 
     </RelativeLayout>
 
