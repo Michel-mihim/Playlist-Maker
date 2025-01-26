@@ -43,7 +43,6 @@ class SettingsViewModel(application: Application): AndroidViewModel(application)
         themeSwitcherIsDarkSetter(settingsInteractor.isThemeDark(application))
     }
 
-
     fun switchTheme(checked: Boolean) {
         (app_link as App).switchTheme(checked)
 
@@ -55,28 +54,50 @@ class SettingsViewModel(application: Application): AndroidViewModel(application)
     //SHARING=======================================================================================
     private val sharingInteractor = Creator.provideSharingInteractor()
 
-    fun shareApp(context: Context) {
+    private val shareActivityIntentLiveData = MutableLiveData<Intent>()
+    fun observeShareActivityIntentLiveData(): LiveData<Intent> = shareActivityIntentLiveData
+
+    private val supportEmailActivityIntentLiveData = MutableLiveData<Intent>()
+    fun observeSupportEmailActivityIntentLiveData(): LiveData<Intent> = supportEmailActivityIntentLiveData
+
+    private val termsIntentLiveData = MutableLiveData<Intent>()
+    fun observeTermsIntentLiveData(): LiveData<Intent> = termsIntentLiveData
+
+    fun shareApp() {
         sharingInteractor.shareApp(
-            onChooserReady = { chooser ->
-                startActivity(context, chooser as Intent, null)
+            onChooserReady = { intent ->
+                startShareActivity(intent as Intent)
             }
         )
     }
 
-    fun openSupport(context: Context) {
+    fun openSupport() {
         sharingInteractor.openSupport(
             onSupportEmailIntentReady = { intent ->
-                startActivity(context, intent as Intent, null)
+                startSupportEmailActivity(intent as Intent)
             }
         )
     }
 
-    fun openTerms(context: Context) {
+    fun openTerms() {
         sharingInteractor.openTerms(
             onTermsIntentReady = { intent ->
-                startActivity(context, intent as Intent, null)
+                startTermsIntentActivity(intent as Intent)
             }
         )
+    }
+
+    //POSTING=======================================================================================
+    private fun startShareActivity(intent: Intent) {
+        shareActivityIntentLiveData.postValue(intent)
+    }
+
+    private fun startSupportEmailActivity(intent: Intent) {
+        supportEmailActivityIntentLiveData.postValue(intent)
+    }
+
+    private fun startTermsIntentActivity(intent: Intent) {
+        termsIntentLiveData.postValue(intent)
     }
 
 }

@@ -38,21 +38,33 @@ class SettingsActivity : AppCompatActivity() {
             darkThemeSwitcherActivated(isDark)
         }
 
+        settingsViewModel.observeShareActivityIntentLiveData().observe(this) {intent ->
+            startActivity(intent)
+        }
+
+        settingsViewModel.observeSupportEmailActivityIntentLiveData().observe(this) {intent ->
+            startActivity(intent)
+        }
+
+        settingsViewModel.observeTermsIntentLiveData().observe(this) { intent ->
+            startActivity(intent)
+        }
+
         //слушатели нажатий=========================================================================
         themeSwitcher.setOnCheckedChangeListener { _, checked ->
             settingsViewModel.switchTheme(checked)
         }
 
         buttonShare.setOnClickListener{
-            settingsViewModel.shareApp(this)
+            settingsViewModel.shareApp()
         }
 
         buttonSupport.setOnClickListener{
-            settingsViewModel.openSupport(this)
+            settingsViewModel.openSupport()
         }
 
         buttonLicense.setOnClickListener{
-            settingsViewModel.openTerms(this)
+            settingsViewModel.openTerms()
         }
 
         settingsBackButton.setOnClickListener{
