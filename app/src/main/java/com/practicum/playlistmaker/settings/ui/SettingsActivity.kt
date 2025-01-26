@@ -44,15 +44,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         buttonShare.setOnClickListener{
-            /*
-            val shareIntent = Intent(Intent.ACTION_SEND)
-            shareIntent.setType("text/plain")
-            shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_message_subject))
-            shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_message))
-            val chooser = Intent.createChooser(shareIntent, null)
-            startActivity(chooser)
-            */
-            settingsViewModel.shareApp()
+            settingsViewModel.shareApp(this)
         }
 
         buttonSupport.setOnClickListener{

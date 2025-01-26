@@ -1,8 +1,8 @@
 package com.practicum.playlistmaker.settings.ui
 
 import android.app.Application
+import android.content.Context
 import android.content.Intent
-import android.util.Log
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -55,10 +55,10 @@ class SettingsViewModel(application: Application): AndroidViewModel(application)
     //SHARING=======================================================================================
     private val sharingInteractor = Creator.provideSharingInteractor()
 
-    fun shareApp() {
+    fun shareApp(context: Context) {
         sharingInteractor.shareApp(
             onChooserReady = { chooser ->
-                startActivity(app_link, chooser as Intent, null)
+                startActivity(context, chooser as Intent, null)
             }
         )
     }
