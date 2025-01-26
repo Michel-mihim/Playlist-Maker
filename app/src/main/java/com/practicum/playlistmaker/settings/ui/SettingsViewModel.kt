@@ -63,4 +63,20 @@ class SettingsViewModel(application: Application): AndroidViewModel(application)
         )
     }
 
+    fun openSupport(context: Context) {
+        sharingInteractor.openSupport(
+            onSupportEmailIntentReady = { intent ->
+                startActivity(context, intent as Intent, null)
+            }
+        )
+    }
+
+    fun openTerms(context: Context) {
+        sharingInteractor.openTerms(
+            onTermsIntentReady = { intent ->
+                startActivity(context, intent as Intent, null)
+            }
+        )
+    }
+
 }

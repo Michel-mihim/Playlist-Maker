@@ -48,18 +48,11 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         buttonSupport.setOnClickListener{
-            val supportIntent = Intent(Intent.ACTION_SENDTO)
-            supportIntent.data = Uri.parse("mailto:")
-            supportIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.student_email)))
-            supportIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.letter_text_subject))
-            supportIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.letter_text))
-            startActivity(supportIntent)
+            settingsViewModel.openSupport(this)
         }
 
         buttonLicense.setOnClickListener{
-            val licenseIntent = Intent(Intent.ACTION_VIEW)
-            licenseIntent.data = Uri.parse(getString(R.string.license_url))
-            startActivity(licenseIntent)
+            settingsViewModel.openTerms(this)
         }
 
         settingsBackButton.setOnClickListener{

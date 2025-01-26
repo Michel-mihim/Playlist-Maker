@@ -9,12 +9,12 @@ class SharingInteractorImpl(private val externalNavigator: ExternalNavigator) : 
         externalNavigator.shareLink(getShareAppLink(), onChooserReady)
     }
 
-    override fun openTerms() {
-        externalNavigator.openLink(getTermsLink())
+    override fun openTerms(onTermsIntentReady: (Any) -> Unit) {
+        externalNavigator.openLink(getTermsLink(), onTermsIntentReady)
     }
 
-    override fun openSupport() {
-        externalNavigator.openEmail(getSupportEmailData())
+    override fun openSupport(onSupportEmailIntentReady: (Any) -> Unit) {
+        externalNavigator.openEmail(getSupportEmailData(), onSupportEmailIntentReady)
     }
 
     private fun getShareAppLink(): String {

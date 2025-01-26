@@ -67,7 +67,12 @@ object Creator {
     }
 
     private fun provideExternalNavigator(): ExternalNavigator {
-        return ExternalNavigatorImpl(provideShareLinkIntent(), provideShareLinkChooser())
+        return ExternalNavigatorImpl(
+            provideShareLinkIntent(),
+            provideShareLinkChooser(),
+            provideSupportEmailIntent(),
+            provideTermsIntent()
+        )
     }
 
     lateinit var shareLinkIntent: Intent
@@ -79,6 +84,14 @@ object Creator {
 
     private fun provideShareLinkChooser(): Intent {
         return Intent.createChooser(shareLinkIntent, null)
+    }
+
+    private fun provideSupportEmailIntent(): Intent {
+        return Intent(Intent.ACTION_SENDTO)
+    }
+
+    private fun provideTermsIntent(): Intent {
+        return Intent(Intent.ACTION_VIEW)
     }
 
     //mediaPlayer===================================================================================
