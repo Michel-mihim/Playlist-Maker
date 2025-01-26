@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker.creator
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.media.MediaPlayer
 import com.practicum.playlistmaker.search.data.impl.HistoryTracksRepositoryImpl
@@ -20,6 +21,10 @@ import com.practicum.playlistmaker.search.domain.impl.SearchTracksInteractorImpl
 import com.practicum.playlistmaker.settings.domain.SettingsInteractor
 import com.practicum.playlistmaker.settings.data.SettingsRepository
 import com.practicum.playlistmaker.settings.domain.impl.SettingsInteractorImpl
+import com.practicum.playlistmaker.sharing.data.ExternalNavigator
+import com.practicum.playlistmaker.sharing.data.impl.ExternalNavigatorImpl
+import com.practicum.playlistmaker.sharing.domain.api.SharingInteractor
+import com.practicum.playlistmaker.sharing.domain.impl.SharingInteractorImpl
 import com.practicum.playlistmaker.utils.constants.Constants
 
 object Creator {
@@ -54,6 +59,26 @@ object Creator {
 
     private fun provideSettingsRepository(context: Context): SettingsRepository {
         return SettingsRepositoryImpl(provideSharedPreferences(context))
+    }
+
+    //sharing=======================================================================================
+    fun provideSharingInteractor(): SharingInteractor {
+        return SharingInteractorImpl(provideExternalNavigator())
+    }
+
+    private fun provideExternalNavigator(): ExternalNavigator {
+        return ExternalNavigatorImpl(provideShareLinkIntent(), provideShareLinkChooser())
+    }
+
+    lateinit var shareLinkIntent: Intent
+
+    private fun provideShareLinkIntent(): Intent {
+        shareLinkIntent = Intent(Intent.ACTION_SEND)
+        return shareLinkIntent
+    }
+
+    private fun provideShareLinkChooser(): Intent {
+        return Intent.createChooser(shareLinkIntent, null)
     }
 
     //mediaPlayer===================================================================================

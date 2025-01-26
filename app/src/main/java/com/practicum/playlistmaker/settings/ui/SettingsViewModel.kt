@@ -1,7 +1,9 @@
 package com.practicum.playlistmaker.settings.ui
 
 import android.app.Application
+import android.content.Intent
 import android.util.Log
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -22,6 +24,8 @@ class SettingsViewModel(application: Application): AndroidViewModel(application)
         }
     }
 
+    //==============================================================================================
+    //SETTINGS======================================================================================
     private val settingsActivityDarkThemeLiveData = MutableLiveData<Boolean>()
     fun observeSettingsActivityTheme(): LiveData<Boolean> = settingsActivityDarkThemeLiveData
 
@@ -33,6 +37,7 @@ class SettingsViewModel(application: Application): AndroidViewModel(application)
     private fun themeSwitcherIsDarkSetter(isDark: Boolean) {
         settingsActivityDarkThemeLiveData.postValue(isDark)
     }
+    //==============================================================================================
 
     init {
         themeSwitcherIsDarkSetter(settingsInteractor.isThemeDark(application))
@@ -44,6 +49,18 @@ class SettingsViewModel(application: Application): AndroidViewModel(application)
 
         settingsInteractor.writeThemeDark(checked)
         themeSwitcherIsDarkSetter(checked)
+    }
+
+    //==============================================================================================
+    //SHARING=======================================================================================
+    private val sharingInteractor = Creator.provideSharingInteractor()
+
+    fun shareApp() {
+        sharingInteractor.shareApp(
+            onChooserReady = { chooser ->
+                startActivity(app_link, chooser as Intent, null)
+            }
+        )
     }
 
 }
