@@ -40,7 +40,7 @@ class SettingsViewModel(application: Application): AndroidViewModel(application)
     //==============================================================================================
 
     init {
-        themeSwitcherIsDarkSetter(settingsInteractor.isThemeDark(application))
+        themeSwitcherIsDarkSetter(settingsInteractor.isThemeDark())
     }
 
     fun switchTheme(checked: Boolean) {

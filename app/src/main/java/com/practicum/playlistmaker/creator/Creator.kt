@@ -34,7 +34,6 @@ import com.practicum.playlistmaker.sharing.domain.impl.SharingInteractorImpl
 import com.practicum.playlistmaker.utils.constants.Constants
 
 object Creator {
-    //var onProvideSharedPreferenceChangeListener: ((key: String) -> Unit)? = null
 
     //searchTracks==================================================================================
     fun provideSearchTracksInteractor(): SearchTracksInteractor {
@@ -64,7 +63,7 @@ object Creator {
     }
 
     private fun provideSettingsRepository(context: Context): SettingsRepository {
-        return SettingsRepositoryImpl(provideSharedPreferences(context))
+        return SettingsRepositoryImpl(provideSharedPreferences(context), context)
     }
 
     //playerIntentGetter============================================================================

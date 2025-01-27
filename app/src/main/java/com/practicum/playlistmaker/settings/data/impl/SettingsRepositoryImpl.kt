@@ -7,9 +7,12 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.practicum.playlistmaker.settings.data.SettingsRepository
 import com.practicum.playlistmaker.utils.constants.Constants
 
-class SettingsRepositoryImpl(private val sharedPreferences: SharedPreferences): SettingsRepository {
+class SettingsRepositoryImpl(
+    private val sharedPreferences: SharedPreferences,
+    private val context: Context
+    ): SettingsRepository {
 
-    override fun isThemeInSettingsDark(context: Context): Boolean {
+    override fun isThemeInSettingsDark(): Boolean {
         val nightModeFlags = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         return sharedPreferences.getBoolean(Constants.THEME_KEY, nightModeFlags == Configuration.UI_MODE_NIGHT_YES)
         //первый параметр - тема, прописанная в настройках,

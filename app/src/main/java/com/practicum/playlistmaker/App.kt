@@ -15,7 +15,7 @@ class App: Application() {
 
         val settingsInteractor = Creator.provideSettingsInteractor(this)
 
-        isThemeDarkFlag = settingsInteractor.isThemeDark(this) //тема либо из настроек, либо системная
+        isThemeDarkFlag = settingsInteractor.isThemeDark() //тема либо из настроек, либо системная
 
         switchTheme(isThemeDarkFlag) //установим для всего приложения полученный результат
 
