@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker.search.ui
 
 import android.app.Application
+import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.AndroidViewModel
@@ -37,6 +38,7 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
 
     private val searchTracksInteractor = Creator.provideSearchTracksInteractor()
     private val historyTracksInteractor = Creator.provideHistoryTracksInteractor(getApplication<Application>())
+    private val getPlayerIntentUseCase = Creator.provideGetPlayerIntentUseCase(getApplication<Application>())
 
     init {
         historyTracksInteractor.setOnHistoryUpdatedListener(onHistoryUpdatedListener)
@@ -63,6 +65,9 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
 
     private val searchActivityToastStateLiveData = SingleLiveEvent<String>()
     fun observeSearchActivityToastState(): LiveData<String> = searchActivityToastStateLiveData
+
+    private val playerActivityIntentLiveData = SingleLiveEvent<Intent>()
+    fun observePlayerActivityIntent(): LiveData<Intent> = playerActivityIntentLiveData
 
     //LIFE_CYCLE====================================================================================
     override fun onCleared() {
@@ -153,6 +158,20 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
 
     private fun showToastState(message: String) {
         searchActivityToastStateLiveData.postValue(message)
+    }
+
+    //PLAYER========================================================================================
+    fun getPlayerIntent(track: Track) {
+        getPlayerIntentUseCase.execute(
+            track,
+            onPlayerIntentReady = { intent ->
+                startPlayerActivity(intent as Intent)
+            }
+        )
+    }
+
+    private fun startPlayerActivity(intent: Intent) {
+        playerActivityIntentLiveData.postValue(intent)
     }
 
 }

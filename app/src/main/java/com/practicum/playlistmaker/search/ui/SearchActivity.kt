@@ -1,12 +1,10 @@
 package com.practicum.playlistmaker.search.ui
 
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -16,21 +14,15 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.player.ui.PlayerActivity
 import com.practicum.playlistmaker.search.domain.api.HistoryTracksInteractor
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.utils.constants.Constants
 import com.practicum.playlistmaker.search.domain.models.SearchActivityState
-import java.text.SimpleDateFormat
-import java.util.Locale
-import com.practicum.playlistmaker.utils.converters.getCoverArtwork
-import com.practicum.playlistmaker.utils.converters.isoDateToYearConvert
 
 
 class SearchActivity : AppCompatActivity() {
@@ -89,6 +81,10 @@ class SearchActivity : AppCompatActivity() {
             showToast(message)
         }
 
+        searchViewModel.observePlayerActivityIntent().observe(this) { intent ->
+            startActivity(intent)
+        }
+
         //инициализация views
         searchBackButton = findViewById(R.id.search_back_button)
         searchClearButton = findViewById(R.id.search_clear_button)
@@ -114,8 +110,10 @@ class SearchActivity : AppCompatActivity() {
         adapter.onItemClickListener = { track ->
             if (clickDebouncer()) {
                 //запуск плеера
-                val playerIntent = Intent(this, PlayerActivity::class.java)
+                searchViewModel.getPlayerIntent(track)
 
+                //val playerIntent = Intent(this, PlayerActivity::class.java)
+                /*
                 val bundle = Bundle()
                 bundle.putString("b_track_name", track.trackName)
                 bundle.putString("b_artist_name", track.artistName)
@@ -128,7 +126,7 @@ class SearchActivity : AppCompatActivity() {
                 bundle.putString("b_previewUrl", track.previewUrl)
                 playerIntent.putExtras(bundle)
                 startActivity(playerIntent)
-
+                */
                 searchViewModel.writeHistory(track)
             }
         }

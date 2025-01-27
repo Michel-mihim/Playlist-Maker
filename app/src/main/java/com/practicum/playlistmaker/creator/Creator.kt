@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.media.MediaPlayer
+import android.os.Bundle
+import com.practicum.playlistmaker.App
 import com.practicum.playlistmaker.search.data.impl.HistoryTracksRepositoryImpl
 import com.practicum.playlistmaker.player.data.impl.MediaPlayerRepositoryImpl
 import com.practicum.playlistmaker.search.data.impl.searchTracksRepositoryImpl
@@ -15,8 +17,12 @@ import com.practicum.playlistmaker.search.domain.impl.HistoryTracksInteractorImp
 import com.practicum.playlistmaker.player.domain.api.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.data.MediaPlayerRepository
 import com.practicum.playlistmaker.player.domain.impl.MediaPlayerInteractorImpl
+import com.practicum.playlistmaker.player.ui.PlayerActivity
+import com.practicum.playlistmaker.search.data.PlayerIntentGetter
 import com.practicum.playlistmaker.search.domain.api.SearchTracksInteractor
 import com.practicum.playlistmaker.search.data.SearchTracksRepository
+import com.practicum.playlistmaker.search.data.impl.PlayerIntentGetterImpl
+import com.practicum.playlistmaker.search.domain.api.GetPlayerIntentUseCase
 import com.practicum.playlistmaker.search.domain.impl.SearchTracksInteractorImpl
 import com.practicum.playlistmaker.settings.domain.SettingsInteractor
 import com.practicum.playlistmaker.settings.data.SettingsRepository
@@ -61,6 +67,22 @@ object Creator {
         return SettingsRepositoryImpl(provideSharedPreferences(context))
     }
 
+    //playerIntentGetter============================================================================
+    fun provideGetPlayerIntentUseCase(context: Context): GetPlayerIntentUseCase {
+        return GetPlayerIntentUseCase(providePlayerIntentGetter(context))
+    }
+
+    private fun providePlayerIntentGetter(context: Context): PlayerIntentGetter {
+        return PlayerIntentGetterImpl(providePlayerIntent(context), providePlayerBundle())
+    }
+
+    private fun providePlayerIntent(context: Context): Intent {
+        return Intent(context, PlayerActivity::class.java)
+    }
+
+    private fun providePlayerBundle(): Bundle {
+        return Bundle()
+    }
     //sharing=======================================================================================
     fun provideSharingInteractor(): SharingInteractor {
         return SharingInteractorImpl(provideExternalNavigator())
