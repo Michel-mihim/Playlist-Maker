@@ -52,7 +52,7 @@ class SettingsViewModel(application: Application): AndroidViewModel(application)
 
     //==============================================================================================
     //SHARING=======================================================================================
-    private val sharingInteractor = Creator.provideSharingInteractor()
+    private val sharingInteractor = Creator.provideSharingInteractor(getApplication<Application>())
 
     private val shareActivityIntentLiveData = MutableLiveData<Intent>()
     fun observeShareActivityIntentLiveData(): LiveData<Intent> = shareActivityIntentLiveData

@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.media.MediaPlayer
 import android.os.Bundle
-import com.practicum.playlistmaker.App
 import com.practicum.playlistmaker.search.data.impl.HistoryTracksRepositoryImpl
 import com.practicum.playlistmaker.player.data.impl.MediaPlayerRepositoryImpl
 import com.practicum.playlistmaker.search.data.impl.searchTracksRepositoryImpl
@@ -30,7 +29,9 @@ import com.practicum.playlistmaker.settings.domain.impl.SettingsInteractorImpl
 import com.practicum.playlistmaker.sharing.data.ExternalNavigator
 import com.practicum.playlistmaker.sharing.data.impl.ExternalNavigatorImpl
 import com.practicum.playlistmaker.sharing.domain.api.SharingInteractor
+import com.practicum.playlistmaker.sharing.domain.api.TextResourseGetter
 import com.practicum.playlistmaker.sharing.domain.impl.SharingInteractorImpl
+import com.practicum.playlistmaker.sharing.data.impl.TextResourseGetterImpl
 import com.practicum.playlistmaker.utils.constants.Constants
 
 object Creator {
@@ -83,8 +84,15 @@ object Creator {
         return Bundle()
     }
     //sharing=======================================================================================
-    fun provideSharingInteractor(): SharingInteractor {
-        return SharingInteractorImpl(provideExternalNavigator())
+    fun provideSharingInteractor(context: Context): SharingInteractor {
+        return SharingInteractorImpl(
+            provideExternalNavigator(),
+            provideTextResourseGetter(context)
+        )
+    }
+
+    private fun provideTextResourseGetter(context: Context): TextResourseGetter {
+        return TextResourseGetterImpl(context)
     }
 
     private fun provideExternalNavigator(): ExternalNavigator {
