@@ -112,21 +112,6 @@ class SearchActivity : AppCompatActivity() {
                 //запуск плеера
                 searchViewModel.getPlayerIntent(track)
 
-                //val playerIntent = Intent(this, PlayerActivity::class.java)
-                /*
-                val bundle = Bundle()
-                bundle.putString("b_track_name", track.trackName)
-                bundle.putString("b_artist_name", track.artistName)
-                bundle.putString("b_track_time", SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis))
-                bundle.putString("b_artworkUrl100", getCoverArtwork(track.artworkUrl100))
-                bundle.putString("b_track_album", track.collectionName)
-                bundle.putString("b_track_year", isoDateToYearConvert(track.releaseDate))
-                bundle.putString("b_track_genre", track.primaryGenreName)
-                bundle.putString("b_track_country", track.country)
-                bundle.putString("b_previewUrl", track.previewUrl)
-                playerIntent.putExtras(bundle)
-                startActivity(playerIntent)
-                */
                 searchViewModel.writeHistory(track)
             }
         }
@@ -183,11 +168,6 @@ class SearchActivity : AppCompatActivity() {
             handler.postDelayed({isClickAllowed = true}, Constants.CLICK_DEBOUNCE_DELAY)
         }
         return current
-    }
-
-    private fun clearHistory(historyTracksInteractor: HistoryTracksInteractor) {
-        historyTracksInteractor.clearTracks()
-        Toast.makeText(this@SearchActivity, Constants.HISTORY_CLEARED, Toast.LENGTH_SHORT).show()
     }
 
     //управление видимостью=========================================================================
@@ -247,16 +227,6 @@ class SearchActivity : AppCompatActivity() {
 
     private fun hideSearchProgressbar(){
         searchProgressBar.visibility = View.INVISIBLE
-    }
-
-    private fun openSoftKeyBoard(inputManager: InputMethodManager, view: EditText) {
-        view.requestFocus()
-        inputManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
-    }
-
-    private fun closeSoftKeyBoard(inputManager: InputMethodManager) {
-        inputManager.hideSoftInputFromWindow(currentFocus!!.windowToken,0)
-        searchEdittext.clearFocus()
     }
 
     private fun defaultViewsShow() {
