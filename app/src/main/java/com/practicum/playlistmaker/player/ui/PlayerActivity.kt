@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.player.domain.models.PlayerStatus
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.utils.constants.Constants
 import com.practicum.playlistmaker.utils.converters.dimensionsFloatToIntConvert
 
 
@@ -67,24 +68,24 @@ class PlayerActivity : AppCompatActivity() {
         //основной листинг
         val bundle = intent.extras
         if (bundle != null) {
-            playerTrackName.text = bundle.getString("b_track_name")
-            playerArtistName.text = bundle.getString("b_artist_name")
-            playerTrackTime.text = bundle.getString("b_track_time")
-            playerTrackAlbum.text = bundle.getString("b_track_album")
-            playerTrackYear.text = bundle.getString("b_track_year")
-            playerTrackGenre.text = bundle.getString("b_track_genre")
-            playerTrackCountry.text = bundle.getString("b_track_country")
+            playerTrackName.text = bundle.getString(Constants.TRACK_NAME_KEY)
+            playerArtistName.text = bundle.getString(Constants.ARTIST_NAME_KEY)
+            playerTrackTime.text = bundle.getString(Constants.TRACK_TIME_KEY)
+            playerTrackAlbum.text = bundle.getString(Constants.TRACK_ALBUM_KEY)
+            playerTrackYear.text = bundle.getString(Constants.TRACK_YEAR_KEY)
+            playerTrackGenre.text = bundle.getString(Constants.TRACK_GENRE_KEY)
+            playerTrackCountry.text = bundle.getString(Constants.TRACK_COUNTRY_KEY)
 
             val cornerDp = resources.getDimension(R.dimen.track_poster_corner)
             val cornerPx = dimensionsFloatToIntConvert(cornerDp, this)
             Glide.with(this)
-                .load(bundle.getString("b_artworkUrl100"))
+                .load(bundle.getString(Constants.PIC_URL_KEY))
                 .placeholder(R.drawable.placeholder_large)
                 .transform(RoundedCorners(cornerPx))
                 .into(playerTrackImage)
         }
 
-        playerViewModel.mediaPlayerPrepare(bundle?.getString(("b_previewUrl")))
+        playerViewModel.mediaPlayerPrepare(bundle?.getString((Constants.PREVIEW_PIC_URL_KEY)))
 
         //слушатели нажатий
         playerBackButton.setOnClickListener{

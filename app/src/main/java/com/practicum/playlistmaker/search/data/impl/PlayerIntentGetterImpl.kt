@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.practicum.playlistmaker.search.data.PlayerIntentGetter
 import com.practicum.playlistmaker.search.domain.models.Track
+import com.practicum.playlistmaker.utils.constants.Constants
 import java.text.SimpleDateFormat
 import java.util.Locale
 import com.practicum.playlistmaker.utils.converters.getCoverArtwork
@@ -17,15 +18,15 @@ class PlayerIntentGetterImpl(
         track: Track,
         onPlayerIntentReady: ((Any) -> Unit)
     ) {
-        bundle.putString("b_track_name", track.trackName)
-        bundle.putString("b_artist_name", track.artistName)
-        bundle.putString("b_track_time", SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis))
-        bundle.putString("b_artworkUrl100", getCoverArtwork(track.artworkUrl100))
-        bundle.putString("b_track_album", track.collectionName)
-        bundle.putString("b_track_year", isoDateToYearConvert(track.releaseDate))
-        bundle.putString("b_track_genre", track.primaryGenreName)
-        bundle.putString("b_track_country", track.country)
-        bundle.putString("b_previewUrl", track.previewUrl)
+        bundle.putString(Constants.TRACK_NAME_KEY, track.trackName)
+        bundle.putString(Constants.ARTIST_NAME_KEY, track.artistName)
+        bundle.putString(Constants.TRACK_TIME_KEY, SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis))
+        bundle.putString(Constants.PIC_URL_KEY, getCoverArtwork(track.artworkUrl100))
+        bundle.putString(Constants.TRACK_ALBUM_KEY, track.collectionName)
+        bundle.putString(Constants.TRACK_YEAR_KEY, isoDateToYearConvert(track.releaseDate))
+        bundle.putString(Constants.TRACK_GENRE_KEY, track.primaryGenreName)
+        bundle.putString(Constants.TRACK_COUNTRY_KEY, track.country)
+        bundle.putString(Constants.PREVIEW_PIC_URL_KEY, track.previewUrl)
         playerIntent.putExtras(bundle)
         onPlayerIntentReady.invoke(playerIntent)
     }
