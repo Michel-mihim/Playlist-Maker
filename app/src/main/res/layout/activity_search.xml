@@ -25,6 +25,7 @@
     </LinearLayout>
 
     <RelativeLayout
+        android:id="@+id/search_edit_field"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -99,11 +100,12 @@
 
         <Button
             android:id="@+id/search_renew_button"
-            style="@style/main_activity_button_style"
+            style="@style/clear_history_button_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/not_found_renew_button_margin_top"
             android:text="@string/renew"
+            android:letterSpacing="@integer/letter_spacing"
             android:backgroundTint="@color/not_found_renew_button_color"
             android:fontFamily="@font/ys_display_medium"
             android:textColor="@color/not_found_renew_button_text_color"
@@ -113,7 +115,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
@@ -133,7 +135,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/history_recycler"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/history_recycler_height"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:layout_marginTop="@dimen/history_recycler_margin_top"/>
 
             <Button
@@ -144,10 +147,12 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="24dp"
                 android:text="@string/clear_history"
+                android:letterSpacing="@integer/letter_spacing"
                 android:backgroundTint="@color/not_found_renew_button_color"
                 android:fontFamily="@font/ys_display_medium"
                 android:textColor="@color/not_found_renew_button_text_color"
                 android:textSize="@dimen/not_found_renew_button_text_size"
+
                 android:visibility="invisible"/>
 
         </LinearLayout>

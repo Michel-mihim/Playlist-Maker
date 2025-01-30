@@ -12,7 +12,7 @@
         <item name="android:textAllCaps">false</item>
         <item name="android:textSize">@dimen/text_size</item>
         <item name="android:fontFamily">@font/ys_display_medium</item>
-        <item name="cornerRadius">@dimen/radius</item>
+        <item name="cornerRadius">@dimen/history_corner_radius</item>
         <item name="iconGravity">textStart</item>
         <item name="iconTint">@color/buttonTextColor</item>
     </style>
