@@ -27,4 +27,15 @@ object Constants {
     const val SHOW_PROGRESS_DELAY = 500L
     const val TRACK_IS_OVER_PROGRESS = "00:00"
 
+    //ключи
+    const val TRACK_NAME_KEY = "b_track_name"
+    const val ARTIST_NAME_KEY = "b_artist_name"
+    const val TRACK_TIME_KEY = "b_track_time"
+    const val TRACK_ALBUM_KEY = "b_track_album"
+    const val TRACK_YEAR_KEY = "b_track_year"
+    const val TRACK_GENRE_KEY = "b_track_genre"
+    const val TRACK_COUNTRY_KEY = "b_track_country"
+    const val PIC_URL_KEY = "b_artworkUrl100"
+    const val PREVIEW_PIC_URL_KEY = "b_previewUrl"
+
 }

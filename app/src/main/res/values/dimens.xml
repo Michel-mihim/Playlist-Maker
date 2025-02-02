@@ -12,6 +12,7 @@
     <dimen name="super_tiny_text_size">11dp</dimen>
     <dimen name="radius">16dp</dimen>
     <dimen name="dp_0">0dp</dimen>
+    <dimen name="history_corner_radius">54dp</dimen>
 
     <!--
     SEARCH ACTIVITY

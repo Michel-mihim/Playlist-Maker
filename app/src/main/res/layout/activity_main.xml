@@ -9,7 +9,7 @@
     android:background="@color/backgroundColor"
 
     android:orientation="vertical"
-    tools:context=".presentation.ui.main.MainActivity">
+    tools:context=".main.ui.MainMenuActivity">
 
     <TextView
         android:layout_width="match_parent"
@@ -30,6 +30,7 @@
         android:layout_marginTop="@dimen/dp24"
         android:layout_marginHorizontal="@dimen/dp16"
         android:text="@string/button_search"
+        android:letterSpacing="@integer/letter_spacing"
         app:icon="@drawable/search"/>
 
     <Button
@@ -39,6 +40,7 @@
         android:layout_marginBottom="@dimen/dp10"
         android:layout_marginHorizontal="@dimen/dp16"
         android:text="@string/button_lib"
+        android:letterSpacing="@integer/letter_spacing"
         app:icon="@drawable/lib"/>
 
     <Button
@@ -47,6 +49,7 @@
         android:layout_marginBottom="@dimen/dp28"
         android:layout_marginHorizontal="@dimen/dp16"
         android:text="@string/button_settings"
+        android:letterSpacing="@integer/letter_spacing"
         app:icon="@drawable/settings"/>
 
 </LinearLayout>
