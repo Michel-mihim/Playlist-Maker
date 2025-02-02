@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.settings.domain
+package com.practicum.playlistmaker.settings.domain.api
 
 
 interface SettingsInteractor {

@@ -3,8 +3,7 @@ package com.practicum.playlistmaker.settings.data.impl
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
-import androidx.appcompat.app.AppCompatDelegate
-import com.practicum.playlistmaker.settings.data.SettingsRepository
+import com.practicum.playlistmaker.settings.domain.api.SettingsRepository
 import com.practicum.playlistmaker.utils.constants.Constants
 
 class SettingsRepositoryImpl(

@@ -1,6 +1,4 @@
-package com.practicum.playlistmaker.settings.data
-
-import android.content.Context
+package com.practicum.playlistmaker.settings.domain.api
 
 interface SettingsRepository {
     fun isThemeInSettingsDark(): Boolean
