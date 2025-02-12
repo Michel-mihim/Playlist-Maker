@@ -7,7 +7,6 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import com.practicum.playlistmaker.search.data.impl.HistoryTracksRepositoryImpl
 import com.practicum.playlistmaker.player.data.impl.MediaPlayerRepositoryImpl
-import com.practicum.playlistmaker.search.data.impl.searchTracksRepositoryImpl
 import com.practicum.playlistmaker.search.data.network.RetrofitNetworkClient
 import com.practicum.playlistmaker.settings.data.impl.SettingsRepositoryImpl
 import com.practicum.playlistmaker.search.domain.api.HistoryTracksInteractor
@@ -37,13 +36,7 @@ import com.practicum.playlistmaker.utils.constants.Constants
 object Creator {
 
     //searchTracks==================================================================================
-    fun provideSearchTracksInteractor(): SearchTracksInteractor {
-        return SearchTracksInteractorImpl(provideSearchTracksRepository())
-    }
 
-    private fun provideSearchTracksRepository(): SearchTracksRepository {
-        return searchTracksRepositoryImpl(RetrofitNetworkClient())
-    }
 
     //history=======================================================================================
     fun provideHistoryTracksInteractor(context: Context): HistoryTracksInteractor {

@@ -7,12 +7,10 @@ import com.practicum.playlistmaker.search.domain.api.SearchTracksRepository
 import com.practicum.playlistmaker.search.domain.models.SearchTracksResult
 import com.practicum.playlistmaker.search.domain.models.Track
 
-class searchTracksRepositoryImpl(private val networkClient: NetworkClient) :
-    SearchTracksRepository {
-
-    override fun searchTracks(
-        expression: String
-    ): SearchTracksResult<List<Track>> {
+class SearchTracksRepositoryImpl(
+    private val networkClient: NetworkClient
+) : SearchTracksRepository {
+    override fun searchTracks(expression: String): SearchTracksResult<List<Track>> {
         val response = networkClient.doRequest(TracksSearchRequest(expression))
 
         if (response.resultCode == 200) {
@@ -44,5 +42,4 @@ class searchTracksRepositoryImpl(private val networkClient: NetworkClient) :
         }
 
     }
-
 }

@@ -21,8 +21,12 @@ import com.practicum.playlistmaker.search.domain.models.SearchActivityNavigation
 import com.practicum.playlistmaker.search.domain.models.SearchActivityState
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.utils.classes.SingleLiveEvent
+import org.koin.android.ext.android.inject
 
-class SearchViewModel(application: Application): AndroidViewModel(application) {
+
+class SearchViewModel(
+    application: Application
+): AndroidViewModel(application) {
 
     companion object {
         fun getSearchViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
@@ -36,7 +40,7 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
         searchActivityNavigate()
     }
 
-    private val searchTracksInteractor = Creator.provideSearchTracksInteractor()
+    private val searchTracksInteractor: SearchTracksInteractor by inject()
     private val historyTracksInteractor = Creator.provideHistoryTracksInteractor(getApplication<Application>())
     private val getPlayerIntentUseCase = Creator.provideGetPlayerIntentUseCase(getApplication<Application>())
 
