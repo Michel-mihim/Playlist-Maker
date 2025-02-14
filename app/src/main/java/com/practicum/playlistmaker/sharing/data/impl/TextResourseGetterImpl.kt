@@ -6,7 +6,9 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.sharing.domain.api.TextResourseGetter
 import com.practicum.playlistmaker.sharing.domain.model.EmailData
 
-class TextResourseGetterImpl(val context: Context): TextResourseGetter {
+class TextResourseGetterImpl(
+    val context: Context
+): TextResourseGetter {
     override fun getTermsLink(): String {
         return getString(context, R.string.license_url)
     }

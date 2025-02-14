@@ -7,31 +7,27 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.practicum.playlistmaker.App
 import com.practicum.playlistmaker.creator.Creator
+import com.practicum.playlistmaker.settings.domain.api.SettingsInteractor
+import com.practicum.playlistmaker.sharing.domain.api.SharingInteractor
 
-class SettingsViewModel(application: Application): AndroidViewModel(application) {
+class SettingsViewModel(
+    private val settingsInteractor: SettingsInteractor,
+    private val sharingInteractor: SharingInteractor,
+    private val app_link: Application
+): ViewModel() {
 
-    companion object {
-        fun getSettingsViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                SettingsViewModel(this[APPLICATION_KEY] as Application)
-            }
-        }
-    }
 
     //==============================================================================================
     //SETTINGS======================================================================================
     private val settingsActivityDarkThemeLiveData = MutableLiveData<Boolean>()
     fun observeSettingsActivityTheme(): LiveData<Boolean> = settingsActivityDarkThemeLiveData
-
-    private val app_link = application
-
-    private val settingsInteractor = Creator.provideSettingsInteractor(getApplication<Application>())
 
     //POSTING=======================================================================================
     private fun themeSwitcherIsDarkSetter(isDark: Boolean) {
@@ -52,7 +48,6 @@ class SettingsViewModel(application: Application): AndroidViewModel(application)
 
     //==============================================================================================
     //SHARING=======================================================================================
-    private val sharingInteractor = Creator.provideSharingInteractor(getApplication<Application>())
 
     private val shareActivityIntentLiveData = MutableLiveData<Intent>()
     fun observeShareActivityIntentLiveData(): LiveData<Intent> = shareActivityIntentLiveData

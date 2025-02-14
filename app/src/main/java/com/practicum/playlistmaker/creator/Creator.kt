@@ -42,13 +42,7 @@ object Creator {
 
 
     //settings======================================================================================
-    fun provideSettingsInteractor(context: Context): SettingsInteractor {
-        return SettingsInteractorImpl(provideSettingsRepository(context))
-    }
 
-    private fun provideSettingsRepository(context: Context): SettingsRepository {
-        return SettingsRepositoryImpl(provideSharedPreferences(context), context)
-    }
 
     //playerIntentGetter============================================================================
 
