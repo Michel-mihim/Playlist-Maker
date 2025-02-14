@@ -20,7 +20,7 @@ import com.practicum.playlistmaker.sharing.domain.api.SharingInteractor
 class SettingsViewModel(
     private val settingsInteractor: SettingsInteractor,
     private val sharingInteractor: SharingInteractor,
-    private val app_link: Application
+    //private val app_link: Application
 ): ViewModel() {
 
 
@@ -40,7 +40,7 @@ class SettingsViewModel(
     }
 
     fun switchTheme(checked: Boolean) {
-        (app_link as App).switchTheme(checked)
+        //(app_link as App).switchTheme(checked)
 
         settingsInteractor.writeThemeDark(checked)
         themeSwitcherIsDarkSetter(checked)

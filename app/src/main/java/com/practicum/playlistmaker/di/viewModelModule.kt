@@ -14,7 +14,7 @@ val viewModelModule = module {
     }
 
     viewModel {
-        SettingsViewModel(get(), get(), Application()) //тут может быть краш
+        SettingsViewModel(get(), get()) //тут добавить App
     }
 
     viewModel {
