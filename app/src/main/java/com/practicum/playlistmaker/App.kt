@@ -7,6 +7,8 @@ import com.practicum.playlistmaker.di.dataModule
 import com.practicum.playlistmaker.di.interactorModule
 import com.practicum.playlistmaker.di.repositoryModule
 import com.practicum.playlistmaker.di.viewModelModule
+import com.practicum.playlistmaker.settings.domain.api.SettingsInteractor
+import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
@@ -22,7 +24,7 @@ class App: Application() {
             modules(dataModule, repositoryModule, interactorModule, viewModelModule)
         }
 
-        val settingsInteractor = Creator.provideSettingsInteractor(this)
+        val settingsInteractor: SettingsInteractor by inject<SettingsInteractor>()
 
         isThemeDarkFlag = settingsInteractor.isThemeDark() //тема либо из настроек, либо системная
 

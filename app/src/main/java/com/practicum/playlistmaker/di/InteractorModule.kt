@@ -1,5 +1,7 @@
 package com.practicum.playlistmaker.di
 
+import com.practicum.playlistmaker.player.domain.api.MediaPlayerInteractor
+import com.practicum.playlistmaker.player.domain.impl.MediaPlayerInteractorImpl
 import com.practicum.playlistmaker.search.domain.api.GetPlayerIntentUseCase
 import com.practicum.playlistmaker.search.domain.api.HistoryTracksInteractor
 import com.practicum.playlistmaker.search.domain.api.SearchTracksInteractor
@@ -31,6 +33,10 @@ val interactorModule = module {
 
     single<SharingInteractor> {
         SharingInteractorImpl(get(), get())
+    }
+
+    single<MediaPlayerInteractor> {
+        MediaPlayerInteractorImpl(get())
     }
 
 }

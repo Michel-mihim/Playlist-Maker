@@ -5,7 +5,9 @@ import com.practicum.playlistmaker.player.domain.api.MediaPlayerRepository
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class MediaPlayerRepositoryImpl(private val mediaPlayer: MediaPlayer): MediaPlayerRepository {
+class MediaPlayerRepositoryImpl(
+    private val mediaPlayer: MediaPlayer
+): MediaPlayerRepository {
     override fun prepare(
         url: String?,
         onPrepared: () -> Unit,

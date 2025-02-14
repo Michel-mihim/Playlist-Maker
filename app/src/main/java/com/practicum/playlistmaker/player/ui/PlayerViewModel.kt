@@ -6,27 +6,21 @@ import android.os.Looper
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.creator.Creator
+import com.practicum.playlistmaker.player.domain.api.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.domain.models.PlayerStatus
 import com.practicum.playlistmaker.search.domain.models.SearchActivityState
 import com.practicum.playlistmaker.utils.constants.Constants
 
-class PlayerViewModel(application: Application): AndroidViewModel(application) {
-
-    companion object {
-        fun getPlayerViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                PlayerViewModel(this[APPLICATION_KEY] as Application)
-            }
-        }
-    }
-
-    private val mediaPlayerInteractor = Creator.provideMediaPlayerInteractor()
+class PlayerViewModel(
+    private val mediaPlayerInteractor: MediaPlayerInteractor
+): ViewModel() {
 
     private var playerStatus: PlayerStatus = PlayerStatus.STATE_DEFAULT
 

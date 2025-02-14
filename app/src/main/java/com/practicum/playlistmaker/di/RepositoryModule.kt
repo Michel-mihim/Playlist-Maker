@@ -2,6 +2,8 @@ package com.practicum.playlistmaker.di
 
 import android.content.Intent
 import com.practicum.playlistmaker.creator.Creator.shareLinkIntent
+import com.practicum.playlistmaker.player.data.impl.MediaPlayerRepositoryImpl
+import com.practicum.playlistmaker.player.domain.api.MediaPlayerRepository
 import com.practicum.playlistmaker.player.ui.PlayerActivity
 import com.practicum.playlistmaker.search.data.impl.HistoryTracksRepositoryImpl
 import com.practicum.playlistmaker.search.data.impl.PlayerIntentGetterImpl
@@ -47,6 +49,10 @@ val repositoryModule = module {
 
     single<TextResourseGetter> {
         TextResourseGetterImpl(androidContext())
+    }
+
+    single<MediaPlayerRepository> {
+        MediaPlayerRepositoryImpl(get())
     }
 
 }

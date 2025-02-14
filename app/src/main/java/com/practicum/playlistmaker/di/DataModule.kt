@@ -2,6 +2,7 @@ package com.practicum.playlistmaker.di
 
 import android.content.Context
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Bundle
 import com.practicum.playlistmaker.search.data.NetworkClient
 import com.practicum.playlistmaker.search.data.impl.SearchTracksRepositoryImpl
@@ -38,6 +39,10 @@ val dataModule = module {
 
     factory {
         Bundle()
+    }
+
+    factory {
+        MediaPlayer()
     }
 
 }

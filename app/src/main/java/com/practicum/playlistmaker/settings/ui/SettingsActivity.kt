@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.practicum.playlistmaker.R
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -19,7 +20,7 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var buttonLicense: Button
     private lateinit var settingsBackButton: ImageButton
 
-    private lateinit var settingsViewModel: SettingsViewModel
+    private val settingsViewModel by viewModel<SettingsViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +33,6 @@ class SettingsActivity : AppCompatActivity() {
         buttonLicense = findViewById(R.id.button_license)
         settingsBackButton = findViewById(R.id.settings_back_button)
 
-        settingsViewModel = ViewModelProvider(this, SettingsViewModel.getSettingsViewModelFactory())[SettingsViewModel::class.java]
 
         settingsViewModel.observeSettingsActivityTheme().observe(this) { isDark ->
             darkThemeSwitcherActivated(isDark)

@@ -12,6 +12,7 @@ import com.practicum.playlistmaker.player.domain.models.PlayerStatus
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.utils.constants.Constants
 import com.practicum.playlistmaker.utils.converters.dimensionsFloatToIntConvert
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class PlayerActivity : AppCompatActivity() {
@@ -29,15 +30,14 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var trackPlayButton: ImageButton
     private lateinit var trackProgress: TextView
 
-    //LATEINIT VARS
-    private lateinit var playerViewModel: PlayerViewModel
+    //VAL BY
+    private val playerViewModel by viewModel<PlayerViewModel>()
 
     //основной листинг==============================================================================
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
 
-        playerViewModel = ViewModelProvider(this, PlayerViewModel.getPlayerViewModelFactory())[PlayerViewModel::class.java]
 
         playerViewModel.observePlayerActivityPlayerReadiness().observe(this) { ready ->
             trackPlayButtonActivate(ready)
