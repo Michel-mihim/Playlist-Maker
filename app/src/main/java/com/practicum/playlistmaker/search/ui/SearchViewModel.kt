@@ -7,6 +7,7 @@ import android.os.Looper
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
@@ -25,23 +26,14 @@ import org.koin.android.ext.android.inject
 
 
 class SearchViewModel(
-    application: Application
-): AndroidViewModel(application) {
-
-    companion object {
-        fun getSearchViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                SearchViewModel(this[APPLICATION_KEY] as Application)
-            }
-        }
-    }
+    private val searchTracksInteractor: SearchTracksInteractor,
+    private val historyTracksInteractor: HistoryTracksInteractor
+): ViewModel() {
 
     private val onHistoryUpdatedListener = OnHistoryUpdatedListener {
         searchActivityNavigate()
     }
 
-    private val searchTracksInteractor: SearchTracksInteractor by inject()
-    private val historyTracksInteractor = Creator.provideHistoryTracksInteractor(getApplication<Application>())
     private val getPlayerIntentUseCase = Creator.provideGetPlayerIntentUseCase(getApplication<Application>())
 
     init {

@@ -26,12 +26,4 @@ val dataModule = module {
         RetrofitNetworkClient(get())
     }
 
-    single<SearchTracksRepository> {
-        SearchTracksRepositoryImpl(get())
-    }
-
-    single<SearchTracksInteractor> {
-        SearchTracksInteractorImpl(get())
-    }
-
 }
