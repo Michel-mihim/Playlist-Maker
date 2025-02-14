@@ -39,17 +39,7 @@ object Creator {
 
 
     //history=======================================================================================
-    fun provideHistoryTracksInteractor(context: Context): HistoryTracksInteractor {
-        return HistoryTracksInteractorImpl(provideHistoryTracksRepository(context))
-    }
 
-    private fun provideHistoryTracksRepository(context: Context): HistoryTracksRepository {
-        return HistoryTracksRepositoryImpl(provideSharedPreferences(context))
-    }
-
-    private fun provideSharedPreferences(context: Context): SharedPreferences {
-        return context.getSharedPreferences(Constants.PREFERENCES, Context.MODE_PRIVATE)
-    }
 
     //settings======================================================================================
     fun provideSettingsInteractor(context: Context): SettingsInteractor {
@@ -61,21 +51,8 @@ object Creator {
     }
 
     //playerIntentGetter============================================================================
-    fun provideGetPlayerIntentUseCase(context: Context): GetPlayerIntentUseCase {
-        return GetPlayerIntentUseCase(providePlayerIntentGetter(context))
-    }
 
-    private fun providePlayerIntentGetter(context: Context): PlayerIntentGetter {
-        return PlayerIntentGetterImpl(providePlayerIntent(context), providePlayerBundle())
-    }
 
-    private fun providePlayerIntent(context: Context): Intent {
-        return Intent(context, PlayerActivity::class.java)
-    }
-
-    private fun providePlayerBundle(): Bundle {
-        return Bundle()
-    }
     //sharing=======================================================================================
     fun provideSharingInteractor(context: Context): SharingInteractor {
         return SharingInteractorImpl(

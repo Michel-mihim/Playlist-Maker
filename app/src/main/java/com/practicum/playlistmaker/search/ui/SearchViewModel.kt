@@ -17,6 +17,7 @@ import com.practicum.playlistmaker.search.domain.models.SearchTracksResult
 import com.practicum.playlistmaker.utils.constants.Constants
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import com.practicum.playlistmaker.search.domain.OnHistoryUpdatedListener
+import com.practicum.playlistmaker.search.domain.api.GetPlayerIntentUseCase
 import com.practicum.playlistmaker.search.domain.api.HistoryTracksInteractor
 import com.practicum.playlistmaker.search.domain.models.SearchActivityNavigationState
 import com.practicum.playlistmaker.search.domain.models.SearchActivityState
@@ -27,14 +28,13 @@ import org.koin.android.ext.android.inject
 
 class SearchViewModel(
     private val searchTracksInteractor: SearchTracksInteractor,
-    private val historyTracksInteractor: HistoryTracksInteractor
+    private val historyTracksInteractor: HistoryTracksInteractor,
+    private val getPlayerIntentUseCase: GetPlayerIntentUseCase
 ): ViewModel() {
 
     private val onHistoryUpdatedListener = OnHistoryUpdatedListener {
         searchActivityNavigate()
     }
-
-    private val getPlayerIntentUseCase = Creator.provideGetPlayerIntentUseCase(getApplication<Application>())
 
     init {
         historyTracksInteractor.setOnHistoryUpdatedListener(onHistoryUpdatedListener)
