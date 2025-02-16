@@ -1,20 +1,14 @@
 package com.practicum.playlistmaker.search.ui
 
-import android.app.Application
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.practicum.playlistmaker.search.domain.api.SearchTracksInteractor
 import com.practicum.playlistmaker.search.domain.models.SearchTracksResult
 import com.practicum.playlistmaker.utils.constants.Constants
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import com.practicum.playlistmaker.search.domain.OnHistoryUpdatedListener
 import com.practicum.playlistmaker.search.domain.api.GetPlayerIntentUseCase
 import com.practicum.playlistmaker.search.domain.api.HistoryTracksInteractor
@@ -22,7 +16,6 @@ import com.practicum.playlistmaker.search.domain.models.SearchActivityNavigation
 import com.practicum.playlistmaker.search.domain.models.SearchActivityState
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.utils.classes.SingleLiveEvent
-import org.koin.android.ext.android.inject
 
 
 class SearchViewModel(
