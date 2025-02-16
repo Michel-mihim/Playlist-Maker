@@ -26,7 +26,7 @@ val interactorModule = module {
         HistoryTracksInteractorImpl(get())
     }
 
-    single {
+    factory {
         Log.d("wtf", "getPlayerIntentUseCase created")
         GetPlayerIntentUseCase(get())
     }
@@ -41,7 +41,7 @@ val interactorModule = module {
         SharingInteractorImpl(get(), get())
     }
 
-    single<MediaPlayerInteractor> {
+    factory<MediaPlayerInteractor> {
         Log.d("wtf", "playerInteractor created")
         MediaPlayerInteractorImpl(get())
     }

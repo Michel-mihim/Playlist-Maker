@@ -60,7 +60,7 @@ val repositoryModule = module {
         TextResourseGetterImpl(androidContext())
     }
 
-    single<MediaPlayerRepository> {
+    factory<MediaPlayerRepository> {
         Log.d("wtf", "mediaPlayerRepository created")
         MediaPlayerRepositoryImpl(get())
     }

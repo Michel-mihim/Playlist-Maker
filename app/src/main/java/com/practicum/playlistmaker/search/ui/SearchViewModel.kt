@@ -47,7 +47,6 @@ class SearchViewModel(
     }
 
 
-
     private val searchActivityStateLiveData = MutableLiveData<SearchActivityState>()
     fun observeSearchActivityState(): LiveData<SearchActivityState> = searchActivityStateLiveData
 

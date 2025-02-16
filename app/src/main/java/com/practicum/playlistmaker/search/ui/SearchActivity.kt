@@ -5,6 +5,7 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -81,6 +82,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         searchViewModel.observePlayerActivityIntent().observe(this) { intent ->
+            Log.d("wtf", "intent player got(searchActivity_observer)")
             startActivity(intent)
         }
 
@@ -110,6 +112,7 @@ class SearchActivity : AppCompatActivity() {
             if (clickDebouncer()) {
                 //запуск плеера
                 searchViewModel.getPlayerIntent(track)
+                Log.d("wtf", "intent asked(track_clicked)")
 
                 searchViewModel.writeHistory(track)
             }
