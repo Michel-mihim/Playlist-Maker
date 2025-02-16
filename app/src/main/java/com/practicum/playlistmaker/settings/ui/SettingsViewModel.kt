@@ -14,14 +14,13 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.practicum.playlistmaker.App
-import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.settings.domain.api.SettingsInteractor
 import com.practicum.playlistmaker.sharing.domain.api.SharingInteractor
 
 class SettingsViewModel(
     private val settingsInteractor: SettingsInteractor,
     private val sharingInteractor: SharingInteractor,
-    //private val app_link: Application
+    private val app_link: Application
 ): ViewModel() {
 
     //==============================================================================================
@@ -40,7 +39,7 @@ class SettingsViewModel(
     }
 
     fun switchTheme(checked: Boolean) {
-        //(app_link as App).switchTheme(checked)
+        (app_link as App).switchTheme(checked)
 
         settingsInteractor.writeThemeDark(checked)
         themeSwitcherIsDarkSetter(checked)

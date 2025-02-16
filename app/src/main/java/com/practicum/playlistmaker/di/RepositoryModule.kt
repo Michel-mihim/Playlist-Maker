@@ -2,7 +2,6 @@ package com.practicum.playlistmaker.di
 
 import android.content.Intent
 import android.util.Log
-import com.practicum.playlistmaker.creator.Creator.shareLinkIntent
 import com.practicum.playlistmaker.player.data.impl.MediaPlayerRepositoryImpl
 import com.practicum.playlistmaker.player.domain.api.MediaPlayerRepository
 import com.practicum.playlistmaker.player.ui.PlayerActivity

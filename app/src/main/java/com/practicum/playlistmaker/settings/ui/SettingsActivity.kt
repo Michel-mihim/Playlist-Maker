@@ -43,6 +43,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         settingsViewModel.observeSupportEmailActivityIntentLiveData().observe(this) {intent ->
+            Log.d("wtf", "Letter send intent:" + intent.toString())
             startActivity(intent)
         }
 
@@ -60,6 +61,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         buttonSupport.setOnClickListener{
+            Log.d("wtf", "Letter for sent pressed.")
             settingsViewModel.openSupport()
         }
 
