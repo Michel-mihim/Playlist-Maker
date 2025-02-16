@@ -88,16 +88,6 @@ object Creator {
     }
 
     //mediaPlayer===================================================================================
-    fun provideMediaPlayerInteractor(): MediaPlayerInteractor {
-        return MediaPlayerInteractorImpl(provideMediaPlayerRepository())
-    }
 
-    private fun provideMediaPlayerRepository(): MediaPlayerRepository {
-        return MediaPlayerRepositoryImpl(provideMediaPlayer())
-    }
-
-    private fun provideMediaPlayer(): MediaPlayer{
-        return MediaPlayer()
-    }
 
 }

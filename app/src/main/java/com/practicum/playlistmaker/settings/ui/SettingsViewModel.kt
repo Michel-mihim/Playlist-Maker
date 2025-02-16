@@ -3,6 +3,7 @@ package com.practicum.playlistmaker.settings.ui
 import android.app.Application
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -22,7 +23,6 @@ class SettingsViewModel(
     private val sharingInteractor: SharingInteractor,
     //private val app_link: Application
 ): ViewModel() {
-
 
     //==============================================================================================
     //SETTINGS======================================================================================

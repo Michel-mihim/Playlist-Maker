@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.util.Log
 import com.practicum.playlistmaker.search.data.NetworkClient
 import com.practicum.playlistmaker.search.data.impl.SearchTracksRepositoryImpl
 import com.practicum.playlistmaker.search.data.network.ITunesApiService
@@ -33,15 +34,18 @@ val dataModule = module {
     }
 
     single {
+        Log.d("wtf", "sharedPreferences created")
         androidContext().
         getSharedPreferences(Constants.PREFERENCES, Context.MODE_PRIVATE)
     }
 
     factory {
+        Log.d("wtf", "bundle created")
         Bundle()
     }
 
     factory {
+        Log.d("wtf", "mediaPlayer created")
         MediaPlayer()
     }
 
