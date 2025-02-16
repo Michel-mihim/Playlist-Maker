@@ -42,11 +42,10 @@ val repositoryModule = module {
         SettingsRepositoryImpl(get(), androidContext())
     }
 
-    single<ExternalNavigator> {
+    factory<ExternalNavigator> {
         Log.d("wtf", "externalNavigator created")
 
-        lateinit var shareLinkIntent: Intent
-        shareLinkIntent = Intent(Intent.ACTION_SEND)
+        val shareLinkIntent = Intent(Intent.ACTION_SEND)
         ExternalNavigatorImpl(
             shareLinkIntent,
             Intent.createChooser(shareLinkIntent, null),
@@ -55,7 +54,7 @@ val repositoryModule = module {
         )
     }
 
-    single<TextResourseGetter> {
+    factory<TextResourseGetter> {
         Log.d("wtf", "textResourseGetter created")
         TextResourseGetterImpl(androidContext())
     }

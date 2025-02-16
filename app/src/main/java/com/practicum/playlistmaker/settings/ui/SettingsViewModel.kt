@@ -68,6 +68,7 @@ class SettingsViewModel(
     fun openSupport() {
         sharingInteractor.openSupport(
             onSupportEmailIntentReady = { intent ->
+                Log.d("wtf", "Send intent got")
                 startSupportEmailActivity(intent as Intent)
             }
         )

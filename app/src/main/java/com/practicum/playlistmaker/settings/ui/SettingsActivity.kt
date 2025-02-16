@@ -6,10 +6,12 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.utils.constants.Constants
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsActivity : AppCompatActivity() {
@@ -43,8 +45,13 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         settingsViewModel.observeSupportEmailActivityIntentLiveData().observe(this) {intent ->
-            Log.d("wtf", "Letter send intent:" + intent.toString())
-            startActivity(intent)
+            Log.d("wtf", "Send intent before starting." + intent.toString())
+            try {
+                startActivity(intent)
+            } catch (e: Exception) {
+                Toast.makeText(this@SettingsActivity, Constants.EMAIL_CLIENT_NOT_FOUND, Toast.LENGTH_LONG).show()
+            }
+
         }
 
         settingsViewModel.observeTermsIntentLiveData().observe(this) { intent ->
@@ -61,7 +68,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         buttonSupport.setOnClickListener{
-            Log.d("wtf", "Letter for sent pressed.")
+            Log.d("wtf", "Send intent asked.")
             settingsViewModel.openSupport()
         }
 

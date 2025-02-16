@@ -36,7 +36,7 @@ val interactorModule = module {
         SettingsInteractorImpl(get())
     }
 
-    single<SharingInteractor> {
+    factory<SharingInteractor> {
         Log.d("wtf", "sharingInteractor created")
         SharingInteractorImpl(get(), get())
     }
