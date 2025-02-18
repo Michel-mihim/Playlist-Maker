@@ -34,18 +34,15 @@ val dataModule = module {
     }
 
     single {
-        Log.d("wtf", "sharedPreferences created")
         androidContext().
         getSharedPreferences(Constants.PREFERENCES, Context.MODE_PRIVATE)
     }
 
     factory {
-        Log.d("wtf", "bundle created")
         Bundle()
     }
 
     factory {
-        Log.d("wtf", "mediaPlayer created")
         MediaPlayer()
     }
 

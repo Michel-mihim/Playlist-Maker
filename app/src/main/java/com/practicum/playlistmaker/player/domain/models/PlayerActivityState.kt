@@ -1,9 +1,7 @@
 package com.practicum.playlistmaker.player.domain.models
 
-sealed interface PlayerActivityState {
-    data class PlayerCurrentState(
-        val playerActivityPlayerReadiness: Boolean,
-        val playerActivityPlayerStatus: PlayerStatus,
-        val playerActivityTrackProgress: String
-        ) : PlayerActivityState
-}
+data class PlayerActivityState(
+    val playerActivityPlayerReadiness: Boolean,
+    val playerActivityPlayerStatus: PlayerStatus,
+    val playerActivityTrackProgress: String
+)

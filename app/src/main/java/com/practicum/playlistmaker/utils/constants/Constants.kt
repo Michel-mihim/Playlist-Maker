@@ -15,6 +15,7 @@ object Constants {
 
     const val SEARCH_DEBOUNCE_DELAY = 2000L
     const val CLICK_DEBOUNCE_DELAY = 1000L
+    const val FAST_CLICK_DEBOUNCE_DELAY = 500L
 
     //настройки
     const val PREFERENCES = "shared_preferences"

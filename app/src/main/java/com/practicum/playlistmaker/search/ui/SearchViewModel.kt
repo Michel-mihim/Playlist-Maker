@@ -99,20 +99,24 @@ class SearchViewModel(
                     searchActivityNavigationState = SearchActivityNavigationState.SEARCH_RESULT
 
                     when (result) {
+
                         is SearchTracksResult.Success -> {
                             tracksRecyclerList.addAll(result.tracks)
                             renderState(SearchActivityState.Content(tracksRecyclerList))
                         }
+
                         is SearchTracksResult.Empty -> {
                             tracksRecyclerList.addAll(result.tracks)
                             renderState(SearchActivityState.Empty)
                             showToastState(Constants.TRACKS_NOT_FOUND_2)
                         }
+
                         is SearchTracksResult.Failure -> {
                             tracksRecyclerList.addAll(result.tracks)
                             renderState(SearchActivityState.Error)
                             showToastState("Код ошибки: ${result.code}")
                         }
+
                     }
                 }
             })

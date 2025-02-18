@@ -12,17 +12,14 @@ import org.koin.dsl.module
 val viewModelModule = module {
 
     viewModel {
-        Log.d("wtf", "searchViewModel created")
         SearchViewModel(get(), get(), get())
     }
 
     viewModel {
-        Log.d("wtf", "settingsViewModel created")
         SettingsViewModel(get(), get(), androidApplication())
     }
 
     viewModel {
-        Log.d("wtf", "playerViewModel created")
         PlayerViewModel(get())
     }
 

@@ -17,32 +17,26 @@ import org.koin.dsl.module
 val interactorModule = module {
 
     single<SearchTracksInteractor> {
-        Log.d("wtf", "searchTracksInteractor created")
         SearchTracksInteractorImpl(get())
     }
 
     single<HistoryTracksInteractor> {
-        Log.d("wtf", "historyTracksInteractor created")
         HistoryTracksInteractorImpl(get())
     }
 
     factory {
-        Log.d("wtf", "getPlayerIntentUseCase created")
         GetPlayerIntentUseCase(get())
     }
 
     single<SettingsInteractor> {
-        Log.d("wtf", "settingsInteractor created")
         SettingsInteractorImpl(get())
     }
 
     factory<SharingInteractor> {
-        Log.d("wtf", "sharingInteractor created")
         SharingInteractorImpl(get(), get())
     }
 
     factory<MediaPlayerInteractor> {
-        Log.d("wtf", "playerInteractor created")
         MediaPlayerInteractorImpl(get())
     }
 

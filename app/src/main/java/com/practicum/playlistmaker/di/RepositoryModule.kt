@@ -23,28 +23,22 @@ import org.koin.dsl.module
 val repositoryModule = module {
 
     single<SearchTracksRepository> {
-        Log.d("wtf", "searchTracksRepository created")
         SearchTracksRepositoryImpl(get())
     }
 
     single<HistoryTracksRepository> {
-        Log.d("wtf", "historyTracksRepository created")
         HistoryTracksRepositoryImpl(get())
     }
 
     single<PlayerIntentGetter> {
-        Log.d("wtf", "playerIntentGetter created")
         PlayerIntentGetterImpl(Intent(androidContext(), PlayerActivity::class.java), get())
     }
 
     single<SettingsRepository> {
-        Log.d("wtf", "settingsRepository created")
         SettingsRepositoryImpl(get(), androidContext())
     }
 
     factory<ExternalNavigator> {
-        Log.d("wtf", "externalNavigator created")
-
         val shareLinkIntent = Intent(Intent.ACTION_SEND)
         ExternalNavigatorImpl(
             shareLinkIntent,
@@ -55,12 +49,10 @@ val repositoryModule = module {
     }
 
     factory<TextResourseGetter> {
-        Log.d("wtf", "textResourseGetter created")
         TextResourseGetterImpl(androidContext())
     }
 
     factory<MediaPlayerRepository> {
-        Log.d("wtf", "mediaPlayerRepository created")
         MediaPlayerRepositoryImpl(get())
     }
 
