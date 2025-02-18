@@ -51,6 +51,10 @@ class PlayerActivity : AppCompatActivity() {
             setTrackProgress(progress)
         }
 
+        playerViewModel.observePlayerActivityCurrentState().observe(this) { currentState ->
+            trackPlayButtonActivate(currentState.)
+        }
+
         //инициализация views
         playerTrackName = findViewById(R.id.track_player_name)
         playerArtistName = findViewById(R.id.track_artist_name)
