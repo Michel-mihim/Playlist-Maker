@@ -5,7 +5,9 @@ import com.practicum.playlistmaker.search.domain.api.HistoryTracksInteractor
 import com.practicum.playlistmaker.search.domain.api.HistoryTracksRepository
 import com.practicum.playlistmaker.search.domain.models.Track
 
-class HistoryTracksInteractorImpl(private val repository: HistoryTracksRepository) :
+class HistoryTracksInteractorImpl(
+    private val repository: HistoryTracksRepository
+) :
     HistoryTracksInteractor {
 
     override fun getTracks(): Array<Track> {

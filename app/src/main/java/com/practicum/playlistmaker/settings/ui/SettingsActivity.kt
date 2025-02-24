@@ -6,10 +6,13 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.utils.constants.Constants
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -19,7 +22,7 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var buttonLicense: Button
     private lateinit var settingsBackButton: ImageButton
 
-    private lateinit var settingsViewModel: SettingsViewModel
+    private val settingsViewModel by viewModel<SettingsViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +35,6 @@ class SettingsActivity : AppCompatActivity() {
         buttonLicense = findViewById(R.id.button_license)
         settingsBackButton = findViewById(R.id.settings_back_button)
 
-        settingsViewModel = ViewModelProvider(this, SettingsViewModel.getSettingsViewModelFactory())[SettingsViewModel::class.java]
 
         settingsViewModel.observeSettingsActivityTheme().observe(this) { isDark ->
             darkThemeSwitcherActivated(isDark)
@@ -43,7 +45,13 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         settingsViewModel.observeSupportEmailActivityIntentLiveData().observe(this) {intent ->
-            startActivity(intent)
+            Log.d("wtf", "Send intent before starting." + intent.toString())
+            try {
+                startActivity(intent)
+            } catch (e: Exception) {
+                Toast.makeText(this@SettingsActivity, Constants.EMAIL_CLIENT_NOT_FOUND, Toast.LENGTH_LONG).show()
+            }
+
         }
 
         settingsViewModel.observeTermsIntentLiveData().observe(this) { intent ->
@@ -60,6 +68,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         buttonSupport.setOnClickListener{
+            Log.d("wtf", "Send intent asked.")
             settingsViewModel.openSupport()
         }
 

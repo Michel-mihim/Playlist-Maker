@@ -4,7 +4,9 @@ import com.practicum.playlistmaker.search.domain.api.SearchTracksInteractor
 import com.practicum.playlistmaker.search.domain.api.SearchTracksRepository
 import java.util.concurrent.Executors
 
-class SearchTracksInteractorImpl(private val repository: SearchTracksRepository):
+class SearchTracksInteractorImpl(
+    private val repository: SearchTracksRepository
+):
     SearchTracksInteractor {
 
     private val executor = Executors.newCachedThreadPool()

@@ -1,44 +1,32 @@
 package com.practicum.playlistmaker.search.ui
 
-import android.app.Application
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.practicum.playlistmaker.creator.Creator
+import androidx.lifecycle.ViewModel
 import com.practicum.playlistmaker.search.domain.api.SearchTracksInteractor
 import com.practicum.playlistmaker.search.domain.models.SearchTracksResult
 import com.practicum.playlistmaker.utils.constants.Constants
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import com.practicum.playlistmaker.search.domain.OnHistoryUpdatedListener
+import com.practicum.playlistmaker.search.domain.api.GetPlayerIntentUseCase
 import com.practicum.playlistmaker.search.domain.api.HistoryTracksInteractor
 import com.practicum.playlistmaker.search.domain.models.SearchActivityNavigationState
 import com.practicum.playlistmaker.search.domain.models.SearchActivityState
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.utils.classes.SingleLiveEvent
 
-class SearchViewModel(application: Application): AndroidViewModel(application) {
 
-    companion object {
-        fun getSearchViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                SearchViewModel(this[APPLICATION_KEY] as Application)
-            }
-        }
-    }
+class SearchViewModel(
+    private val searchTracksInteractor: SearchTracksInteractor,
+    private val historyTracksInteractor: HistoryTracksInteractor,
+    private val getPlayerIntentUseCase: GetPlayerIntentUseCase
+): ViewModel() {
 
     private val onHistoryUpdatedListener = OnHistoryUpdatedListener {
         searchActivityNavigate()
     }
-
-    private val searchTracksInteractor = Creator.provideSearchTracksInteractor()
-    private val historyTracksInteractor = Creator.provideHistoryTracksInteractor(getApplication<Application>())
-    private val getPlayerIntentUseCase = Creator.provideGetPlayerIntentUseCase(getApplication<Application>())
 
     init {
         historyTracksInteractor.setOnHistoryUpdatedListener(onHistoryUpdatedListener)
@@ -57,7 +45,6 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
         val newSearchText = this.latestSearchText ?: ""
         searchRequest(newSearchText)
     }
-
 
 
     private val searchActivityStateLiveData = MutableLiveData<SearchActivityState>()
@@ -112,20 +99,24 @@ class SearchViewModel(application: Application): AndroidViewModel(application) {
                     searchActivityNavigationState = SearchActivityNavigationState.SEARCH_RESULT
 
                     when (result) {
+
                         is SearchTracksResult.Success -> {
                             tracksRecyclerList.addAll(result.tracks)
                             renderState(SearchActivityState.Content(tracksRecyclerList))
                         }
+
                         is SearchTracksResult.Empty -> {
                             tracksRecyclerList.addAll(result.tracks)
                             renderState(SearchActivityState.Empty)
                             showToastState(Constants.TRACKS_NOT_FOUND_2)
                         }
+
                         is SearchTracksResult.Failure -> {
                             tracksRecyclerList.addAll(result.tracks)
                             renderState(SearchActivityState.Error)
                             showToastState("Код ошибки: ${result.code}")
                         }
+
                     }
                 }
             })

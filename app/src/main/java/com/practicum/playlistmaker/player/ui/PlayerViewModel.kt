@@ -6,38 +6,28 @@ import android.os.Looper
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.creator.Creator
+import com.practicum.playlistmaker.player.domain.api.MediaPlayerInteractor
+import com.practicum.playlistmaker.player.domain.models.PlayerActivityState
 import com.practicum.playlistmaker.player.domain.models.PlayerStatus
 import com.practicum.playlistmaker.search.domain.models.SearchActivityState
 import com.practicum.playlistmaker.utils.constants.Constants
 
-class PlayerViewModel(application: Application): AndroidViewModel(application) {
-
-    companion object {
-        fun getPlayerViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                PlayerViewModel(this[APPLICATION_KEY] as Application)
-            }
-        }
-    }
-
-    private val mediaPlayerInteractor = Creator.provideMediaPlayerInteractor()
+class PlayerViewModel(
+    private val mediaPlayerInteractor: MediaPlayerInteractor
+): ViewModel() {
 
     private var playerStatus: PlayerStatus = PlayerStatus.STATE_DEFAULT
 
-    private val playerActivityPlayerReadinessLiveData = MutableLiveData<Boolean>()
-    fun observePlayerActivityPlayerReadiness(): LiveData<Boolean> = playerActivityPlayerReadinessLiveData
+    private var currentProgress: String = ""
 
-    private val playerActivityPlayerStatusLiveData = MutableLiveData<PlayerStatus>()
-    fun observePlayerActivityPlayerStatus(): LiveData<PlayerStatus> = playerActivityPlayerStatusLiveData
-
-    private val playerActivityTrackProgressLiveData = MutableLiveData<String>()
-    fun observePlayerActivityTrackProgress(): LiveData<String> = playerActivityTrackProgressLiveData
+    private val playerActivityCurrentStateLiveData = MutableLiveData<PlayerActivityState>()
+    fun observePlayerActivityCurrentState(): LiveData<PlayerActivityState> = playerActivityCurrentStateLiveData
 
     private val handler = Handler(Looper.getMainLooper())
     private val showProgressRunnable = Runnable { showProgress() }
@@ -54,14 +44,25 @@ class PlayerViewModel(application: Application): AndroidViewModel(application) {
         mediaPlayerInteractor.prepare(
             previewUrl,
             onPrepared = { ->
-                trackPlayButtonActivate()
+                playerActivityPostState(
+                    PlayerActivityState(
+                        true,
+                        PlayerStatus.STATE_PREPARED,
+                        ""
+                    )
+                )
                 playerStatus = PlayerStatus.STATE_PREPARED
             },
             onCompletion = { -> //окончание воспроизведения
                 playerStatus = PlayerStatus.STATE_PREPARED
-                trackPlayButtonRenderStatus(PlayerStatus.STATE_PREPARED)
                 handler.removeCallbacks(showProgressRunnable)
-                trackRenderProgress(Constants.TRACK_IS_OVER_PROGRESS)
+                playerActivityPostState(
+                    PlayerActivityState(
+                        true,
+                        PlayerStatus.STATE_PREPARED,
+                        Constants.TRACK_IS_OVER_PROGRESS
+                    )
+                )
             }
         )
     }
@@ -77,43 +78,56 @@ class PlayerViewModel(application: Application): AndroidViewModel(application) {
             PlayerStatus.STATE_PAUSED -> {
                 startPlayer()
             }
-            PlayerStatus.STATE_DEFAULT -> TODO()
+            PlayerStatus.STATE_DEFAULT -> {}
         }
     }
 
     private fun startPlayer(){
         mediaPlayerInteractor.start()
         playerStatus = PlayerStatus.STATE_PLAYING
-        trackPlayButtonRenderStatus(PlayerStatus.STATE_PLAYING)
+        playerActivityPostState(
+            PlayerActivityState(
+                true,
+                PlayerStatus.STATE_PLAYING,
+                currentProgress
+            )
+        )
         handler.post(showProgressRunnable)
     }
 
     fun pausePlayer(){
         mediaPlayerInteractor.pause()
         playerStatus = PlayerStatus.STATE_PAUSED
-        trackPlayButtonRenderStatus(PlayerStatus.STATE_PAUSED)
+        playerActivityPostState(
+            PlayerActivityState(
+                true,
+                PlayerStatus.STATE_PAUSED,
+                currentProgress
+            )
+        )
         handler.removeCallbacks(showProgressRunnable)
     }
 
     private fun showProgress(){
         mediaPlayerInteractor.timerUpdate(
             onTimerUpdated = { progress ->
-                trackRenderProgress(progress)
+                playerActivityPostState(
+                    PlayerActivityState(
+                        true,
+                        PlayerStatus.STATE_PLAYING,
+                        progress
+                    )
+                )
+                currentProgress = progress
             }
         )
         handler.postDelayed(showProgressRunnable, Constants.SHOW_PROGRESS_DELAY)
     }
 
     //POSTING=======================================================================================
-    private fun trackPlayButtonActivate() {
-        playerActivityPlayerReadinessLiveData.postValue(true)
+
+    private fun playerActivityPostState(playerActivityState: PlayerActivityState) {
+        playerActivityCurrentStateLiveData.postValue(playerActivityState)
     }
 
-    private fun trackPlayButtonRenderStatus(status: PlayerStatus) {
-        playerActivityPlayerStatusLiveData.postValue(status)
-    }
-
-    private fun trackRenderProgress(progress: String) {
-        playerActivityTrackProgressLiveData.postValue(progress)
-    }
 }

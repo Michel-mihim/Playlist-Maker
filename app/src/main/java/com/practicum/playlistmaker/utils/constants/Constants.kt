@@ -10,10 +10,12 @@ object Constants {
             "Загрузка не удалась. Проверьте подключение к интернету"
     const val SOMETHING_WRONG = "Что-то пошло не так.."
     const val SEARCH_SUCCESS = "Поиск успешно произведен!"
-    const val HISTORY_CLEARED ="История поиска была удалена"
+    const val HISTORY_CLEARED = "История поиска была удалена"
+    const val EMAIL_CLIENT_NOT_FOUND = "Не обнаружен почтовый клиент!"
 
     const val SEARCH_DEBOUNCE_DELAY = 2000L
     const val CLICK_DEBOUNCE_DELAY = 1000L
+    const val FAST_CLICK_DEBOUNCE_DELAY = 500L
 
     //настройки
     const val PREFERENCES = "shared_preferences"

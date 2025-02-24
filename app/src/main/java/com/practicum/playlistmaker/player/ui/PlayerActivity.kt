@@ -1,6 +1,9 @@
 package com.practicum.playlistmaker.player.ui
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -10,11 +13,18 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.player.domain.models.PlayerStatus
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.player.domain.models.PlayerActivityState
+import com.practicum.playlistmaker.search.domain.models.SearchActivityState
 import com.practicum.playlistmaker.utils.constants.Constants
 import com.practicum.playlistmaker.utils.converters.dimensionsFloatToIntConvert
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class PlayerActivity : AppCompatActivity() {
+
+    private val handler = Handler(Looper.getMainLooper())
+
+    private var isClickAllowed = true
 
     //VIEWS
     private lateinit var playerBackButton: ImageButton
@@ -29,26 +39,16 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var trackPlayButton: ImageButton
     private lateinit var trackProgress: TextView
 
-    //LATEINIT VARS
-    private lateinit var playerViewModel: PlayerViewModel
+    //VAL BY
+    private val playerViewModel by viewModel<PlayerViewModel>()
 
     //основной листинг==============================================================================
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
 
-        playerViewModel = ViewModelProvider(this, PlayerViewModel.getPlayerViewModelFactory())[PlayerViewModel::class.java]
-
-        playerViewModel.observePlayerActivityPlayerReadiness().observe(this) { ready ->
-            trackPlayButtonActivate(ready)
-        }
-
-        playerViewModel.observePlayerActivityPlayerStatus().observe(this) {
-            renderTrackPlayButton(it)
-        }
-
-        playerViewModel.observePlayerActivityTrackProgress().observe(this) { progress ->
-            setTrackProgress(progress)
+        playerViewModel.observePlayerActivityCurrentState().observe(this) {
+            renderPlayerState(it)
         }
 
         //инициализация views
@@ -93,13 +93,22 @@ class PlayerActivity : AppCompatActivity() {
         }
 
         trackPlayButton.setOnClickListener {
-            playerViewModel.playbackControl()
+            if (clickDebouncer()) {
+                playerViewModel.playbackControl()
+            }
+
         }
     }
 
     override fun onPause() {
         super.onPause()
         playerViewModel.pausePlayer()
+    }
+
+    private fun renderPlayerState(state: PlayerActivityState) {
+        trackPlayButtonActivate(state.playerActivityPlayerReadiness)
+        renderTrackPlayButton(state.playerActivityPlayerStatus)
+        setTrackProgress(state.playerActivityTrackProgress)
     }
 
     private fun trackPlayButtonActivate(ready: Boolean) {
@@ -126,4 +135,14 @@ class PlayerActivity : AppCompatActivity() {
     private fun setTrackProgress(progress: String) {
         trackProgress.text = progress
     }
+
+    private fun clickDebouncer() : Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({isClickAllowed = true}, Constants.FAST_CLICK_DEBOUNCE_DELAY)
+        }
+        return current
+    }
+
 }

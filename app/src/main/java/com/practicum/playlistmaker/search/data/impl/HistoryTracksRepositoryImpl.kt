@@ -7,7 +7,9 @@ import com.practicum.playlistmaker.search.domain.api.HistoryTracksRepository
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.utils.constants.Constants
 
-class HistoryTracksRepositoryImpl(private val sharedPrefs: SharedPreferences) :
+class HistoryTracksRepositoryImpl(
+    private val sharedPrefs: SharedPreferences
+) :
     HistoryTracksRepository {
 
     var listener: OnHistoryUpdatedListener? = null
