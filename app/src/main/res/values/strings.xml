@@ -30,4 +30,10 @@
     <string name="history">Вы искали</string>
     <string name="clear_history">Очистить историю</string>
 
+    <!--
+    LIB ACTIVITY
+    -->
+    <string name="lib_empty">Ваша медиатека пуста</string>
+    <string name="playlist_empty">Вы не создали\n ни одного плейлиста</string>
+
 </resources>
