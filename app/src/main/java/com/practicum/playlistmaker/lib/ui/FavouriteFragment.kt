@@ -11,6 +11,10 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavouriteFragment: Fragment() {
 
+    companion object {
+        fun newInstance() = FavouriteFragment()
+    }
+
     private lateinit var binding: FragmentFavouriteBinding
 
     private val favouriteViewModel: FavouriteViewModel by viewModel()
