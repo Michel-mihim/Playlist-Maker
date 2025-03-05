@@ -20,7 +20,7 @@
 
         <TextView
             style="@style/menu_head_text_style"
-            android:text="@string/button_lib"/>
+            android:text="@string/button_lib" />
 
     </LinearLayout>
 
@@ -28,7 +28,9 @@
         android:id="@+id/lib_tablayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:tabMode="fixed"/>
+        android:background="@color/menuColor"
+        app:tabMode="fixed"
+        app:tabTextColor="@color/menu_items_text_color" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/lib_view_pager"
