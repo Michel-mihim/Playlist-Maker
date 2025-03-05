@@ -1,7 +1,9 @@
 package com.practicum.playlistmaker.lib.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.tabs.TabLayoutMediator
 import com.practicum.playlistmaker.R
@@ -30,9 +32,8 @@ class LibActivity : AppCompatActivity() {
 
         }
 
-
-        val libBackButton = findViewById<ImageButton>(R.id.lib_back_button)
-        libBackButton.setOnClickListener{
+        //val libBackButton = findViewById<ImageButton>(R.id.lib_back_button)
+        binding.libBackButton.setOnClickListener{
             finish()
         }
 

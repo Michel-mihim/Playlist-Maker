@@ -28,9 +28,9 @@
         android:id="@+id/lib_tablayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/menuColor"
-        app:tabMode="fixed"
-        app:tabTextColor="@color/menu_items_text_color" />
+        android:background="#000000"
+        app:tabTextColor="#FFFFFFFF"
+        app:tabMode="fixed"/>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/lib_view_pager"
