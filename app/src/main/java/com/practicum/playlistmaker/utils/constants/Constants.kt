@@ -25,6 +25,10 @@ object Constants {
 
     const val HISTORY_CAPACITY = 10
 
+    //медиатека
+    const val LIB_EMPTY = "Ваша медиатека пуста"
+    const val NO_PLAYLISTS = "Вы не создали\n ни одного плейлиста"
+
     //медиаплеер
     const val SHOW_PROGRESS_DELAY = 500L
     const val TRACK_IS_OVER_PROGRESS = "00:00"
