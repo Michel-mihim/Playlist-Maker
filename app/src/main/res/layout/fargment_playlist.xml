@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/placeholder_pic"
+        android:id="@+id/playlist_epmty_pic"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="@drawable/not_found"
@@ -13,7 +13,7 @@
         android:visibility="visible"/>
 
     <TextView
-        android:id="@+id/placeholder_text"
+        android:id="@+id/playlist_empty_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/not_found_margin_horizontal"
