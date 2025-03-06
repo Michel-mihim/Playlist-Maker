@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentPlaylistBinding
 import com.practicum.playlistmaker.utils.constants.Constants
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -30,6 +31,6 @@ class PlaylistFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.playlistEmptyText.text = Constants.NO_PLAYLISTS
+        binding.playlistEmptyText.text = getString(R.string.no_playlist)
     }
 }

@@ -1,5 +1,8 @@
 package com.practicum.playlistmaker.utils.constants
 
+import android.app.Activity
+import com.practicum.playlistmaker.R
+
 object Constants {
     const val SEARCH_STRING = "SEARCH_STRING"
     const val SEARCH_DEF = ""
@@ -26,8 +29,7 @@ object Constants {
     const val HISTORY_CAPACITY = 10
 
     //медиатека
-    const val LIB_EMPTY = "Ваша медиатека пуста"
-    const val NO_PLAYLISTS = "Вы не создали\n ни одного плейлиста"
+
 
     //медиаплеер
     const val SHOW_PROGRESS_DELAY = 500L

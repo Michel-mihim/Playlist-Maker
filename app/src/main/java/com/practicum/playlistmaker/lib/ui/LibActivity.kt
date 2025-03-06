@@ -3,7 +3,9 @@ package com.practicum.playlistmaker.lib.ui
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.tabs.TabLayoutMediator
+import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivityLibBinding
+import com.practicum.playlistmaker.utils.constants.Constants
 
 class LibActivity : AppCompatActivity() {
 
@@ -20,8 +22,8 @@ class LibActivity : AppCompatActivity() {
 
         tabMediator = TabLayoutMediator(binding.libTablayout, binding.libViewPager) { tab, position ->
             when(position) {
-               0 -> tab.text = "Избранные треки"
-               1 -> tab.text = "Плейлисты"
+               0 -> tab.text = getString(R.string.favourite_tracks)
+               1 -> tab.text = getString(R.string.playlists)
             }
         }
         tabMediator.attach()

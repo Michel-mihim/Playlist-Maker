@@ -20,7 +20,7 @@
         android:layout_marginTop="@dimen/lib_text_margin_top"
         android:fontFamily="@font/ys_display_medium"
         android:gravity="center_horizontal"
-        android:text="@string/playlist_empty"
+        android:text="@string/no_playlist"
         android:textColor="@color/not_found_text_color"
         android:textSize="@dimen/not_found_text_size"
         android:textStyle="bold"
