@@ -1,28 +1,44 @@
 package com.practicum.playlistmaker.lib.ui
 
 import android.os.Bundle
-import android.widget.ImageButton
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.tabs.TabLayoutMediator
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.databinding.ActivityLibBinding
+import com.practicum.playlistmaker.utils.constants.Constants
 
 class LibActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityLibBinding
+    private lateinit var tabMediator: TabLayoutMediator
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_lib)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+        binding = ActivityLibBinding.inflate(layoutInflater)
 
-        val libBackButton = findViewById<ImageButton>(R.id.lib_back_button)
-        libBackButton.setOnClickListener{
+        setContentView(binding.root)
+
+        binding.libViewPager.adapter = LibViewPagerAdapter(supportFragmentManager, lifecycle)
+
+        tabMediator = TabLayoutMediator(binding.libTablayout, binding.libViewPager) { tab, position ->
+            when(position) {
+               0 -> tab.text = getString(R.string.favourite_tracks)
+               1 -> tab.text = getString(R.string.playlists)
+            }
+        }
+        tabMediator.attach()
+
+        //val libBackButton = findViewById<ImageButton>(R.id.lib_back_button)
+        binding.libBackButton.setOnClickListener{
             finish()
         }
 
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        tabMediator.detach()
     }
 }

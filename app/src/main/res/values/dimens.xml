@@ -64,4 +64,12 @@
     <dimen name="settings_name_padding_top">14dp</dimen>
     <dimen name="settings_name_padding_bottom">16dp</dimen>
 
+    <!--
+    LIB ACTIVITY
+    -->
+    <dimen name="lib_tab_text_size">14sp</dimen>
+    <dimen name="lib_pic_margin_top">106dp</dimen>
+    <dimen name="lib_text_margin_top">242dp</dimen>
+    <dimen name="lib_button_margin_top">24dp</dimen>
+
 </resources>
