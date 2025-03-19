@@ -7,7 +7,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.practicum.playlistmaker.lib.ui.LibActivity
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.settings.ui.SettingsActivity
 
@@ -27,8 +26,8 @@ class MainMenuActivity : AppCompatActivity() {
         val buttonLib = findViewById<Button>(R.id.button_lib)
 
         buttonLib.setOnClickListener {
-            val libIntent = Intent(this, LibActivity::class.java)
-            startActivity(libIntent)
+            //val libIntent = Intent(this, LibActivity::class.java)
+            //startActivity(libIntent)
         }
 
         // button_settings_reaction-----------------------------------------------------------------

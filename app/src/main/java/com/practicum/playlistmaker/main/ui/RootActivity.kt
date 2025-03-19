@@ -8,6 +8,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.commit
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivityRootBinding
+import com.practicum.playlistmaker.lib.ui.LibFragment
 import com.practicum.playlistmaker.search.ui.SearchFragment
 
 class RootActivity : AppCompatActivity() {
@@ -22,7 +23,7 @@ class RootActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.commit {
-                this.add(R.id.rootFragmentContainerView, SearchFragment())
+                this.add(R.id.rootFragmentContainerView, LibFragment())
             }
         }
     }

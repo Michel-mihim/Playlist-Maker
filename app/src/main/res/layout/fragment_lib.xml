@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/menuColor"
-    tools:context=".lib.ui.LibActivity"
+    tools:context=".lib.ui.LibFragment"
     android:orientation="vertical">
 
     <LinearLayout
