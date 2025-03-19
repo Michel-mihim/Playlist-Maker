@@ -72,7 +72,7 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-
+        
         searchViewModel.observeSearchActivityState().observe(this) {
             render(it)
         }
