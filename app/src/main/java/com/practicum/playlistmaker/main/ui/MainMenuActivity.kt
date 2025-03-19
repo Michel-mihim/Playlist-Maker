@@ -9,7 +9,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.practicum.playlistmaker.lib.ui.LibActivity
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.search.ui.SearchActivity
 import com.practicum.playlistmaker.settings.ui.SettingsActivity
 
 class MainMenuActivity : AppCompatActivity() {
@@ -20,8 +19,8 @@ class MainMenuActivity : AppCompatActivity() {
         // button_search_reaction-------------------------------------------------------------------
         val buttonSearch = findViewById<Button>(R.id.button_search)
         buttonSearch.setOnClickListener{
-            val searchIntent = Intent(this, SearchActivity::class.java)
-            startActivity(searchIntent)
+            //val searchIntent = Intent(this, SearchActivity::class.java)
+            //startActivity(searchIntent)
         }
 
         // button_lib_reaction----------------------------------------------------------------------
