@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.settings.ui.SettingsActivity
 
 class MainMenuActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,8 +33,8 @@ class MainMenuActivity : AppCompatActivity() {
         val buttonSettings = findViewById<Button>(R.id.button_settings)
 
         buttonSettings.setOnClickListener {
-            val settingsIntent = Intent(this, SettingsActivity::class.java)
-            startActivity(settingsIntent)
+            //val settingsIntent = Intent(this, SettingsActivity::class.java)
+            //startActivity(settingsIntent)
         }
     }
 }

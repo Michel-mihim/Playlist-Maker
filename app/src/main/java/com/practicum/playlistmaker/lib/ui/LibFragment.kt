@@ -19,7 +19,7 @@ class LibFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentLibBinding.inflate(layoutInflater)
+        binding = FragmentLibBinding.inflate(inflater, container, false)
         return binding.root
     }
 

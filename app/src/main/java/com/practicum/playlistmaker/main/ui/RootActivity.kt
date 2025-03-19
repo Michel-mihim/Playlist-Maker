@@ -10,6 +10,7 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivityRootBinding
 import com.practicum.playlistmaker.lib.ui.LibFragment
 import com.practicum.playlistmaker.search.ui.SearchFragment
+import com.practicum.playlistmaker.settings.ui.SettingsFragment
 
 class RootActivity : AppCompatActivity() {
 
@@ -23,7 +24,7 @@ class RootActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.commit {
-                this.add(R.id.rootFragmentContainerView, LibFragment())
+                this.add(R.id.rootFragmentContainerView, SettingsFragment())
             }
         }
     }
