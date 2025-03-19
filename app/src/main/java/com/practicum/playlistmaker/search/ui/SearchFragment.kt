@@ -1,31 +1,32 @@
 package com.practicum.playlistmaker.search.ui
 
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.search.domain.models.Track
-import com.practicum.playlistmaker.utils.constants.Constants
+import com.practicum.playlistmaker.databinding.FragmentSearchBinding
 import com.practicum.playlistmaker.search.domain.models.SearchActivityState
+import com.practicum.playlistmaker.search.domain.models.Track
+import com.practicum.playlistmaker.search.ui.SearchActivity
+import com.practicum.playlistmaker.utils.constants.Constants
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlin.getValue
 
+class SearchFragment: Fragment() {
 
-class SearchActivity : AppCompatActivity() {
+    private lateinit var binding: FragmentSearchBinding
 
     //инициализированные объекты====================================================================
     private val handler = Handler(Looper.getMainLooper())
@@ -53,50 +54,35 @@ class SearchActivity : AppCompatActivity() {
         }
     )
 
-    //не инициализированные views===================================================================
-    private lateinit var placeholderImage: ImageView
-    private lateinit var placeholderText: TextView
-    private lateinit var searchRenewButton: Button
-    private lateinit var historyClearButton: Button
-    private lateinit var youFoundHistoryText: TextView
-    private lateinit var searchBackButton: ImageButton
-    private lateinit var searchClearButton: ImageButton
-    private lateinit var searchEdittext: EditText
-    private lateinit var searchRecyclerView: RecyclerView
-    private lateinit var historyRecyclerView: RecyclerView
-    private lateinit var searchProgressBar: ProgressBar
-    //==============================================================================================
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentSearchBinding.inflate(layoutInflater)
+        return binding.root
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_search)
-        
-        searchViewModel.observeSearchActivityState().observe(this) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        searchViewModel.observeSearchActivityState().observe(viewLifecycleOwner) {
             render(it)
         }
 
-        searchViewModel.observeSearchActivityToastState().observe(this) { message ->
+        searchViewModel.observeSearchActivityToastState().observe(viewLifecycleOwner) { message ->
             showToast(message)
         }
 
-        searchViewModel.observePlayerActivityIntent().observe(this) { intent ->
+        searchViewModel.observePlayerActivityIntent().observe(viewLifecycleOwner) { intent ->
             Log.d("wtf", "intent player got(searchActivity_observer)")
             startActivity(intent)
         }
 
-        //инициализация views
+        binding.searchResultsRecycler.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.historyRecycler.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
-        placeholderImage = findViewById(R.id.placeholder_pic)
-        placeholderText = findViewById(R.id.placeholder_text)
-        searchRenewButton = findViewById(R.id.search_renew_button)
-
-        youFoundHistoryText = findViewById(R.id.you_found_text)
-        searchProgressBar = findViewById(R.id.search_progress_bar)
-
-        searchRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
-        historyRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
-
-        inputManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        //inputManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager пока не нужен
 
         searchViewModel.showHistory()
 
@@ -113,20 +99,17 @@ class SearchActivity : AppCompatActivity() {
         }
 
 
-        historyClearButton.setOnClickListener{
+        binding.historyClearButton.setOnClickListener{
             searchViewModel.clearHistory()
         }
 
-        searchBackButton.setOnClickListener{
-            finish()
-        }
 
-        searchClearButton.setOnClickListener {
-            searchEdittext.setText(Constants.SEARCH_DEF)
+        binding.searchClearButton.setOnClickListener {
+            binding.searchEditText.setText(Constants.SEARCH_DEF)
 
         }
 
-        searchRenewButton.setOnClickListener {
+        binding.searchRenewButton.setOnClickListener {
             if (clickDebouncer()) renewRequest()
         }
 
@@ -136,7 +119,7 @@ class SearchActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                searchClearButton.visibility = searchClearButtonVisibility(s)
+                binding.searchClearButton.visibility = searchClearButtonVisibility(s)
                 searchViewModel.searchDelayed(
                     changedText = s?.toString() ?: ""
                 )
@@ -150,11 +133,11 @@ class SearchActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {
             }
         }
-        searchEdittext.addTextChangedListener(textWatcher)
+        binding.searchEditText.addTextChangedListener(textWatcher)
     }
 
     private fun renewRequest(){
-        searchViewModel.searchForce(searchEdittext.text.toString())
+        searchViewModel.searchForce(binding.searchEditText.text.toString())
     }
 
     private fun clickDebouncer() : Boolean {
@@ -190,7 +173,7 @@ class SearchActivity : AppCompatActivity() {
     private fun showHistory(tracks: List<Track>) {
         historyViewsShow()
 
-        historyRecyclerView.adapter = adapter
+        binding.historyRecycler.adapter = adapter
         adapter.tracks.clear()
         adapter.tracks.addAll(tracks)
         adapter.notifyDataSetChanged()
@@ -199,7 +182,7 @@ class SearchActivity : AppCompatActivity() {
     private fun showContent(tracks: List<Track>) {
         contentViewsShow()
 
-        searchRecyclerView.adapter = adapter
+        binding.searchResultsRecycler.adapter = adapter
         adapter.tracks.clear()
         adapter.tracks.addAll(tracks)
         adapter.notifyDataSetChanged()
@@ -214,77 +197,77 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     private fun showSearchProgressbar(){
-        searchProgressBar.visibility = View.VISIBLE
+        binding.searchProgressBar.visibility = View.VISIBLE
     }
 
     private fun hideSearchProgressbar(){
-        searchProgressBar.visibility = View.INVISIBLE
+        binding.searchProgressBar.visibility = View.INVISIBLE
     }
 
     private fun defaultViewsShow() {
         hideSearchProgressbar()
-        searchRecyclerView.visibility = View.INVISIBLE
-        historyRecyclerView.visibility = View.INVISIBLE
-        searchRenewButton.visibility = View.INVISIBLE
-        historyClearButton.visibility = View.INVISIBLE
+        binding.searchResultsRecycler.visibility = View.INVISIBLE
+        binding.historyRecycler.visibility = View.INVISIBLE
+        binding.searchRenewButton.visibility = View.INVISIBLE
+        binding.historyClearButton.visibility = View.INVISIBLE
         hidePlaceholder()
-        youFoundHistoryText.visibility = View.INVISIBLE
+        binding.youFoundText.visibility = View.INVISIBLE
     }
 
     private fun historyViewsShow() {
         hideSearchProgressbar()
-        searchRecyclerView.visibility = View.INVISIBLE
-        historyRecyclerView.visibility = View.VISIBLE
-        searchRenewButton.visibility = View.INVISIBLE
-        historyClearButton.visibility = View.VISIBLE
+        binding.searchResultsRecycler.visibility = View.INVISIBLE
+        binding.historyRecycler.visibility = View.VISIBLE
+        binding.searchRenewButton.visibility = View.INVISIBLE
+        binding.historyClearButton.visibility = View.VISIBLE
         hidePlaceholder()
-        youFoundHistoryText.visibility = View.VISIBLE
+        binding.youFoundText.visibility = View.VISIBLE
     }
 
     private fun emptyViewsShow(text: String, image: Int) {
         hideSearchProgressbar()
-        searchRecyclerView.visibility = View.INVISIBLE
-        historyRecyclerView.visibility = View.INVISIBLE
-        searchRenewButton.visibility = View.INVISIBLE
-        historyClearButton.visibility = View.INVISIBLE
+        binding.searchResultsRecycler.visibility = View.INVISIBLE
+        binding.historyRecycler.visibility = View.INVISIBLE
+        binding.searchRenewButton.visibility = View.INVISIBLE
+        binding.historyClearButton.visibility = View.INVISIBLE
         showPlaceholder(text, image)
-        youFoundHistoryText.visibility = View.INVISIBLE
+        binding.youFoundText.visibility = View.INVISIBLE
     }
 
     private fun contentViewsShow() {
         hideSearchProgressbar()
-        searchRecyclerView.visibility = View.VISIBLE
-        historyRecyclerView.visibility = View.INVISIBLE
-        searchRenewButton.visibility = View.INVISIBLE
-        historyClearButton.visibility = View.INVISIBLE
+        binding.searchResultsRecycler.visibility = View.VISIBLE
+        binding.historyRecycler.visibility = View.INVISIBLE
+        binding.searchRenewButton.visibility = View.INVISIBLE
+        binding.historyClearButton.visibility = View.INVISIBLE
         hidePlaceholder()
-        youFoundHistoryText.visibility = View.INVISIBLE
+        binding.youFoundText.visibility = View.INVISIBLE
     }
 
     private fun errorViewsShow(text: String, image: Int) {
         hideSearchProgressbar()
-        searchRecyclerView.visibility = View.INVISIBLE
-        historyRecyclerView.visibility = View.INVISIBLE
-        searchRenewButton.visibility = View.VISIBLE
-        historyClearButton.visibility = View.INVISIBLE
+        binding.searchResultsRecycler.visibility = View.INVISIBLE
+        binding.historyRecycler.visibility = View.INVISIBLE
+        binding.searchRenewButton.visibility = View.VISIBLE
+        binding.historyClearButton.visibility = View.INVISIBLE
         showPlaceholder(text, image)
-        youFoundHistoryText.visibility = View.INVISIBLE
+        binding.youFoundText.visibility = View.INVISIBLE
     }
 
     private fun showPlaceholder(text: String, image: Int) {
-        placeholderText.text = text
-        placeholderImage.setImageResource(image)
-        placeholderText.visibility = View.VISIBLE
-        placeholderImage.visibility = View.VISIBLE
+        binding.placeholderText.text = text
+        binding.placeholderPic.setImageResource(image)
+        binding.placeholderText.visibility = View.VISIBLE
+        binding.placeholderPic.visibility = View.VISIBLE
     }
 
     private fun hidePlaceholder() {
-        placeholderText.visibility = View.INVISIBLE
-        placeholderImage.visibility = View.INVISIBLE
+        binding.placeholderText.visibility = View.INVISIBLE
+        binding.placeholderPic.visibility = View.INVISIBLE
     }
 
     private fun searchClearButtonVisibility(s: CharSequence?): Int {
@@ -294,16 +277,4 @@ class SearchActivity : AppCompatActivity() {
             View.VISIBLE
         }
     }
-
-    //переопределение методов активити==============================================================
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString(Constants.SEARCH_STRING, searchDef)
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        searchDef = savedInstanceState.getString(Constants.SEARCH_STRING, Constants.SEARCH_DEF)
-    }
-
 }
