@@ -118,10 +118,10 @@
         <item name="android:letterSpacing">@integer/letter_spacing</item>
     </style>
     
-    <style name="BottomMenuTheme" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="itemIconTint">@color/menu_items_text_color</item>
-        <item name="itemTextColor">@color/menu_items_text_color</item>
-        <item name="itemBackground">@color/menuColor</item>
+    <style name="BottomMenuTheme" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
+        <item name="itemIconTint">@color/bottom_menu_item_color</item>
+        <item name="itemTextColor">@color/bottom_menu_item_color</item>
+        <item name="android:background">@color/menuColor</item>
 
     </style>
 
