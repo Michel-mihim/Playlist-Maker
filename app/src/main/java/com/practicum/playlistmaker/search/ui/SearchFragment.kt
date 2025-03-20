@@ -43,8 +43,7 @@ class SearchFragment: Fragment() {
     private val adapter = TracksAdapter (
         object : TracksAdapter.TrackClickListener {
             override fun onTrackClick(track: Track) {
-                if (clickDebouncer()) {
-                }
+                if (clickDebouncer()) { }
             }
 
             override fun onLikeClick(track: Track) {
@@ -74,7 +73,6 @@ class SearchFragment: Fragment() {
         }
 
         searchViewModel.observePlayerActivityIntent().observe(viewLifecycleOwner) { intent ->
-            Log.d("wtf", "intent player got(searchActivity_observer)")
             startActivity(intent)
         }
 
@@ -91,8 +89,6 @@ class SearchFragment: Fragment() {
             if (clickDebouncer()) {
                 //запуск плеера
                 searchViewModel.getPlayerIntent(track)
-                Log.d("wtf", "intent asked(track_clicked)")
-
                 searchViewModel.writeHistory(track)
             }
         }

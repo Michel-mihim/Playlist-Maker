@@ -42,6 +42,8 @@ android {
 
 dependencies {
 
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
     val fragment_version = "1.5.5"
 
     implementation("com.google.android.material:material:1.8.0")
