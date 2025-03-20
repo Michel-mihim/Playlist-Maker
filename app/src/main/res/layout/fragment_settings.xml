@@ -10,7 +10,8 @@
     tools:context="com.practicum.playlistmaker.settings.ui.SettingsFragment">
 
     <LinearLayout
-        style="@style/SettingsActivityMenuListStyle">
+        style="@style/SettingsActivityMenuListStyle"
+        android:layout_marginStart="@dimen/dp4">
 
         <TextView
             style="@style/menu_head_text_style"
