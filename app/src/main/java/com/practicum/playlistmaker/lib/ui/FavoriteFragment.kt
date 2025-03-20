@@ -7,18 +7,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentFavouriteBinding
-import com.practicum.playlistmaker.utils.constants.Constants
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class FavouriteFragment: Fragment() {
+class FavoriteFragment: Fragment() {
 
     companion object {
-        fun newInstance() = FavouriteFragment()
+        fun newInstance() = FavoriteFragment()
     }
 
     private lateinit var binding: FragmentFavouriteBinding
 
-    private val favouriteViewModel: FavouriteViewModel by viewModel()
+    private val favoriteViewModel: FavoriteViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,

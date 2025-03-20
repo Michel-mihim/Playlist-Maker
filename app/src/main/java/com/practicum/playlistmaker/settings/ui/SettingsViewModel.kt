@@ -16,6 +16,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.practicum.playlistmaker.App
 import com.practicum.playlistmaker.settings.domain.api.SettingsInteractor
 import com.practicum.playlistmaker.sharing.domain.api.SharingInteractor
+import com.practicum.playlistmaker.utils.classes.SingleLiveEvent
 
 class SettingsViewModel(
     private val settingsInteractor: SettingsInteractor,
@@ -48,13 +49,13 @@ class SettingsViewModel(
     //==============================================================================================
     //SHARING=======================================================================================
 
-    private val shareActivityIntentLiveData = MutableLiveData<Intent>()
+    private val shareActivityIntentLiveData = SingleLiveEvent<Intent>()
     fun observeShareActivityIntentLiveData(): LiveData<Intent> = shareActivityIntentLiveData
 
-    private val supportEmailActivityIntentLiveData = MutableLiveData<Intent>()
+    private val supportEmailActivityIntentLiveData = SingleLiveEvent<Intent>()
     fun observeSupportEmailActivityIntentLiveData(): LiveData<Intent> = supportEmailActivityIntentLiveData
 
-    private val termsIntentLiveData = MutableLiveData<Intent>()
+    private val termsIntentLiveData = SingleLiveEvent<Intent>()
     fun observeTermsIntentLiveData(): LiveData<Intent> = termsIntentLiveData
 
     fun shareApp() {
@@ -75,6 +76,7 @@ class SettingsViewModel(
     }
 
     fun openTerms() {
+        Log.d("wtf", "viewModel interactor activated")
         sharingInteractor.openTerms(
             onTermsIntentReady = { intent ->
                 startTermsIntentActivity(intent as Intent)
@@ -92,6 +94,7 @@ class SettingsViewModel(
     }
 
     private fun startTermsIntentActivity(intent: Intent) {
+        Log.d("wtf", "interactor result got, intent posting")
         termsIntentLiveData.postValue(intent)
     }
 

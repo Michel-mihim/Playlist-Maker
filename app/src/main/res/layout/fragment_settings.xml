@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-
+    android:id="@+id/settingsFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/menuColor"
-
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="com.practicum.playlistmaker.settings.ui.SettingsFragment">
 
     <LinearLayout
-        style="@style/SettingsActivityMenuListStyle">
-
-        <ImageButton
-            style="@style/arrow_back_button_style"
-            android:id="@+id/settings_back_button"/>
+        style="@style/SettingsActivityMenuListStyle"
+        android:layout_marginStart="@dimen/dp4">
 
         <TextView
             style="@style/menu_head_text_style"

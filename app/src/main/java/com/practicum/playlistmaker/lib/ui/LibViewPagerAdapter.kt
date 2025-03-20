@@ -16,7 +16,7 @@ class LibViewPagerAdapter(
 
     override fun createFragment(position: Int): Fragment {
         return when(position) {
-            0 -> FavouriteFragment.newInstance()
+            0 -> FavoriteFragment.newInstance()
             else -> PlaylistFragment.newInstance()
         }
     }
