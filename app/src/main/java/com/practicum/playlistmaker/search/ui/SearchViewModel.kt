@@ -6,6 +6,7 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.search.domain.api.SearchTracksInteractor
 import com.practicum.playlistmaker.search.domain.models.SearchTracksResult
 import com.practicum.playlistmaker.utils.constants.Constants
@@ -16,6 +17,9 @@ import com.practicum.playlistmaker.search.domain.models.SearchActivityNavigation
 import com.practicum.playlistmaker.search.domain.models.SearchActivityState
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.utils.classes.SingleLiveEvent
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 class SearchViewModel(
@@ -32,7 +36,7 @@ class SearchViewModel(
         historyTracksInteractor.setOnHistoryUpdatedListener(onHistoryUpdatedListener)
     }
 
-    private val handler = Handler(Looper.getMainLooper())
+    private var searchJob: Job? = null
 
     private var latestSearchText: String? = null
 
@@ -40,12 +44,6 @@ class SearchViewModel(
 
     private val tracksRecyclerList = ArrayList<Track>()
     private var historyTracks = ArrayList<Track>()
-
-    private val searchRunnable = Runnable {
-        val newSearchText = this.latestSearchText ?: ""
-        searchRequest(newSearchText)
-    }
-
 
     private val searchActivityStateLiveData = MutableLiveData<SearchActivityState>()
     fun observeSearchActivityState(): LiveData<SearchActivityState> = searchActivityStateLiveData
@@ -55,12 +53,6 @@ class SearchViewModel(
 
     private val playerActivityIntentLiveData = SingleLiveEvent<Intent>()
     fun observePlayerActivityIntent(): LiveData<Intent> = playerActivityIntentLiveData
-
-    //LIFE_CYCLE====================================================================================
-    override fun onCleared() {
-        super.onCleared()
-        handler.removeCallbacks(searchRunnable)
-    }
 
     //NAVIGATION====================================================================================
     private fun searchActivityNavigate() {
@@ -78,17 +70,21 @@ class SearchViewModel(
 
         this.latestSearchText = changedText
 
-        handler.removeCallbacks(searchRunnable) // runnable - fun searchRequest()
-        handler.postDelayed(searchRunnable, Constants.SEARCH_DEBOUNCE_DELAY)
+        searchJob?.cancel()
+        searchJob = viewModelScope.launch {
+            delay(Constants.SEARCH_DEBOUNCE_DELAY)
+            searchRequest(changedText)
+        }
     }
 
     fun searchForce(text: String) {
         this.latestSearchText = text
 
-        handler.removeCallbacks(searchRunnable)
-        handler.post(searchRunnable)
+        searchJob?.cancel()
+        searchJob = viewModelScope.launch {
+            searchRequest(text)
+        }
     }
-
 
     private fun searchRequest(newSearchText: String){
         if (newSearchText.isNotEmpty()) {
