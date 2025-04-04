@@ -32,9 +32,6 @@ class SearchFragment: Fragment() {
 
     private var isClickAllowed = true
 
-    private var searchDef: String = Constants.SEARCH_DEF
-
-
     //не инициализированные объекты=================================================================
     private lateinit var inputManager: InputMethodManager
 
@@ -273,15 +270,4 @@ class SearchFragment: Fragment() {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        outState.putString(Constants.SEARCH_STRING, searchDef)
-    }
-
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-
-        searchDef = savedInstanceState?.getString(Constants.SEARCH_STRING, Constants.SEARCH_DEF) ?: ""
-    }
 }
