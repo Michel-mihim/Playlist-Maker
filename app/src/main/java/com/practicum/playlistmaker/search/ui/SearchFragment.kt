@@ -21,7 +21,6 @@ import com.practicum.playlistmaker.databinding.FragmentSearchBinding
 import com.practicum.playlistmaker.search.domain.models.SearchActivityState
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.utils.constants.Constants
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -128,6 +127,7 @@ class SearchFragment: Fragment() {
             }
         }
         binding.searchEditText.addTextChangedListener(textWatcher)
+
     }
 
     private fun renewRequest(){
