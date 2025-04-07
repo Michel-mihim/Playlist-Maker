@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.player.domain.models.PlayerStatus
@@ -18,14 +19,14 @@ import com.practicum.playlistmaker.player.domain.models.PlayerActivityState
 import com.practicum.playlistmaker.search.domain.models.SearchActivityState
 import com.practicum.playlistmaker.utils.constants.Constants
 import com.practicum.playlistmaker.utils.converters.dimensionsFloatToIntConvert
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class PlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPlayerBinding
-
-    private val handler = Handler(Looper.getMainLooper())
 
     private var isClickAllowed = true
 
@@ -120,7 +121,11 @@ class PlayerActivity : AppCompatActivity() {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-            handler.postDelayed({isClickAllowed = true}, Constants.FAST_CLICK_DEBOUNCE_DELAY)
+
+            lifecycleScope.launch {
+                delay(Constants.FAST_CLICK_DEBOUNCE_DELAY)
+                isClickAllowed = true
+            }
         }
         return current
     }
