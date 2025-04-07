@@ -11,12 +11,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.player.domain.api.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.domain.models.PlayerActivityState
 import com.practicum.playlistmaker.player.domain.models.PlayerStatus
 import com.practicum.playlistmaker.search.domain.models.SearchActivityState
 import com.practicum.playlistmaker.utils.constants.Constants
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class PlayerViewModel(
     private val mediaPlayerInteractor: MediaPlayerInteractor
@@ -29,13 +33,12 @@ class PlayerViewModel(
     private val playerActivityCurrentStateLiveData = MutableLiveData<PlayerActivityState>()
     fun observePlayerActivityCurrentState(): LiveData<PlayerActivityState> = playerActivityCurrentStateLiveData
 
-    private val handler = Handler(Looper.getMainLooper())
-    private val showProgressRunnable = Runnable { showProgress() }
+    private var timerJob: Job? = null
 
     //LIFE_CYCLE====================================================================================
     override fun onCleared() {
         super.onCleared()
-        handler.removeCallbacks(showProgressRunnable)
+        timerJob?.cancel()
         mediaPlayerInteractor.release()
     }
 
@@ -55,7 +58,7 @@ class PlayerViewModel(
             },
             onCompletion = { -> //окончание воспроизведения
                 playerStatus = PlayerStatus.STATE_PREPARED
-                handler.removeCallbacks(showProgressRunnable)
+                timerJob?.cancel()
                 playerActivityPostState(
                     PlayerActivityState(
                         true,
@@ -92,7 +95,7 @@ class PlayerViewModel(
                 currentProgress
             )
         )
-        handler.post(showProgressRunnable)
+        showProgress()
     }
 
     fun pausePlayer(){
@@ -105,7 +108,7 @@ class PlayerViewModel(
                 currentProgress
             )
         )
-        handler.removeCallbacks(showProgressRunnable)
+        timerJob?.cancel()
     }
 
     private fun showProgress(){
@@ -121,7 +124,11 @@ class PlayerViewModel(
                 currentProgress = progress
             }
         )
-        handler.postDelayed(showProgressRunnable, Constants.SHOW_PROGRESS_DELAY)
+
+        timerJob = viewModelScope.launch {
+            delay(Constants.SHOW_PROGRESS_DELAY)
+            showProgress()
+        }
     }
 
     //POSTING=======================================================================================

@@ -37,7 +37,6 @@ class PlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityPlayerBinding.inflate(layoutInflater)
-
         setContentView(binding.root)
 
         playerViewModel.observePlayerActivityCurrentState().observe(this) {
