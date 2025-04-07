@@ -89,7 +89,33 @@ class SearchViewModel(
     private fun searchRequest(newSearchText: String){
         if (newSearchText.isNotEmpty()) {
             renderState(SearchActivityState.Loading)
+
             tracksRecyclerList.clear()
+
+            viewModelScope.launch {
+                searchTracksInteractor.searchTracks(newSearchText).collect { result ->
+                    searchActivityNavigationState = SearchActivityNavigationState.SEARCH_RESULT
+                    when (result) {
+                        is SearchTracksResult.Success -> {
+                            tracksRecyclerList.addAll(result.tracks)
+                            renderState(SearchActivityState.Content(tracksRecyclerList))
+                        }
+
+                        is SearchTracksResult.Empty -> {
+                            tracksRecyclerList.addAll(result.tracks)
+                            renderState(SearchActivityState.Empty)
+                            showToastState(Constants.TRACKS_NOT_FOUND_2)
+                        }
+
+                        is SearchTracksResult.Failure -> {
+                            tracksRecyclerList.addAll(result.tracks)
+                            renderState(SearchActivityState.Error)
+                            showToastState("Код ошибки: ${result.code}")
+                        }
+                    }
+                }
+            }
+            /*
             searchTracksInteractor.searchTracks(newSearchText, object : SearchTracksInteractor.TracksConsumer {
                 override fun consume(result: SearchTracksResult<List<Track>>) {
                     searchActivityNavigationState = SearchActivityNavigationState.SEARCH_RESULT
@@ -116,6 +142,8 @@ class SearchViewModel(
                     }
                 }
             })
+
+             */
         }
     }
 
