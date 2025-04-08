@@ -14,12 +14,15 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentSearchBinding
 import com.practicum.playlistmaker.search.domain.models.SearchActivityState
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.utils.constants.Constants
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.getValue
 
@@ -28,12 +31,7 @@ class SearchFragment: Fragment() {
     private lateinit var binding: FragmentSearchBinding
 
     //инициализированные объекты====================================================================
-    private val handler = Handler(Looper.getMainLooper())
-
     private var isClickAllowed = true
-
-    private var searchDef: String = Constants.SEARCH_DEF
-
 
     //не инициализированные объекты=================================================================
     private lateinit var inputManager: InputMethodManager
@@ -129,6 +127,7 @@ class SearchFragment: Fragment() {
             }
         }
         binding.searchEditText.addTextChangedListener(textWatcher)
+
     }
 
     private fun renewRequest(){
@@ -139,7 +138,10 @@ class SearchFragment: Fragment() {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-            handler.postDelayed({isClickAllowed = true}, Constants.CLICK_DEBOUNCE_DELAY)
+            viewLifecycleOwner.lifecycleScope.launch {
+                delay(Constants.CLICK_DEBOUNCE_DELAY)
+                isClickAllowed = true
+            }
         }
         return current
     }
@@ -273,15 +275,4 @@ class SearchFragment: Fragment() {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        outState.putString(Constants.SEARCH_STRING, searchDef)
-    }
-
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-
-        searchDef = savedInstanceState?.getString(Constants.SEARCH_STRING, Constants.SEARCH_DEF) ?: ""
-    }
 }

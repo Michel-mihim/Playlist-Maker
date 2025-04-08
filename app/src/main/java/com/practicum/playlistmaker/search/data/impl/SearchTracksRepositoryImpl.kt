@@ -6,11 +6,13 @@ import com.practicum.playlistmaker.search.data.dto.TracksSearchResponse
 import com.practicum.playlistmaker.search.domain.api.SearchTracksRepository
 import com.practicum.playlistmaker.search.domain.models.SearchTracksResult
 import com.practicum.playlistmaker.search.domain.models.Track
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class SearchTracksRepositoryImpl(
     private val networkClient: NetworkClient
 ) : SearchTracksRepository {
-    override fun searchTracks(expression: String): SearchTracksResult<List<Track>> {
+    override fun searchTracks(expression: String): Flow<SearchTracksResult<List<Track>>> = flow {
         val response = networkClient.doRequest(TracksSearchRequest(expression))
 
         if (response.resultCode == 200) {
@@ -30,15 +32,15 @@ class SearchTracksRepositoryImpl(
                 )
             }
 
-            return if (tracks.isNotEmpty()) {//not empty
-                SearchTracksResult.Success(tracks, response.resultCode)
+            if (tracks.isNotEmpty()) {//not empty
+                emit(SearchTracksResult.Success(tracks, response.resultCode))
             } else {//empty
-                SearchTracksResult.Empty(emptyList(), response.resultCode)
+                emit(SearchTracksResult.Empty(emptyList(), response.resultCode))
             }
 
         } else
         {//code!=200
-            return SearchTracksResult.Failure(emptyList(), response.resultCode)
+            emit(SearchTracksResult.Failure(emptyList(), response.resultCode))
         }
 
     }

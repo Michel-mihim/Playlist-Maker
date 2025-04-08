@@ -9,35 +9,26 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.player.domain.models.PlayerStatus
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
 import com.practicum.playlistmaker.player.domain.models.PlayerActivityState
 import com.practicum.playlistmaker.search.domain.models.SearchActivityState
 import com.practicum.playlistmaker.utils.constants.Constants
 import com.practicum.playlistmaker.utils.converters.dimensionsFloatToIntConvert
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class PlayerActivity : AppCompatActivity() {
 
-    private val handler = Handler(Looper.getMainLooper())
+    private lateinit var binding: ActivityPlayerBinding
 
     private var isClickAllowed = true
-
-    //VIEWS
-    private lateinit var playerBackButton: ImageButton
-    private lateinit var playerTrackName: TextView
-    private lateinit var playerArtistName: TextView
-    private lateinit var playerTrackTime: TextView
-    private lateinit var playerTrackAlbum: TextView
-    private lateinit var playerTrackYear: TextView
-    private lateinit var playerTrackGenre: TextView
-    private lateinit var playerTrackCountry: TextView
-    private lateinit var playerTrackImage: ImageView
-    private lateinit var trackPlayButton: ImageButton
-    private lateinit var trackProgress: TextView
 
     //VAL BY
     private val playerViewModel by viewModel<PlayerViewModel>()
@@ -45,36 +36,26 @@ class PlayerActivity : AppCompatActivity() {
     //основной листинг==============================================================================
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_player)
+
+        binding = ActivityPlayerBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         playerViewModel.observePlayerActivityCurrentState().observe(this) {
             renderPlayerState(it)
         }
 
-        //инициализация views
-        playerTrackName = findViewById(R.id.track_player_name)
-        playerArtistName = findViewById(R.id.track_artist_name)
-        playerTrackTime = findViewById(R.id.attr1_2_time)
-        playerTrackAlbum = findViewById(R.id.attr2_2_album)
-        playerTrackYear = findViewById(R.id.attr3_2_year)
-        playerTrackGenre = findViewById(R.id.attr4_2_genre)
-        playerTrackCountry = findViewById(R.id.attr5_2_country)
-        playerTrackImage = findViewById(R.id.player_track_image)
-        playerBackButton = findViewById(R.id.player_back_button)
-        trackPlayButton = findViewById(R.id.button_play_2)
-        trackPlayButton.isEnabled = false //пока плеер не готов на нее нельзя нажимать
-        trackProgress = findViewById(R.id.track_player_progress)
+        binding.buttonPlay2.isEnabled = false //пока плеер не готов на нее нельзя нажимать
 
         //основной листинг
         val bundle = intent.extras
         if (bundle != null) {
-            playerTrackName.text = bundle.getString(Constants.TRACK_NAME_KEY)
-            playerArtistName.text = bundle.getString(Constants.ARTIST_NAME_KEY)
-            playerTrackTime.text = bundle.getString(Constants.TRACK_TIME_KEY)
-            playerTrackAlbum.text = bundle.getString(Constants.TRACK_ALBUM_KEY)
-            playerTrackYear.text = bundle.getString(Constants.TRACK_YEAR_KEY)
-            playerTrackGenre.text = bundle.getString(Constants.TRACK_GENRE_KEY)
-            playerTrackCountry.text = bundle.getString(Constants.TRACK_COUNTRY_KEY)
+            binding.trackPlayerName.text = bundle.getString(Constants.TRACK_NAME_KEY)
+            binding.trackArtistName.text = bundle.getString(Constants.ARTIST_NAME_KEY)
+            binding.attr12Time.text = bundle.getString(Constants.TRACK_TIME_KEY)
+            binding.attr22Album.text = bundle.getString(Constants.TRACK_ALBUM_KEY)
+            binding.attr32Year.text = bundle.getString(Constants.TRACK_YEAR_KEY)
+            binding.attr42Genre.text = bundle.getString(Constants.TRACK_GENRE_KEY)
+            binding.attr52Country.text = bundle.getString(Constants.TRACK_COUNTRY_KEY)
 
             val cornerDp = resources.getDimension(R.dimen.track_poster_corner)
             val cornerPx = dimensionsFloatToIntConvert(cornerDp, this)
@@ -82,17 +63,17 @@ class PlayerActivity : AppCompatActivity() {
                 .load(bundle.getString(Constants.PIC_URL_KEY))
                 .placeholder(R.drawable.placeholder_large)
                 .transform(RoundedCorners(cornerPx))
-                .into(playerTrackImage)
+                .into(binding.playerTrackImage)
         }
 
         playerViewModel.mediaPlayerPrepare(bundle?.getString((Constants.PREVIEW_PIC_URL_KEY)))
 
         //слушатели нажатий
-        playerBackButton.setOnClickListener{
+        binding.playerBackButton.setOnClickListener{
             finish()
         }
 
-        trackPlayButton.setOnClickListener {
+        binding.buttonPlay2.setOnClickListener {
             if (clickDebouncer()) {
                 playerViewModel.playbackControl()
             }
@@ -112,7 +93,7 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun trackPlayButtonActivate(ready: Boolean) {
-        trackPlayButton.isEnabled = ready
+        binding.buttonPlay2.isEnabled = ready
     }
 
     private fun renderTrackPlayButton(status: PlayerStatus) {
@@ -125,22 +106,26 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun setTrackPlayButtonPlay() {
-        trackPlayButton.setImageResource(R.drawable.track_play)
+        binding.buttonPlay2.setImageResource(R.drawable.track_play)
     }
 
     private fun setTrackPlayButtonPause() {
-        trackPlayButton.setImageResource(R.drawable.track_pause)
+        binding.buttonPlay2.setImageResource(R.drawable.track_pause)
     }
 
     private fun setTrackProgress(progress: String) {
-        trackProgress.text = progress
+        binding.trackPlayerProgress.text = progress
     }
 
     private fun clickDebouncer() : Boolean {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-            handler.postDelayed({isClickAllowed = true}, Constants.FAST_CLICK_DEBOUNCE_DELAY)
+
+            lifecycleScope.launch {
+                delay(Constants.FAST_CLICK_DEBOUNCE_DELAY)
+                isClickAllowed = true
+            }
         }
         return current
     }
