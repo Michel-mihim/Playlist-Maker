@@ -5,12 +5,15 @@ import android.util.Log
 import com.practicum.playlistmaker.player.data.impl.MediaPlayerRepositoryImpl
 import com.practicum.playlistmaker.player.domain.api.MediaPlayerRepository
 import com.practicum.playlistmaker.player.ui.PlayerActivity
+import com.practicum.playlistmaker.search.data.converters.TrackDbConvertor
+import com.practicum.playlistmaker.search.data.impl.FavoriteTracksRepositoryImpl
 import com.practicum.playlistmaker.search.data.impl.HistoryTracksRepositoryImpl
 import com.practicum.playlistmaker.search.data.impl.PlayerIntentGetterImpl
 import com.practicum.playlistmaker.search.data.impl.SearchTracksRepositoryImpl
 import com.practicum.playlistmaker.search.domain.api.HistoryTracksRepository
 import com.practicum.playlistmaker.search.domain.api.PlayerIntentGetter
 import com.practicum.playlistmaker.search.domain.api.SearchTracksRepository
+import com.practicum.playlistmaker.search.domain.db.FavoriteTracksRepository
 import com.practicum.playlistmaker.settings.data.impl.SettingsRepositoryImpl
 import com.practicum.playlistmaker.settings.domain.api.SettingsRepository
 import com.practicum.playlistmaker.sharing.data.impl.ExternalNavigatorImpl
@@ -54,6 +57,14 @@ val repositoryModule = module {
 
     factory<MediaPlayerRepository> {
         MediaPlayerRepositoryImpl(get())
+    }
+
+    factory {
+        TrackDbConvertor()
+    }
+
+    single<FavoriteTracksRepository> {
+        FavoriteTracksRepositoryImpl(get(), get())
     }
 
 }
