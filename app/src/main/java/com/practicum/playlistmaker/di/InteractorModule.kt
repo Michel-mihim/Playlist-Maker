@@ -3,9 +3,11 @@ package com.practicum.playlistmaker.di
 import android.util.Log
 import com.practicum.playlistmaker.player.domain.api.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.domain.impl.MediaPlayerInteractorImpl
+import com.practicum.playlistmaker.search.domain.api.FavoriteTracksInteractor
 import com.practicum.playlistmaker.search.domain.api.GetPlayerIntentUseCase
 import com.practicum.playlistmaker.search.domain.api.HistoryTracksInteractor
 import com.practicum.playlistmaker.search.domain.api.SearchTracksInteractor
+import com.practicum.playlistmaker.search.domain.impl.FavoriteTracksInteractorImpl
 import com.practicum.playlistmaker.search.domain.impl.HistoryTracksInteractorImpl
 import com.practicum.playlistmaker.search.domain.impl.SearchTracksInteractorImpl
 import com.practicum.playlistmaker.settings.domain.api.SettingsInteractor
@@ -38,6 +40,10 @@ val interactorModule = module {
 
     factory<MediaPlayerInteractor> {
         MediaPlayerInteractorImpl(get())
+    }
+
+    factory<FavoriteTracksInteractor> {
+        FavoriteTracksInteractorImpl(get())
     }
 
 }
